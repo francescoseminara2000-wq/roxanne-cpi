@@ -234,3 +234,17 @@ model AuditLog {
   target      String
   dettagli    String?  @db.Text
 }
+
+model User {
+  id           Int       @id @default(autoincrement())
+  username     String    @unique
+  email        String    @unique
+  password     String    // Password hash o raw per demo
+  nomeCompleto String
+  ruolo        String    @default("OPERATORE_CPI") // ADMIN, OPERATORE_SILV, TUTOR_L68, ASL_MEDICO
+  sedeCpi      String    @default("Lecco")
+  attivo       Boolean   @default(true)
+  ultimoAccesso DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}

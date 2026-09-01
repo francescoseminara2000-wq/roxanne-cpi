@@ -155,7 +155,55 @@ async function main() {
     }
   });
 
-  console.log(`✅ Database popolato con successo! ID Persona creata: ${persona.id}`);
+  // 2. Inserimento Utenze e Operatori di Sistema
+  const defaultUsers = [
+    {
+      username: 'admin',
+      email: 'admin.cpi@provincia.lecco.it',
+      password: 'admin',
+      nomeCompleto: 'Marco Galli',
+      ruolo: 'ADMIN',
+      sedeCpi: 'Lecco Centro',
+      attivo: true
+    },
+    {
+      username: 'elena.bianchi',
+      email: 'elena.bianchi@provincia.lecco.it',
+      password: 'password123',
+      nomeCompleto: 'Elena Bianchi',
+      ruolo: 'OPERATORE_SILV',
+      sedeCpi: 'Merate',
+      attivo: true
+    },
+    {
+      username: 'roberto.rossi',
+      email: 'roberto.rossi@provincia.lecco.it',
+      password: 'password123',
+      nomeCompleto: 'Roberto Rossi',
+      ruolo: 'TUTOR_L68',
+      sedeCpi: 'Lecco Nord',
+      attivo: true
+    },
+    {
+      username: 'anna.verdi',
+      email: 'anna.verdi@asst-lecco.it',
+      password: 'password123',
+      nomeCompleto: 'Dott.ssa Anna Verdi',
+      ruolo: 'ASL_MEDICO',
+      sedeCpi: 'ASST Lecco Ospedale Manzoni',
+      attivo: true
+    }
+  ];
+
+  for (const u of defaultUsers) {
+    await prisma.user.upsert({
+      where: { username: u.username },
+      update: {},
+      create: u
+    });
+  }
+
+  console.log(`✅ Database popolato con successo! ID Persona creata: ${persona.id} e ${defaultUsers.length} utenti attivi.`);
 }
 
 main()

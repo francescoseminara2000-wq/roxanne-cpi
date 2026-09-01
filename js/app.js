@@ -424,14 +424,35 @@ document.addEventListener("DOMContentLoaded", () => {
       runMatcher();
     });
 
+    const btnUsers = document.getElementById("nav-mode-users");
+    const sectionUsers = document.getElementById("section-users");
+
+    if (btnUsers) {
+      btnUsers.addEventListener("click", () => {
+        setActiveBtn(btnUsers);
+        [sectionDash, sectionSearch, sectionHub, sectionMatcher, sectionAudit, sectionUsers].forEach(s => s && s.classList.add("hidden"));
+        if (sectionUsers) sectionUsers.classList.remove("hidden");
+        renderUsersTable();
+      });
+    }
+
     if (btnAudit) {
       btnAudit.addEventListener("click", () => {
         setActiveBtn(btnAudit);
-        sectionSearch.classList.add("hidden");
-        sectionHub.classList.add("hidden");
-        sectionMatcher.classList.add("hidden");
+        [sectionDash, sectionSearch, sectionHub, sectionMatcher, sectionAudit, sectionUsers].forEach(s => s && s.classList.add("hidden"));
         sectionAudit.classList.remove("hidden");
         renderAuditLogsTable();
+      });
+    }
+
+    // Logout Action
+    const btnLogout = document.getElementById("btn-logout");
+    if (btnLogout) {
+      btnLogout.addEventListener("click", () => {
+        if (confirm("Effettuare il logout dalla sessione di lavoro?")) {
+          localStorage.removeItem("ROXANNE_CURRENT_USER");
+          document.getElementById("modal-login").classList.remove("hidden");
+        }
       });
     }
 
@@ -2009,6 +2030,209 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     runMatcher();
   });
+
+  // --- PANNELLO ADMIN: GESTIONE UTENZE & OPERATORI CPI ---
+  async function renderUsersTable() {
+    const tbody = document.getElementById("tbody-users-list");
+    if (!tbody) return;
+
+    let users = [];
+    try {
+      const res = await fetch('/api/users');
+      if (res.ok) users = await res.json();
+    } catch (e) {
+      console.log("Offline mode, default local users");
+    }
+
+    if (users.length === 0) {
+      users = [
+        { id: 1, nomeCompleto: "Marco Galli", username: "admin", email: "admin.cpi@provincia.lecco.it", ruolo: "ADMIN", sedeCpi: "Lecco Centro", attivo: true },
+        { id: 2, nomeCompleto: "Elena Bianchi", username: "elena.bianchi", email: "elena.bianchi@provincia.lecco.it", ruolo: "OPERATORE_SILV", sedeCpi: "Merate", attivo: true },
+        { id: 3, nomeCompleto: "Roberto Rossi", username: "roberto.rossi", email: "roberto.rossi@provincia.lecco.it", ruolo: "TUTOR_L68", sedeCpi: "Lecco Nord", attivo: true },
+        { id: 4, nomeCompleto: "Dott.ssa Anna Verdi", username: "anna.verdi", email: "anna.verdi@asst-lecco.it", ruolo: "ASL_MEDICO", sedeCpi: "ASST Lecco", attivo: true }
+      ];
+    }
+
+    document.getElementById("badge-users-count").textContent = `${users.length} Utenti Registrati`;
+
+    tbody.innerHTML = users.map(u => {
+      const roleBadge = u.ruolo === "ADMIN" 
+        ? "bg-rose-50 text-rose-700 border-rose-200" 
+        : u.ruolo === "OPERATORE_SILV" 
+        ? "bg-blue-50 text-blue-700 border-blue-200"
+        : u.ruolo === "ASL_MEDICO"
+        ? "bg-cyan-50 text-cyan-700 border-cyan-200"
+        : "bg-purple-50 text-purple-700 border-purple-200";
+
+      return `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="px-5 py-4">
+            <div class="font-bold text-slate-900 font-heading">${escapeHtml(u.nomeCompleto)}</div>
+            <div class="text-[10px] text-slate-400 font-mono">ID #${u.id}</div>
+          </td>
+          <td class="px-5 py-4 font-mono font-bold text-slate-700">${escapeHtml(u.username)}</td>
+          <td class="px-5 py-4 text-slate-600">${escapeHtml(u.email)}</td>
+          <td class="px-5 py-4">
+            <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${roleBadge} font-heading">
+              ${escapeHtml(u.ruolo)}
+            </span>
+          </td>
+          <td class="px-5 py-4 text-slate-600">${escapeHtml(u.sedeCpi || 'Lecco')}</td>
+          <td class="px-5 py-4">
+            <span class="inline-flex items-center gap-1.5 text-xs font-semibold ${u.attivo ? 'text-emerald-700' : 'text-slate-400'}">
+              <span class="w-2 h-2 rounded-full ${u.attivo ? 'bg-emerald-500' : 'bg-slate-300'}"></span>
+              ${u.attivo ? 'Attivo' : 'Disabilitato'}
+            </span>
+          </td>
+          <td class="px-5 py-4 text-right">
+            <button data-user-id="${u.id}" class="btn-delete-user text-slate-400 hover:text-rose-600 p-1 text-xs cursor-pointer" title="Elimina Utente">
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join("");
+
+    // Delete user listener
+    tbody.querySelectorAll(".btn-delete-user").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const id = btn.getAttribute("data-user-id");
+        if (confirm("Eliminare questo account operatore?")) {
+          try {
+            await fetch(`/api/users/${id}`, { method: 'DELETE' });
+            renderUsersTable();
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      });
+    });
+  }
+
+  // Modal Nuovo Utente Admin Listeners
+  const modalUser = document.getElementById("modal-user-edit");
+  const btnAddNewUser = document.getElementById("btn-add-new-user");
+  const btnCloseModalUser = document.getElementById("btn-close-modal-user");
+  const btnCancelModalUser = document.getElementById("btn-cancel-modal-user");
+  const formUserEdit = document.getElementById("form-user-edit");
+
+  if (btnAddNewUser && modalUser) {
+    btnAddNewUser.addEventListener("click", () => {
+      formUserEdit.reset();
+      document.getElementById("user-edit-id").value = "";
+      modalUser.classList.remove("hidden");
+    });
+  }
+
+  if (btnCloseModalUser && modalUser) {
+    btnCloseModalUser.addEventListener("click", () => modalUser.classList.add("hidden"));
+  }
+
+  if (btnCancelModalUser && modalUser) {
+    btnCancelModalUser.addEventListener("click", () => modalUser.classList.add("hidden"));
+  }
+
+  if (formUserEdit) {
+    formUserEdit.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const payload = {
+        nomeCompleto: document.getElementById("user-nome-completo").value.trim(),
+        username: document.getElementById("user-username").value.trim(),
+        email: document.getElementById("user-email").value.trim(),
+        password: document.getElementById("user-password").value.trim(),
+        ruolo: document.getElementById("user-ruolo").value,
+        sedeCpi: document.getElementById("user-sede").value.trim(),
+        attivo: document.getElementById("user-attivo").checked
+      };
+
+      try {
+        await fetch('/api/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        modalUser.classList.add("hidden");
+        formUserEdit.reset();
+        renderUsersTable();
+
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            icon: 'success',
+            title: 'Operatore Creato',
+            text: `L'account per ${payload.nomeCompleto} è stato registrato nel database MySQL!`,
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+      } catch (err) {
+        alert("Errore creazione utente");
+      }
+    });
+  }
+
+  // --- GESTIONE LOGIN & SESSIONE PROTETTA ---
+  const modalLogin = document.getElementById("modal-login");
+  const formLogin = document.getElementById("form-login");
+  const currentUserDisplay = document.getElementById("current-user-display");
+
+  // Check saved session
+  const savedUserJson = localStorage.getItem("ROXANNE_CURRENT_USER");
+  if (savedUserJson) {
+    try {
+      const savedUser = JSON.parse(savedUserJson);
+      if (currentUserDisplay) {
+        currentUserDisplay.textContent = `${savedUser.nomeCompleto} (${savedUser.ruolo})`;
+      }
+    } catch (e) {}
+  }
+
+  if (formLogin) {
+    formLogin.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value.trim();
+
+      try {
+        const res = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+        if (res.ok && data.success) {
+          localStorage.setItem("ROXANNE_CURRENT_USER", JSON.stringify(data.user));
+          if (currentUserDisplay) {
+            currentUserDisplay.textContent = `${data.user.nomeCompleto} (${data.user.ruolo})`;
+          }
+          modalLogin.classList.add("hidden");
+
+          if (typeof Swal !== "undefined") {
+            Swal.fire({
+              toast: true,
+              position: 'top-end',
+              icon: 'success',
+              title: `Benvenuto, ${data.user.nomeCompleto}!`,
+              showConfirmButton: false,
+              timer: 2000
+            });
+          }
+        } else {
+          alert(data.error || "Credenziali non corrette.");
+        }
+      } catch (err) {
+        // Fallback demo local login
+        if (username === "admin" && password === "admin") {
+          const mockUser = { nomeCompleto: "Marco Galli", ruolo: "ADMIN", username: "admin" };
+          localStorage.setItem("ROXANNE_CURRENT_USER", JSON.stringify(mockUser));
+          if (currentUserDisplay) currentUserDisplay.textContent = "Marco Galli (ADMIN)";
+          modalLogin.classList.add("hidden");
+        } else {
+          alert("Credenziali errate.");
+        }
+      }
+    });
+  }
 
   // Reset DB Listener
   const btnResetDb = document.getElementById("btn-reset-db");

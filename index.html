@@ -78,6 +78,11 @@
         <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
         <span>Audit Logs</span>
       </button>
+
+      <button id="nav-mode-users" class="nav-mode-btn cursor-pointer text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-1.5 rounded-xl transition font-heading flex items-center space-x-2">
+        <i class="fa-solid fa-users-gear text-indigo-600"></i>
+        <span>Gestione Utenze</span>
+      </button>
     </div>
 
     <!-- Right Header Actions -->
@@ -94,19 +99,19 @@
 
       <div class="hidden sm:block h-6 w-[1px] bg-slate-200"></div>
 
+      <!-- Logged User Badge & Profile -->
       <div class="flex items-center space-x-2 bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-1.5">
         <div class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold font-heading">
           <i class="fa-solid fa-user-shield"></i>
         </div>
         <div class="text-left text-xs">
-          <select id="select-active-user" class="bg-transparent font-bold text-slate-800 text-xs border-0 p-0 focus:ring-0 cursor-pointer font-heading">
-            <option value="usr-1">Marco Galli (Admin)</option>
-            <option value="usr-2">Elena Bianchi (SILV)</option>
-            <option value="usr-3">Roberto Rossi (Tutor)</option>
-            <option value="usr-4">Anna Verdi (ASL)</option>
-          </select>
+          <span id="current-user-display" class="font-bold text-slate-800 text-xs block font-heading">Marco Galli (Admin)</span>
         </div>
       </div>
+
+      <button id="btn-logout" class="cursor-pointer text-slate-400 hover:text-rose-600 text-sm p-2 rounded-xl hover:bg-rose-50 transition" title="Disconnetti Sessione">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+      </button>
     </div>
   </header>
 
@@ -1423,7 +1428,154 @@
         </div>
       </section>
 
+      <!-- SECTION 5: PANNELLO ADMIN GESTIONE UTENZE & OPERATORI CPI -->
+      <section id="section-users" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold font-heading text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-users-gear text-indigo-600"></i> Gestione Utenze & Operatori CPI
+            </h1>
+            <p class="text-xs text-slate-500">Pannello Amministratore per la creazione, profilazione ruoli, assegnazione sedi CPI e controllo accessi.</p>
+          </div>
+
+          <button id="btn-add-new-user" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition shadow-xs flex items-center space-x-2 font-heading">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Nuovo Operatore / Utente</span>
+          </button>
+        </div>
+
+        <!-- Tabella Utenze di Sistema -->
+        <div class="card-white overflow-hidden">
+          <div class="p-4 border-b border-slate-100 flex items-center justify-between text-xs">
+            <span class="font-bold text-slate-700 font-heading">Elenco Account Operatori Registrati nel Database</span>
+            <span id="badge-users-count" class="font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200">4 Utenti Attivi</span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-700">
+              <thead class="bg-slate-100/80 text-slate-500 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 font-heading">
+                <tr>
+                  <th class="px-5 py-3.5">Nome Operatore</th>
+                  <th class="px-5 py-3.5">Username</th>
+                  <th class="px-5 py-3.5">Email Istituzionale</th>
+                  <th class="px-5 py-3.5">Ruolo Profilato</th>
+                  <th class="px-5 py-3.5">Sede CPI</th>
+                  <th class="px-5 py-3.5">Stato Account</th>
+                  <th class="px-5 py-3.5 text-right">Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-users-list" class="divide-y divide-slate-100">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
     </main>
+
+  <!-- MODAL LOGIN SCHERMO DI ACCESSO PROTETTO -->
+  <div id="modal-login" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-3xl border border-slate-200 shadow-2xl p-8 space-y-6 text-xs animate-scale-up">
+      <div class="text-center space-y-2">
+        <div class="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto text-2xl font-bold shadow-lg shadow-blue-500/30">
+          <i class="fa-solid fa-people-roof"></i>
+        </div>
+        <h2 class="text-xl font-extrabold text-slate-900 font-heading tracking-tight">ROXANNE STELLAR</h2>
+        <p class="text-xs text-slate-500">Accesso Riservato agli Operatori del Collocamento Mirato L.68/99</p>
+      </div>
+
+      <form id="form-login" class="space-y-4">
+        <div>
+          <label class="rox-label">Username o Email *</label>
+          <div class="relative">
+            <input type="text" id="login-username" placeholder="es. admin o elena.bianchi" required class="rox-input pl-9 font-medium">
+            <i class="fa-solid fa-user absolute left-3 top-3 text-slate-400 text-xs"></i>
+          </div>
+        </div>
+
+        <div>
+          <label class="rox-label">Password *</label>
+          <div class="relative">
+            <input type="password" id="login-password" placeholder="••••••••" required class="rox-input pl-9 font-medium">
+            <i class="fa-solid fa-lock absolute left-3 top-3 text-slate-400 text-xs"></i>
+          </div>
+        </div>
+
+        <div class="p-3 bg-blue-50/70 border border-blue-200/80 rounded-xl space-y-1 text-[11px] text-blue-900">
+          <span class="font-bold block font-heading"><i class="fa-solid fa-circle-info mr-1"></i> Account Demo Predefiniti:</span>
+          <div class="flex justify-between"><span>Admin CPI: <strong>admin</strong></span><span>Pass: <strong>admin</strong></span></div>
+          <div class="flex justify-between"><span>Operatore SILV: <strong>elena.bianchi</strong></span><span>Pass: <strong>password123</strong></span></div>
+        </div>
+
+        <button type="submit" class="w-full cursor-pointer py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold font-heading shadow-md shadow-blue-600/25 transition text-sm">
+          Accedi al Gestionale
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL CREA/MODIFICA UTENTE ADMIN -->
+  <div id="modal-user-edit" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-lg rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 id="modal-user-title" class="font-bold text-slate-900 text-base font-heading">Aggiungi Nuovo Operatore</h3>
+        <button id="btn-close-modal-user" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="form-user-edit" class="space-y-4">
+        <input type="hidden" id="user-edit-id">
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Nome Completo *</label>
+            <input type="text" id="user-nome-completo" required placeholder="es. Marco Galli" class="rox-input">
+          </div>
+          <div>
+            <label class="rox-label">Username *</label>
+            <input type="text" id="user-username" required placeholder="es. marco.galli" class="rox-input font-mono">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Email Istituzionale *</label>
+            <input type="email" id="user-email" required placeholder="nome@provincia.lecco.it" class="rox-input">
+          </div>
+          <div>
+            <label class="rox-label">Password *</label>
+            <input type="text" id="user-password" required placeholder="Password di accesso" class="rox-input">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Ruolo / Profilo *</label>
+            <select id="user-ruolo" class="rox-select w-full">
+              <option value="ADMIN">Amministratore Completo (ADMIN)</option>
+              <option value="OPERATORE_SILV">Operatore SILV</option>
+              <option value="TUTOR_L68">Tutor L.68 / Tirocini</option>
+              <option value="ASL_MEDICO">Medico / Membro ASL</option>
+            </select>
+          </div>
+          <div>
+            <label class="rox-label">Sede Territoriale CPI</label>
+            <input type="text" id="user-sede" value="Lecco Centro" class="rox-input">
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 pt-1">
+          <input type="checkbox" id="user-attivo" checked class="rounded text-indigo-600 focus:ring-0">
+          <label for="user-attivo" class="font-bold text-slate-700">Account Attivo & Abilitato al Login</label>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
+          <button id="btn-cancel-modal-user" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold font-heading shadow-xs">Salva Operatore</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <!-- MODAL EDIT PERSONA -->
   <div id="modal-persona" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">

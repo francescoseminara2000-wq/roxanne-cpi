@@ -249,6 +249,110 @@ app.post('/api/audit', async (req, res) => {
   }
 });
 
+// --- API: AUTHENTICATION & USERS (GESTIONE UTENZE & ADMIN) ---
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await prisma.user.findFirst({
+      where: {
+        OR: [
+          { username: username },
+          { email: username }
+        ]
+      }
+    });
+
+    if (!user || user.password !== password) {
+      return res.status(401).json({ error: 'Credenziali non valide o utente inesistente' });
+    }
+
+    if (!user.attivo) {
+      return res.status(403).json({ error: 'Account disabilitato dall\'amministratore' });
+    }
+
+    // Aggiorna ultimo accesso
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { ultimoAccesso: new Date() }
+    });
+
+    // Registra audit log di accesso
+    await prisma.auditLog.create({
+      data: {
+        operatore: `${user.nomeCompleto} (${user.ruolo})`,
+        azione: 'LOGIN_UTENTE',
+        modulo: 'Autenticazione',
+        target: user.username,
+        dettagli: `Accesso riuscito con ruolo ${user.ruolo}`
+      }
+    });
+
+    const { password: _, ...userWithoutPass } = user;
+    res.json({ success: true, user: userWithoutPass });
+  } catch (error) {
+    console.error('Errore login:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        nomeCompleto: true,
+        ruolo: true,
+        sedeCpi: true,
+        attivo: true,
+        ultimoAccesso: true,
+        createdAt: true
+      },
+      orderBy: { id: 'asc' }
+    });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/users', async (req, res) => {
+  try {
+    const newUser = await prisma.user.create({
+      data: req.body
+    });
+    const { password: _, ...userWithoutPass } = newUser;
+    res.status(201).json(userWithoutPass);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    const updated = await prisma.user.update({
+      where: { id: parseInt(req.params.id) },
+      data: req.body
+    });
+    const { password: _, ...userWithoutPass } = updated;
+    res.json(userWithoutPass);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/users/:id', async (req, res) => {
+  try {
+    await prisma.user.delete({
+      where: { id: parseInt(req.params.id) }
+    });
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Avvio Server
 app.listen(PORT, () => {
   console.log(`====================================================`);
