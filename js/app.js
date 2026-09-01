@@ -2624,28 +2624,60 @@ document.addEventListener("DOMContentLoaded", () => {
     const pIcon = document.getElementById("brand-logo-icon-preview");
 
     if (logoData) {
-      if (hImg) { hImg.src = logoData; hImg.classList.remove("hidden"); }
-      if (hIcon) { hIcon.classList.add("hidden"); }
+      if (hImg) { 
+        hImg.src = logoData; 
+        hImg.style.display = "block";
+        hImg.classList.remove("hidden"); 
+      }
+      if (hIcon) { 
+        hIcon.style.display = "none";
+        hIcon.classList.add("hidden"); 
+      }
       if (hBox) {
-        hBox.className = "h-10 max-w-[160px] flex items-center justify-center shrink-0 bg-transparent shadow-none border-0 overflow-hidden";
+        hBox.className = "h-10 max-w-[180px] flex items-center justify-center shrink-0 bg-transparent shadow-none border-0 overflow-hidden";
+        hBox.style.background = "transparent";
       }
 
-      if (pImg) { pImg.src = logoData; pImg.classList.remove("hidden"); }
-      if (pIcon) { pIcon.classList.add("hidden"); }
+      if (pImg) { 
+        pImg.src = logoData; 
+        pImg.style.display = "block";
+        pImg.classList.remove("hidden"); 
+      }
+      if (pIcon) { 
+        pIcon.style.display = "none";
+        pIcon.classList.add("hidden"); 
+      }
       if (pBox) {
         pBox.className = "w-full h-16 rounded-2xl mx-auto flex items-center justify-center overflow-hidden border border-slate-200 bg-white shadow-xs p-1";
+        pBox.style.background = "#ffffff";
       }
     } else {
-      if (hImg) { hImg.src = ""; hImg.classList.add("hidden"); }
-      if (hIcon) { hIcon.classList.remove("hidden"); }
+      if (hImg) { 
+        hImg.src = ""; 
+        hImg.style.display = "none";
+        hImg.classList.add("hidden"); 
+      }
+      if (hIcon) { 
+        hIcon.style.display = "block";
+        hIcon.classList.remove("hidden"); 
+      }
       if (hBox) {
         hBox.className = "w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 font-heading shrink-0 overflow-hidden";
+        hBox.style.background = "";
       }
 
-      if (pImg) { pImg.src = ""; pImg.classList.add("hidden"); }
-      if (pIcon) { pIcon.classList.remove("hidden"); }
+      if (pImg) { 
+        pImg.src = ""; 
+        pImg.style.display = "none";
+        pImg.classList.add("hidden"); 
+      }
+      if (pIcon) { 
+        pIcon.style.display = "block";
+        pIcon.classList.remove("hidden"); 
+      }
       if (pBox) {
         pBox.className = "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center overflow-hidden border border-slate-200 bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-md shadow-blue-500/15";
+        pBox.style.background = "";
       }
     }
   }
