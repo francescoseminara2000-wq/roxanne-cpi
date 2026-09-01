@@ -3,6 +3,75 @@
  * Riprogettazione UI: Scheda 360° Raggruppata per Card Logiche & Editing In-Place
  */
 
+// --- NATIVE TAILWIND GLASS-TOAST NOTIFICATION ENGINE ---
+window.RoxToast = {
+  container: null,
+  init() {
+    if (!this.container) {
+      this.container = document.createElement("div");
+      this.container.id = "roxanne-toast-container";
+      document.body.appendChild(this.container);
+    }
+  },
+  show({ title = "Notifica", message = "", type = "success", duration = 3200 }) {
+    this.init();
+
+    const toast = document.createElement("div");
+    toast.className = `rox-toast rox-toast-${type}`;
+
+    const iconMap = {
+      success: '<i class="fa-solid fa-circle-check"></i>',
+      error: '<i class="fa-solid fa-circle-xmark"></i>',
+      warning: '<i class="fa-solid fa-triangle-exclamation"></i>',
+      info: '<i class="fa-solid fa-circle-info"></i>'
+    };
+
+    toast.innerHTML = `
+      <div class="rox-toast-icon">
+        ${iconMap[type] || iconMap.info}
+      </div>
+      <div class="rox-toast-content">
+        <div class="rox-toast-title">${title}</div>
+        ${message ? `<div class="rox-toast-message">${message}</div>` : ''}
+      </div>
+      <button class="rox-toast-close" aria-label="Chiudi notifica">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="rox-toast-progress">
+        <div class="rox-toast-progress-bar" style="animation: roxToastProgress ${duration}ms linear forwards;"></div>
+      </div>
+    `;
+
+    this.container.appendChild(toast);
+
+    // Trigger enter animation
+    requestAnimationFrame(() => {
+      toast.classList.add("rox-toast-visible");
+    });
+
+    const closeBtn = toast.querySelector(".rox-toast-close");
+    let timer = null;
+
+    const removeToast = () => {
+      if (timer) clearTimeout(timer);
+      toast.classList.remove("rox-toast-visible");
+      toast.classList.add("rox-toast-leaving");
+      setTimeout(() => {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 350);
+    };
+
+    if (closeBtn) closeBtn.addEventListener("click", removeToast);
+    if (duration > 0) timer = setTimeout(removeToast, duration);
+
+    return toast;
+  },
+  success(title, message, duration) { return this.show({ title, message, type: 'success', duration }); },
+  error(title, message, duration) { return this.show({ title, message, type: 'error', duration }); },
+  info(title, message, duration) { return this.show({ title, message, type: 'info', duration }); },
+  warning(title, message, duration) { return this.show({ title, message, type: 'warning', duration }); }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   let currentResultsViewMode = "table"; // table | cards | compact
   let chartCatBreakdown = null;
@@ -1651,19 +1720,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       window.store.updatePersona(p.id, updatedPayload);
 
-      if (typeof Swal !== "undefined") {
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: 'Scheda salvata con successo!',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true
-        });
-      } else {
-        alert("Scheda cittadino salvata ed aggiornata con successo!");
-      }
+      RoxToast.success("Scheda Salvata", "Tutte le modifiche anagrafiche e sanitarie sono state memorizzate su MySQL.");
       renderCitizenHub();
     });
   }
@@ -1952,14 +2009,10 @@ document.addEventListener("DOMContentLoaded", () => {
       renderMainSearchTable();
       renderCitizenHub();
 
-      if (typeof Swal !== "undefined") {
-        Swal.fire({
-          icon: 'success',
-          title: isEdit ? 'Scheda Aggiornata' : 'Nuovo Iscritto Registrato',
-          text: `La pratica per ${personaPayload.nome} ${personaPayload.cognome} è stata memorizzata nel database MySQL!`,
-          confirmButtonColor: '#2563eb'
-        });
-      }
+      RoxToast.success(
+        isEdit ? "Scheda Aggiornata" : "Nuovo Iscritto Registrato",
+        `La pratica per ${personaPayload.nome} ${personaPayload.cognome} è stata salvata su MySQL!`
+      );
     });
   }
 
@@ -2113,10 +2166,6 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
             `,
             allowOutsideClick: false,
-            showConfirmButton: false
-          });
-        }
-
         const reader = new FileReader();
         reader.onload = async function(evt) {
           await window.store.addDocumentToWallet(p.id, {
@@ -2129,16 +2178,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
 
           renderCitizenHub();
-
-          if (typeof Swal !== "undefined") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Verbale L.68 Salvato!',
-              text: 'Il documento è stato registrato nel database MySQL e nel fascicolo del cittadino.',
-              timer: 1800,
-              showConfirmButton: false
-            });
-          }
+          RoxToast.success("Verbale L.68 Allegato", `File ${file.name} memorizzato nel fascicolo.`);
         };
         reader.readAsDataURL(file);
       }
@@ -2154,21 +2194,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = e.target.files[0];
       const p = window.store.getSelectedPersona();
       if (file && p) {
-        if (typeof Swal !== "undefined") {
-          Swal.fire({
-            title: 'Caricamento Verbale Invalidità...',
-            html: `
-              <div class="space-y-3 pt-2">
-                <p class="text-xs text-slate-600 font-medium">Lettura file <b>${file.name}</b> e memorizzazione su MySQL...</p>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200">
-                  <div class="bg-rose-600 h-2.5 rounded-full animate-pulse" style="width: 100%"></div>
-                </div>
-              </div>
-            `,
-            allowOutsideClick: false,
-            showConfirmButton: false
-          });
-        }
+        RoxToast.info("Caricamento in corso...", `Salvataggio ${file.name} su MySQL...`, 2000);
 
         const reader = new FileReader();
         reader.onload = async function(evt) {
@@ -2182,16 +2208,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
 
           renderCitizenHub();
-
-          if (typeof Swal !== "undefined") {
-            Swal.fire({
-              icon: 'success',
-              title: 'Verbale IC Salvato!',
-              text: 'Il documento è stato registrato nel database MySQL e nel fascicolo del cittadino.',
-              timer: 1800,
-              showConfirmButton: false
-            });
-          }
+          RoxToast.success("Verbale IC Allegato", `File ${file.name} memorizzato nel fascicolo.`);
         };
         reader.readAsDataURL(file);
       }
@@ -2213,21 +2230,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const fileName = nomeCustom || file.name;
       const fileSize = (file.size / 1024).toFixed(1) + " KB";
 
-      if (typeof Swal !== "undefined") {
-        Swal.fire({
-          title: 'Caricamento Allegato nel Wallet...',
-          html: `
-            <div class="space-y-3 pt-2">
-              <p class="text-xs text-slate-600 font-medium">Invio file <b>${fileName}</b> (${fileSize}) su MySQL...</p>
-              <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200">
-                <div class="bg-amber-500 h-2.5 rounded-full animate-pulse" style="width: 100%"></div>
-              </div>
-            </div>
-          `,
-          allowOutsideClick: false,
-          showConfirmButton: false
-        });
-      }
+      RoxToast.info("Caricamento Wallet...", `Invio ${fileName} su MySQL...`, 2000);
 
       const reader = new FileReader();
       reader.onload = async function(evt) {
@@ -2243,21 +2246,12 @@ document.addEventListener("DOMContentLoaded", () => {
         modalDoc.classList.add("hidden");
         document.getElementById("form-upload-doc").reset();
         renderCitizenHub();
-
-        if (typeof Swal !== "undefined") {
-          Swal.fire({
-            icon: 'success',
-            title: 'File Salvato nel Wallet!',
-            text: 'Documento memorizzato in modo permanente su MySQL.',
-            timer: 1800,
-            showConfirmButton: false
-          });
-        }
+        RoxToast.success("Documento Salvato", `File ${fileName} aggiunto al Wallet.`);
       };
 
       reader.readAsDataURL(file);
     } else {
-      alert("Selezionare un file reale da caricare.");
+      RoxToast.warning("Nessun File", "Selezionare un file reale da caricare.");
     }
   });
 
@@ -2291,6 +2285,7 @@ document.addEventListener("DOMContentLoaded", () => {
       modalNota.classList.add("hidden");
       document.getElementById("nota-testo").value = "";
       renderCitizenHub();
+      RoxToast.success("Nota Aggiunta", "La nuova annotazione è stata registrata nel diario.");
     }
   });
 
@@ -2327,6 +2322,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const verbaleData = {
         numeroIscrizione: p.numeroIscrizione,
+        personaId: p.id,
         numPratica: document.getElementById("com-pratica").value.trim(),
         dataSeduta: document.getElementById("com-data-seduta").value,
         dataVerbale: (document.getElementById("com-data-verbale") || {}).value || "",
@@ -2350,22 +2346,8 @@ document.addEventListener("DOMContentLoaded", () => {
       window.store.addVerbaleComitato(verbaleData);
       modalComitato.classList.add("hidden");
       formVerbaleComitato.reset();
-
-      if (typeof Swal !== "undefined") {
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: 'Verbale ASL registrato con successo!',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true
-        });
-      } else {
-        alert("Verbale Comitato Tecnico ASL salvato con successo!");
-      }
-
       renderCitizenHub();
+      RoxToast.success("Verbale ASL Registrato", "Pratica Comitato Tecnico archiviata con successo.");
     });
   }
 
@@ -2421,22 +2403,8 @@ document.addEventListener("DOMContentLoaded", () => {
       window.store.addProgettoInserimentoLav(pilData);
       modalPil.classList.add("hidden");
       formProgettoPil.reset();
-
-      if (typeof Swal !== "undefined") {
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: 'Progetto PIL salvato con successo!',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true
-        });
-      } else {
-        alert("Progetto PIL salvato con successo!");
-      }
-
       renderCitizenHub();
+      RoxToast.success("Progetto PIL Salvato", "Progetto individuale registrato su MySQL.");
     });
   }
 
@@ -2619,17 +2587,9 @@ document.addEventListener("DOMContentLoaded", () => {
         modalUser.classList.add("hidden");
         formUserEdit.reset();
         renderUsersTable();
-
-        if (typeof Swal !== "undefined") {
-          Swal.fire({
-            icon: 'success',
-            title: 'Operatore Creato',
-            text: `L'account per ${payload.nomeCompleto} è stato registrato nel database MySQL!`,
-            confirmButtonColor: '#4f46e5'
-          });
-        }
+        RoxToast.success("Operatore Creato", `L'account per ${payload.nomeCompleto} è attivo su MySQL.`);
       } catch (err) {
-        alert("Errore creazione utente");
+        RoxToast.error("Errore Creazione", "Impossibile registrare il nuovo utente.");
       }
     });
   }
@@ -2649,16 +2609,6 @@ document.addEventListener("DOMContentLoaded", () => {
       btnTogglePass.textContent = isPass ? "Nascondi" : "Mostra";
     });
   }
-
-  // Quick Login Profile Buttons Fill
-  document.querySelectorAll(".btn-quick-login-fill").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const u = btn.getAttribute("data-user");
-      const p = btn.getAttribute("data-pass");
-      document.getElementById("login-username").value = u;
-      document.getElementById("login-password").value = p;
-    });
-  });
 
   // Check saved session
   const savedUserJson = localStorage.getItem("ROXANNE_CURRENT_USER");
@@ -2696,33 +2646,14 @@ document.addEventListener("DOMContentLoaded", () => {
             currentUserDisplay.textContent = `${data.user.nomeCompleto} (${data.user.ruolo})`;
           }
           modalLogin.classList.add("hidden");
-
-          if (typeof Swal !== "undefined") {
-            Swal.fire({
-              toast: true,
-              position: 'top-end',
-              icon: 'success',
-              title: `Autenticato: ${data.user.nomeCompleto} (${data.user.ruolo})`,
-              showConfirmButton: false,
-              timer: 2000
-            });
-          }
+          RoxToast.success("Autenticato", `Benvenuto ${data.user.nomeCompleto} (${data.user.ruolo})`);
         } else {
           // Errore reale dal backend MySQL
-          if (typeof Swal !== "undefined") {
-            Swal.fire({
-              icon: 'error',
-              title: 'Accesso Negato',
-              text: data.error || 'Credenziali non valide o utente inesistente.',
-              confirmButtonColor: '#ef4444'
-            });
-          } else {
-            alert(data.error || "Credenziali non valide.");
-          }
+          RoxToast.error("Accesso Negato", data.error || "Credenziali non valide o utente inesistente.", 4000);
         }
       } catch (err) {
         console.error("Errore connessione server:", err);
-        alert("Errore di connessione con il database di autenticazione.");
+        RoxToast.error("Errore di Rete", "Impossibile raggiungere il database di autenticazione.");
       }
     });
   }
