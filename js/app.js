@@ -1193,10 +1193,14 @@ document.addEventListener("DOMContentLoaded", () => {
               </div>
 
               <div class="flex items-center space-x-2">
-                <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200">
+                <button data-verbale-id="${c.id}" class="btn-print-verbale cursor-pointer bg-cyan-600 hover:bg-cyan-700 text-white text-[11px] font-bold px-3 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 font-heading">
+                  <i class="fa-solid fa-file-pdf"></i>
+                  <span>Stampa / PDF Ufficiale</span>
+                </button>
+                <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-cyan-50 text-cyan-800 border border-cyan-200">
                   <i class="fa-solid fa-user-doctor mr-1"></i> ${escapeHtml(c.responsabile || 'Presidente ASL')}
                 </span>
-                <button data-verbale-id="${c.id}" class="btn-delete-verbale text-slate-400 hover:text-rose-600 p-1 text-xs cursor-pointer" title="Elimina questo verbale">
+                <button data-verbale-id="${c.id}" class="btn-delete-verbale text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 text-xs cursor-pointer transition" title="Elimina questo verbale">
                   <i class="fa-solid fa-trash"></i>
                 </button>
               </div>
@@ -1235,6 +1239,15 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
+    // Print / PDF Verbale Handler
+    container.querySelectorAll(".btn-print-verbale").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const verbaleId = btn.getAttribute("data-verbale-id");
+        const c = list.find(v => String(v.id) === String(verbaleId));
+        if (c) generateComitatoReportPDF(c, p);
+      });
+    });
+
     // Delete Verbale Handler
     container.querySelectorAll(".btn-delete-verbale").forEach(btn => {
       btn.addEventListener("click", () => {
@@ -1245,6 +1258,361 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       });
     });
+  }
+
+  // --- GENERATORE MODELLO PDF UFFICIALE COMITATO TECNICO (FEDELE AL DOCUMENTO ORIGINALE A 2 PAGINE) ---
+  function generateComitatoReportPDF(c, p) {
+    const dataNascitaFmt = p.dataNascita ? formatDate(p.dataNascita.split("T")[0]) : (p.dataDiNascita ? formatDate(p.dataDiNascita.split("T")[0]) : "-");
+    const dataSedutaFmt = c.dataSeduta ? formatDate(c.dataSeduta.split("T")[0]) : "-";
+    const dataVerbaleFmt = c.dataVerbale ? formatDate(c.dataVerbale.split("T")[0]) : (p.diagnosiLastDataVerbale ? formatDate(p.diagnosiLastDataVerbale.split("T")[0]) : "-");
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      alert("Abilita i popup per visualizzare e stampare il modello PDF.");
+      return;
+    }
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="it">
+      <head>
+        <meta charset="UTF-8">
+        <title>Verbale Comitato Tecnico L.68/99 - ${escapeHtml(p.nome)}</title>
+        <style>
+          @page {
+            size: A4 portrait;
+            margin: 12mm 15mm 12mm 15mm;
+          }
+          * {
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #000000;
+          }
+          body {
+            margin: 0;
+            padding: 0;
+            background: #ffffff;
+            font-size: 11pt;
+            line-height: 1.35;
+          }
+          .page-break {
+            page-break-after: always;
+            break-after: page;
+          }
+          .header-logos {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+          }
+          .logo-prov {
+            font-size: 12pt;
+            font-weight: bold;
+            letter-spacing: -0.5px;
+          }
+          .logo-prov span {
+            color: #008855;
+          }
+          .logo-ats {
+            text-align: right;
+            font-size: 9pt;
+            font-weight: bold;
+            line-height: 1.2;
+          }
+          .main-title {
+            text-align: center;
+            font-size: 11pt;
+            font-weight: bold;
+            margin: 12px 0 16px 0;
+            text-transform: uppercase;
+            line-height: 1.4;
+          }
+          table.bordered-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 12px;
+          }
+          table.bordered-table td, table.bordered-table th {
+            border: 1px solid #000000;
+            padding: 6px 8px;
+            vertical-align: top;
+            font-size: 10pt;
+          }
+          .label-col {
+            font-weight: bold;
+            width: 22%;
+            background: #fdfdfd;
+          }
+          .field-val {
+            font-weight: normal;
+          }
+          .section-title-bar {
+            background: #f0f0f0;
+            border: 1px solid #000;
+            padding: 4px 8px;
+            font-weight: bold;
+            font-size: 10.5pt;
+            text-transform: uppercase;
+            margin-top: 14px;
+            margin-bottom: 0;
+          }
+          .section-body {
+            border: 1px solid #000;
+            border-top: none;
+            padding: 8px 10px;
+            font-size: 10pt;
+            min-height: 60px;
+            margin-bottom: 10px;
+          }
+          .cb-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 6px 0;
+          }
+          .cb-item {
+            display: inline-flex;
+            align-items: center;
+            font-size: 9.5pt;
+          }
+          .cb-box {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border: 1.5px solid #000;
+            margin-right: 6px;
+            text-align: center;
+            line-height: 11px;
+            font-weight: bold;
+            font-size: 10pt;
+          }
+          .signatures-grid {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 40px;
+            font-size: 10pt;
+          }
+          .sig-box {
+            border-bottom: 1px solid #000;
+            padding-bottom: 4px;
+            font-weight: bold;
+          }
+          .stamp-box {
+            text-align: right;
+            margin-top: 20px;
+            font-size: 9.5pt;
+            font-style: italic;
+          }
+          .no-print-bar {
+            background: #1e293b;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+          }
+          .btn-print {
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+          }
+          @media print {
+            .no-print-bar { display: none; }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="no-print-bar">
+          <span><b>Verbale Comitato Tecnico L.68/99</b> — Pratica N. ${escapeHtml(c.numPratica || '0')} &bull; ${escapeHtml(p.nome)}</span>
+          <button class="btn-print" onclick="window.print()">Stampa Documento / Salva PDF</button>
+        </div>
+
+        <!-- ==================== PAGINA 1 ==================== -->
+        <div style="padding: 15px 20px;">
+          <div class="header-logos">
+            <div class="logo-prov">
+              PROVINCIA DI LECCO<br>
+              <span style="font-size: 8.5pt; color: #555;">LAVORO IN LOMBARDIA &bull; COLLOCAMENTO MIRATO</span>
+            </div>
+            <div class="logo-ats">
+              Sistema Socio Sanitario<br>
+              <strong>Regione Lombardia &bull; ATS Brianza</strong><br>
+              ASST Lecco
+            </div>
+          </div>
+
+          <div class="main-title">
+            COMITATO TECNICO AI SENSI DELLA L. 68/99 - ART.8 COMMI 1 E 1 BIS MODIFICATO DAL D.LGS 151/2015
+          </div>
+
+          <!-- Dati Anagrafici & Pratica -->
+          <table class="bordered-table">
+            <tr>
+              <td class="label-col">Numero pratica</td>
+              <td style="width: 28%; font-weight: bold;">${escapeHtml(c.numPratica || '0')}</td>
+              <td class="label-col">Data nascita</td>
+              <td class="field-val">${dataNascitaFmt}</td>
+            </tr>
+            <tr>
+              <td class="label-col">Data seduta</td>
+              <td class="field-val font-weight: bold;">${dataSedutaFmt}</td>
+              <td class="label-col">Stato civile</td>
+              <td class="field-val">${escapeHtml(p.statoCivile || 'Celibe/Nubile')}</td>
+            </tr>
+            <tr>
+              <td class="label-col">C.F.</td>
+              <td class="field-val" style="font-family: monospace; font-weight: bold;">${escapeHtml(p.codiceFiscale || '-')}</td>
+              <td class="label-col">Tipo patente</td>
+              <td class="field-val">${escapeHtml(p.patente || '?')}</td>
+            </tr>
+            <tr>
+              <td class="label-col">Nome e Cognome</td>
+              <td class="field-val" style="font-weight: bold; font-size: 11pt;">${escapeHtml(p.nome || '-')}</td>
+              <td class="label-col">Invalidità %</td>
+              <td class="field-val" style="font-weight: bold;">${p.icPercentuale || '0'}%</td>
+            </tr>
+            <tr>
+              <td class="label-col">Luogo di nascita</td>
+              <td class="field-val">${escapeHtml(p.natoA || '-')}</td>
+              <td class="label-col">Residente</td>
+              <td class="field-val">${escapeHtml(p.comuneResidenza || 'Lecco')}</td>
+            </tr>
+            <tr>
+              <td class="label-col">Domiciliato</td>
+              <td class="field-val">${escapeHtml(p.indirizzo || p.domicilioIndirizzo || '-')}</td>
+              <td class="label-col">Telefono</td>
+              <td class="field-val">${escapeHtml(p.cellulare || p.telefono || '-')}</td>
+            </tr>
+          </table>
+
+          <!-- Verbale I.C. / Patologia -->
+          <table class="bordered-table" style="margin-top: -5px;">
+            <tr>
+              <td style="width: 50%;">
+                <strong>Verbale I.C./I.L. rilasciato in data:</strong> ${dataVerbaleFmt}<br>
+                <strong>dall'Asl / INPS:</strong> ${escapeHtml(c.asl || p.diagnosiLastDescCodiceAsl || 'ASST Lecco')}
+              </td>
+              <td style="width: 50%;">
+                <div class="cb-item">
+                  <span class="cb-box">${c.inCaricoAltriServizi ? 'X' : ''}</span>
+                  <strong>In carico ad altri servizi</strong>
+                </div>
+                <div style="border-bottom: 1px dotted #888; height: 18px; margin-top: 4px;"></div>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <strong>Patologia:</strong><br>
+                <div style="padding-top: 4px; font-weight: 500;">${escapeHtml(p.patologia || p.diagnosiLastPatologia || c.altrePatologie || 'Nessuna specifica')}</div>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Istruttoria realizzata tramite -->
+          <div class="section-title-bar">ISTRUTTORIA REALIZZATA TRAMITE:</div>
+          <div class="section-body" style="min-height: auto; padding: 10px;">
+            <div class="cb-group" style="justify-content: space-between;">
+              <div class="cb-item"><span class="cb-box">X</span> Analisi documentazione</div>
+              <div class="cb-item"><span class="cb-box">${c.colloquioDiretto !== false ? 'X' : ''}</span> Colloquio diretto</div>
+              <div class="cb-item"><span class="cb-box"></span> Colloquio con i familiari</div>
+              <div class="cb-item"><span class="cb-box"></span> Colloquio con altri servizi</div>
+              <div class="cb-item"><span class="cb-box"></span> Altro</div>
+            </div>
+          </div>
+
+          <!-- Prognosi Lavorativa -->
+          <div class="section-title-bar">Prognosi lavorativa:</div>
+          <div class="section-body" style="min-height: 85px;">
+            <div class="cb-group" style="margin-bottom: 8px;">
+              <div class="cb-item" style="width: 48%;"><span class="cb-box">${!c.supporto && !c.mediazione && !c.protetto ? 'X' : ''}</span> Senza interventi di supporto</div>
+              <div class="cb-item" style="width: 48%;"><span class="cb-box">${c.protetto ? 'X' : ''}</span> Ambito protetto</div>
+              <div class="cb-item" style="width: 48%;"><span class="cb-box">${c.mediazione || c.supporto ? 'X' : ''}</span> Con il supporto di un servizio di mediazione</div>
+              <div class="cb-item" style="width: 48%;"><span class="cb-box">${c.adozione ? 'X' : ''}</span> Con procedura di adozione</div>
+            </div>
+            <div style="margin-top: 6px; font-size: 9.5pt;">
+              <strong>Note di Prognosi:</strong> ${escapeHtml(c.prognosi || 'Idoneo all\'inserimento lavorativo mirato con le opportune tutele.')}
+            </div>
+          </div>
+
+          <!-- Firme Commissione -->
+          <div class="signatures-grid">
+            <div class="sig-box">Dr. Daniele Capano</div>
+            <div class="sig-box">Dott.ssa Cristina Pagano</div>
+            <div class="sig-box">Dr. Francesco Genna</div>
+            <div class="sig-box">Dott.ssa Susanna Panariti</div>
+            <div class="sig-box">Dr.ssa Felicita Burini</div>
+            <div class="sig-box" style="border: none; text-align: right; font-size: 9pt;">Timbro e data: _______________</div>
+          </div>
+        </div>
+
+        <div class="page-break"></div>
+
+        <!-- ==================== PAGINA 2 ==================== -->
+        <div style="padding: 20px;">
+          
+          <div class="section-title-bar">ANAMNESI</div>
+          <div class="section-body" style="min-height: 160px; line-height: 1.45;">
+            ${escapeHtml(c.anamnesi || p.diagnosi || 'Dagli atti risulta accertato il quadro clinico e funzionale depositato presso gli archivi ASL. Necessità di monitoraggio periodico e inserimento calibrato.')}
+          </div>
+
+          <div class="section-title-bar">PERCORSO SCOLASTICO</div>
+          <div class="section-body" style="min-height: 50px;">
+            ${escapeHtml(c.percorsoScolastico || p.titoloStudioLast || 'Titolo di studio conseguito con percorso formativo idoneo.')}
+          </div>
+
+          <div class="section-title-bar">PERCORSO LAVORATIVO</div>
+          <div class="section-body" style="min-height: 70px;">
+            ${escapeHtml(c.percorsoLavorativo || 'Esperienze pregresse e tirocini di orientamento / inserimento monitorati dal CPI.')}
+          </div>
+
+          <div style="text-align: center; margin: 18px 0 10px 0;">
+            <span style="border: 1.5px solid #000; padding: 4px 18px; font-weight: bold; font-size: 11pt; text-transform: uppercase;">VALUTAZIONE FUNZIONALE</span>
+          </div>
+
+          <div class="section-title-bar">Autonomia Personale</div>
+          <div class="section-body" style="min-height: 45px;">
+            ${escapeHtml(c.autonomiaPers || 'Autonomo nelle attività di base quotidiane e negli spostamenti.')}
+          </div>
+
+          <div class="section-title-bar">Capacità Relazionali</div>
+          <div class="section-body" style="min-height: 45px;">
+            ${escapeHtml(c.capacitaRelazionali || 'Adeguate al contesto lavorativo se inserito in ambiente collaborativo.')}
+          </div>
+
+          <div class="section-title-bar">Abilità Cognitive</div>
+          <div class="section-body" style="min-height: 45px;">
+            ${escapeHtml(c.abilitaCognitive || 'Nella norma per le mansioni operative concordate.')}
+          </div>
+
+          <div class="section-title-bar">Capacità Lavorative</div>
+          <div class="section-body" style="min-height: 55px;">
+            ${escapeHtml(c.capacitaLavorative || c.prognosi || 'Idoneità lavorativa confermata con rispetto delle prescrizioni ergonomiche e posturali.')}
+          </div>
+
+          <div style="margin-top: 30px; display: flex; justify-content: flex-end;">
+            <div style="width: 300px; text-align: center;">
+              <strong>Responsabile istruttoria:</strong><br><br>
+              <div style="border-bottom: 1px solid #000; width: 100%; margin-top: 15px;"></div>
+              <span style="font-size: 9.5pt; color: #444;">${escapeHtml(c.responsabile || 'Presidente Comitato Tecnico ASL')}</span>
+            </div>
+          </div>
+
+        </div>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
   }
 
   // --- RENDER DIARIO & TIROCINI TIMELINE TAB ---
