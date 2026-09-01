@@ -114,67 +114,66 @@ class StoreManager {
   }
 
   async addPersona(personaData) {
-    const newId = this.data.persone.length > 0 ? Math.max(...this.data.persone.map(p => p.id)) + 1 : 1;
     const newNumIscrizione = this.data.persone.length > 0 ? Math.max(...this.data.persone.map(p => p.numeroIscrizione || 10000)) + 1 : 10001;
     
-    const newPersona = {
+    const payload = {
       ...personaData,
-      id: newId,
       numeroIscrizione: personaData.numeroIscrizione || newNumIscrizione,
-      codice: `PERS-${String(newId).padStart(3, '0')}`,
-      disponibilita: personaData.disponibilita || {
-        orarioPreferito: "Full-Time",
-        disponibileTurni: false,
-        disponibileFestivi: false,
-        disponibileTrasferte: false,
-        smartWorking: true,
-        raggioMaxKm: 30,
-        mezzoMunit: true,
-        noteDisponibilita: ""
-      },
-      wallet: personaData.wallet || [
-        { id: Date.now(), nome: "DID_Dichiarazione_Disponibilita.pdf", tipo: "DID", data: new Date().toISOString().split('T')[0], dimensione: "350 KB" }
-      ]
+      codice: personaData.codice || `PERS-${personaData.numeroIscrizione || newNumIscrizione}`
     };
 
-    this.data.persone.unshift(newPersona);
-    this.selectedPersonaId = newId;
-    this.saveData();
-
-    // Sincronizzazione remota MySQL API
     try {
-      await fetch('/api/persone', {
+      const res = await fetch('/api/persone', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(newPersona)
+        body: JSON.stringify(payload)
       });
+
+      if (res.ok) {
+        const createdPersona = await res.json();
+        this.data.persone.unshift(createdPersona);
+        this.selectedPersonaId = createdPersona.id;
+        this.saveData();
+        return createdPersona;
+      }
     } catch (err) {
-      console.warn("API Sync pending:", err);
+      console.error("Errore salvataggio MySQL:", err);
     }
 
+    // Fallback locale di emergenza
+    const fallbackId = Date.now();
+    const newPersona = { ...payload, id: fallbackId, wallet: [] };
+    this.data.persone.unshift(newPersona);
+    this.selectedPersonaId = fallbackId;
+    this.saveData();
     return newPersona;
   }
 
   async updatePersona(id, updatedFields) {
-    const index = this.data.persone.findIndex(p => p.id === parseInt(id));
+    const numericId = parseInt(id);
+    const index = this.data.persone.findIndex(p => p.id === numericId);
     if (index !== -1) {
       this.data.persone[index] = { ...this.data.persone[index], ...updatedFields };
-      this.saveData();
-      
       const p = this.data.persone[index];
-      this.addAuditLog("MODIFICA_SCHEDA", "Scheda Cittadino", `${p.nome} (#${p.numeroIscrizione})`, "Aggiornamento dati anagrafici/sanitari");
-      
-      // Sincronizzazione remota MySQL API
+
       try {
-        await fetch(`/api/persone/${id}`, {
+        const res = await fetch(`/api/persone/${numericId}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(p)
         });
+
+        if (res.ok) {
+          const updatedFromDb = await res.json();
+          this.data.persone[index] = updatedFromDb;
+          this.saveData();
+          return updatedFromDb;
+        }
       } catch (err) {
-        console.warn("API Sync pending:", err);
+        console.error("Errore aggiornamento MySQL:", err);
       }
 
+      this.saveData();
       return this.data.persone[index];
     }
     return null;

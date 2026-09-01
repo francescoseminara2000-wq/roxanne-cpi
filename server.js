@@ -54,16 +54,75 @@ app.get('/api/persone/:id', async (req, res) => {
   }
 });
 
+// Helper Sanitizer per Persona Prisma MySQL
+function sanitizePersonaInput(raw) {
+  const data = { ...raw };
+
+  // Remove transient UI fields
+  delete data.id;
+  delete data.wallet;
+  delete data.comitatoTecnico;
+  delete data.progettiPIL;
+  delete data.noteDiario;
+  delete data.avviamenti;
+
+  // Numeric fields
+  if (data.numeroIscrizione !== undefined) data.numeroIscrizione = parseInt(data.numeroIscrizione) || 10001;
+  if (data.icPercentuale !== undefined) data.icPercentuale = parseInt(data.icPercentuale) || 0;
+  if (data.anno !== undefined && data.anno !== null) data.anno = parseInt(data.anno) || null;
+  if (data.nIscrizManuale !== undefined && data.nIscrizManuale !== null) data.nIscrizManuale = parseInt(data.nIscrizManuale) || null;
+
+  // Boolean fields
+  ['handicapL104', 'allegatiLg68', 'patenteMuletto', 'inglese', 'francese', 'spagnolo', 'tedesco',
+   'stazioneEretta', 'movimentazioneManuale', 'manualitaFine', 'artiSuperiori', 'vista', 'udito', 'colonna', 'contattoPubblico',
+   'impiegato', 'receptionSegreteria', 'magazzino', 'cassa', 'pulizie', 'verde', 'artigiano', 'informatica'].forEach(k => {
+    if (data[k] !== undefined) data[k] = !!data[k];
+  });
+
+  // Date fields
+  const dateKeys = ['dataNascita', 'dataIscrizioneCO', 'dataIscrizioneFD', 'dataIscrizioneLista', 'dataAnzianita', 'dataVerbale', 'dataRevisione', 'diagnosiLastDataDiagnosi', 'diagnosiLastDataRevisione'];
+  dateKeys.forEach(k => {
+    if (data[k]) {
+      try {
+        data[k] = new Date(data[k]).toISOString();
+      } catch (e) {
+        data[k] = null;
+      }
+    } else {
+      data[k] = null;
+    }
+  });
+
+  // Ensure unique codice
+  if (!data.codice) {
+    data.codice = `PERS-${data.numeroIscrizione || Date.now()}`;
+  }
+
+  return data;
+}
+
 app.post('/api/persone', async (req, res) => {
   try {
-    const { disponibilita, wallet, ...personaData } = req.body;
+    const rawData = req.body;
+    const disponibilita = rawData.disponibilita;
+    const sanitized = sanitizePersonaInput(rawData);
+
     const newPersona = await prisma.persona.create({
       data: {
-        ...personaData,
-        disponibilita: disponibilita ? { create: disponibilita } : undefined,
-        wallet: wallet ? { create: wallet } : undefined
+        ...sanitized,
+        disponibilita: disponibilita ? {
+          create: {
+            orarioPreferito: disponibilita.orarioPreferito || "Full-Time",
+            raggioMaxKm: parseInt(disponibilita.raggioMaxKm) || 25,
+            mezzoMunit: !!disponibilita.mezzoMunit,
+            smartWorking: !!disponibilita.smartWorking,
+            disponibileTurni: !!disponibilita.disponibileTurni,
+            disponibileFestivi: !!disponibilita.disponibileFestivi,
+            noteDisponibilita: disponibilita.noteDisponibilita || ""
+          }
+        } : undefined
       },
-      include: { disponibilita: true, wallet: true }
+      include: { disponibilita: true, wallet: true, comitatoTecnico: true, noteDiario: true, progettiPIL: true }
     });
     res.status(201).json(newPersona);
   } catch (error) {
@@ -75,20 +134,38 @@ app.post('/api/persone', async (req, res) => {
 app.put('/api/persone/:id', async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { disponibilita, ...updatedFields } = req.body;
-    
+    const rawData = req.body;
+    const disponibilita = rawData.disponibilita;
+    const sanitized = sanitizePersonaInput(rawData);
+
     const updated = await prisma.persona.update({
       where: { id },
       data: {
-        ...updatedFields,
+        ...sanitized,
         disponibilita: disponibilita ? {
           upsert: {
-            create: disponibilita,
-            update: disponibilita
+            create: {
+              orarioPreferito: disponibilita.orarioPreferito || "Full-Time",
+              raggioMaxKm: parseInt(disponibilita.raggioMaxKm) || 25,
+              mezzoMunit: !!disponibilita.mezzoMunit,
+              smartWorking: !!disponibilita.smartWorking,
+              disponibileTurni: !!disponibilita.disponibileTurni,
+              disponibileFestivi: !!disponibilita.disponibileFestivi,
+              noteDisponibilita: disponibilita.noteDisponibilita || ""
+            },
+            update: {
+              orarioPreferito: disponibilita.orarioPreferito,
+              raggioMaxKm: parseInt(disponibilita.raggioMaxKm) || 25,
+              mezzoMunit: !!disponibilita.mezzoMunit,
+              smartWorking: !!disponibilita.smartWorking,
+              disponibileTurni: !!disponibilita.disponibileTurni,
+              disponibileFestivi: !!disponibilita.disponibileFestivi,
+              noteDisponibilita: disponibilita.noteDisponibilita
+            }
           }
         } : undefined
       },
-      include: { disponibilita: true, wallet: true }
+      include: { disponibilita: true, wallet: true, comitatoTecnico: true, noteDiario: true, progettiPIL: true }
     });
     res.json(updated);
   } catch (error) {
