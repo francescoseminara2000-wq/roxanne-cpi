@@ -1873,6 +1873,27 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnNuovoIscrittoSearch) {
     btnNuovoIscrittoSearch.addEventListener("click", () => openWizardPersona(null));
   }
+
+  // --- AUDIT LOGS TABLE RENDERER ---
+  function renderAuditLogsTable() {
+    const logs = window.store.getAuditLogs();
+    const filterUser = document.getElementById("audit-filter-user") ? document.getElementById("audit-filter-user").value : "ALL";
+
+    const filtered = logs.filter(l => filterUser === "ALL" || (l.operatore && l.operatore.includes(filterUser)));
+
+    const countBadge = document.getElementById("badge-audit-count");
+    if (countBadge) countBadge.textContent = `${filtered.length} Eventi Registrati`;
+
+    const tbody = document.getElementById("tbody-audit-logs");
+    if (!tbody) return;
+
+    if (filtered.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-slate-400 italic">Nessun evento registrato per l'operatore selezionato.</td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = filtered.map(l => {
+      const isActionModifica = l.azione.includes("MODIFICA");
       const isActionWallet = l.azione.includes("WALLET");
       const isActionNota = l.azione.includes("NOTA");
 
