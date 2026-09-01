@@ -2170,10 +2170,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- GESTIONE LOGIN & SESSIONE PROTETTA ---
-  const modalLogin = document.getElementById("modal-login");
-  const formLogin = document.getElementById("form-login");
-  const currentUserDisplay = document.getElementById("current-user-display");
+  // Toggle Show/Hide Password
+  const btnTogglePass = document.getElementById("btn-toggle-password");
+  const loginPassInput = document.getElementById("login-password");
+  if (btnTogglePass && loginPassInput) {
+    btnTogglePass.addEventListener("click", () => {
+      const isPass = loginPassInput.type === "password";
+      loginPassInput.type = isPass ? "text" : "password";
+      btnTogglePass.textContent = isPass ? "Nascondi" : "Mostra";
+    });
+  }
+
+  // Quick Login Profile Buttons Fill
+  document.querySelectorAll(".btn-quick-login-fill").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const u = btn.getAttribute("data-user");
+      const p = btn.getAttribute("data-pass");
+      document.getElementById("login-username").value = u;
+      document.getElementById("login-password").value = p;
+    });
+  });
 
   // Check saved session
   const savedUserJson = localStorage.getItem("ROXANNE_CURRENT_USER");
