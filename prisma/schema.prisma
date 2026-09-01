@@ -1,0 +1,236 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Persona {
+  id                           Int       @id @default(autoincrement())
+  numeroIscrizione             Int       @unique
+  codice                       String    @unique
+  nome                         String
+  cognome                      String?
+  codiceFiscale                String    @unique
+  dataNascita                  DateTime?
+  natoA                        String?
+  sesso                        String?
+  statoCivile                  String?
+  
+  // Residenza & Domicilio
+  comuneResidenza              String?
+  residenzaProvincia           String?
+  indirizzo                    String?
+  domicilioComune              String?
+  domicilioProvincia           String?
+  domicilioIndirizzo           String?
+  
+  // Recapiti
+  telefono                     String?
+  telefono1                    String?
+  telefono2                    String?
+  cellulare                    String?
+  email                        String?
+  patente                      String?
+
+  // L.68/99 & Sanitario
+  categoria                    String    // C.O., Art. 18, F.D., BSL
+  categoriaLg6869              String?
+  dataIscrizioneCO             DateTime?
+  dataIscrizioneFD             DateTime?
+  dataIscrizioneLista          DateTime?
+  tipologiaIscrizioneLista      String?
+  dataAnzianita                DateTime?
+  attivoNonAttivo              String    @default("Attivo")
+  stato                        String    @default("Disoccupato")
+  disponibile                  String    @default("Sì")
+  cancellato                   String    @default("No")
+  lavoraSn                     String    @default("No")
+  operatore                    String?
+  segnalatoDa                  String?
+  referente                    String?
+  
+  // Quadro Clinico
+  icPercentuale                Int?
+  diagnosi                     String?   @db.Text
+  diagnosiLastDescTipoSupporto String?   @db.Text
+  dataVerbale                  DateTime?
+  dataRevisione                DateTime?
+  asl                          String?
+  patologia                    String?
+  handicapL104                 Boolean   @default(false)
+  allegatiLg68                 Boolean   @default(false)
+
+  // Istruzione & Competenze (Studiamo)
+  titoloStudioLast             String?
+  titoloStudioAnnoInizio       String?
+  titoloStudioPresso           String?
+  votazione                    String?
+  anno                         Int?
+  qualifica                    String?
+  patenteMuletto               Boolean   @default(false)
+  ecdl                         String?
+  inglese                      Boolean   @default(false)
+  spagnolo                     Boolean   @default(false)
+  francese                     Boolean   @default(false)
+  tedesco                      Boolean   @default(false)
+  altreLingue                  String?
+
+  // Capacità Funzionali
+  stazioneEretta               Boolean   @default(true)
+  movimentazioneManuale        Boolean   @default(true)
+  manualitaFine                Boolean   @default(true)
+  artiSuperiori                Boolean   @default(true)
+  vista                        Boolean   @default(true)
+  udito                        Boolean   @default(true)
+  colonna                      Boolean   @default(true)
+  lavoriInAltezza              Boolean   @default(false)
+  contattoPubblico             Boolean   @default(true)
+  supervisione                 Boolean   @default(false)
+
+  // Mansioni Idonee
+  impiegato                    Boolean   @default(false)
+  impiegatoMansione            String?
+  cassa                        Boolean   @default(false)
+  commesso                     Boolean   @default(false)
+  magazzino                    Boolean   @default(false)
+  verde                        Boolean   @default(false)
+  socialeScuola                Boolean   @default(false)
+  pulizie                      Boolean   @default(false)
+  impTecnico                   Boolean   @default(false)
+  impCommerciale               Boolean   @default(false)
+  receptionSegreteria          Boolean   @default(false)
+  artigiano                    Boolean   @default(false)
+  artigianoMansione            String?
+  grafica                      Boolean   @default(false)
+  informatica                  Boolean   @default(false)
+  tutteMansioni                Boolean   @default(false)
+
+  // Relazioni
+  disponibilita                Disponibilita?
+  wallet                       DocumentoWallet[]
+  comitatoTecnico              ComitatoTecnico[]
+  progettiPIL                  ProgettoInserimentoLav[]
+  noteDiario                   NotaDiario[]
+  avviamenti                   Avviamento[]
+
+  createdAt                    DateTime  @default(now())
+  updatedAt                    DateTime  @updatedAt
+}
+
+model Disponibilita {
+  id                  Int      @id @default(autoincrement())
+  personaId           Int      @unique
+  persona             Persona  @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  orarioPreferito     String   @default("Full-Time")
+  disponibileTurni    Boolean  @default(false)
+  disponibileFestivi  Boolean  @default(false)
+  disponibileTrasferte Boolean @default(false)
+  smartWorking        Boolean  @default(false)
+  raggioMaxKm         Int      @default(20)
+  mezzoMunit          Boolean  @default(true)
+  noteDisponibilita   String?  @db.Text
+}
+
+model DocumentoWallet {
+  id          Int      @id @default(autoincrement())
+  personaId   Int
+  persona     Persona  @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  nome        String
+  tipo        String
+  descrizione String?  @db.Text
+  data        DateTime @default(now())
+  dimensione  String?
+  fileContent String?  @db.Text
+  fileType    String?
+}
+
+model ComitatoTecnico {
+  id                  Int      @id @default(autoincrement())
+  personaId           Int?
+  persona             Persona? @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  numeroIscrizione    Int
+  numPratica          String
+  dataSeduta          DateTime
+  dataVerbale         DateTime?
+  asl                 String?
+  prognosi            String   @db.Text
+  anamnesi            String?  @db.Text
+  altrePatologie      String?  @db.Text
+  capacitaLavorative  String?  @db.Text
+  capacitaRelazionali String?  @db.Text
+  percorsoScolastico  String?  @db.Text
+  percorsoLavorativo  String?  @db.Text
+  autonomiaPers       String?
+  abilitaCognitive    String?
+  responsabile        String
+  supporto            Boolean  @default(false)
+  mediazione          Boolean  @default(false)
+  protetto            Boolean  @default(false)
+  adozione            Boolean  @default(false)
+  createdAt           DateTime @default(now())
+}
+
+model ProgettoInserimentoLav {
+  id                        Int      @id @default(autoincrement())
+  personaId                 Int?
+  persona                   Persona? @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  numeroIscrizione          Int
+  nome                      String?
+  codiceFiscale             String?
+  data                      DateTime
+  idDote                    String?
+  tutor                     String?
+  progettoInserimento       String   @db.Text
+  profiloDinamicoFunzionale String?  @db.Text
+  profiloSanitario          String?  @db.Text
+  profiloScolastico         String?  @db.Text
+  profiloLavorativo         String?  @db.Text
+  profiloPersonaleSociale   String?  @db.Text
+  valutazioneLavorativa     String?  @db.Text
+  aspettiCriticita          String?  @db.Text
+  aspettiPositivita         String?  @db.Text
+  profiloGiudiziario        String?  @db.Text
+  anamnesi                  String?  @db.Text
+  createdAt                 DateTime @default(now())
+}
+
+model NotaDiario {
+  id               Int      @id @default(autoincrement())
+  personaId        Int?
+  persona          Persona? @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  numeroIscrizione Int
+  nome             String?
+  tipoNota         String   // Diario Operativo vs Monitoraggio Tirocinio
+  data             DateTime
+  noteDiDiario     String   @db.Text
+  firma            String
+  operatore        String
+  createdAt        DateTime @default(now())
+}
+
+model Avviamento {
+  idAvviamento     Int      @id @default(autoincrement())
+  personaId        Int?
+  persona          Persona? @relation(fields: [personaId], references: [id], onDelete: Cascade)
+  nIscrizione      Int
+  azienda          String
+  tipContratto     String
+  dataInizio       DateTime
+  dataFine         DateTime?
+  orario           String
+  ore              Int
+  nullaOsta        Boolean  @default(true)
+}
+
+model AuditLog {
+  id          Int      @id @default(autoincrement())
+  timestamp   DateTime @default(now())
+  operatore   String
+  azione      String
+  modulo      String
+  target      String
+  dettagli    String?  @db.Text
+}

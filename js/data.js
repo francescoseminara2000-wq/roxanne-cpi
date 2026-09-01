@@ -1,0 +1,387 @@
+/**
+ * Roxanne - Dataset Completo Collocamento Mirato (L.68/99)
+ * Contiene TUTTI i campi del DB Access Roxanne 2 (331 pagine PDF)
+ */
+
+window.INITIAL_DATA = {
+  persone: [
+    {
+      // --- IDENTIFICATIVI & ANAGRAFICA BASE ---
+      id: 1,
+      nome: "Mario",
+      cognome: "Rossi",
+      numeroIscrizione: 10452,
+      codiceFiscale: "RSSMRA78A01E507X",
+      codice: "PERS-001",
+      dataNascita: "1978-01-15",
+      natoA: "Lecco",
+      sesso: "M",
+      statoCivile: "Coniugato/a",
+      comuneResidenza: "Lecco",
+      domicilioComune: "Lecco",
+      domicilioIndirizzo: "Via Roma 45",
+      domicilioProvincia: "LC",
+      indirizzo: "Via Roma 45",
+      residenzaProvincia: "LC",
+      telefono: "0341123456",
+      telefono1: "3389876543",
+      telefono2: "0341998877",
+      cellulare: "3389876543",
+      email: "mario.rossi@email.it",
+      patente: "B, C, Muletto",
+
+      // --- STATO E ISCRIZIONE CPI (L.68/99) ---
+      categoria: "C.O.", // C.O. Disabili, Art. 18, F.D., BSL
+      categoriaLg6869: "Disabili Fisici (Art. 1)",
+      dataIscrizioneCO: "2018-03-10",
+      dataIscrizioneFD: "",
+      dataIscrizioneLista: "2018-03-10",
+      tipologiaIscrizioneLista: "Lista Unica Provinciale L.68/99",
+      idTipologiaIscrizioneLista: "TIP-L68-01",
+      dataAnzianita: "2018-03-10",
+      attivoNonAttivo: "Attivo",
+      stato: "Disoccupato",
+      disponibile: "Sì",
+      cancellato: "No",
+      ecancellato: "No",
+      lavoraSn: "No",
+      operatore: "CPI Lecco (M. Galli)",
+      segnalatoDa: "Servizi Sociali Lecco",
+      referente: "Dott.ssa Bianchi",
+      nIscrizManuale: 10452,
+
+      // --- ISTRUZIONE & FORMAZIONE (STUDIAMO) ---
+      idTitoloStudioLast: "TS-04",
+      titoloStudioLast: "Diploma di Ragioneria / Perito Commerciale",
+      titoloStudioAnnoInizio: "1992",
+      titoloStudioPresso: "I.T.C. Viganò Merate",
+      votazione: "85/100",
+      anno: 1997,
+      qualifica: "Ragioniere Programmatore",
+      istituto: "I.T.C. Viganò",
+
+      // --- QUADRO SANITARIO, DIAGNOSI & INPS ---
+      icPercentuale: 67,
+      diagnosi: "Esiti di poliomielite all'arto inferiore destro con limitazione della deambulazione autonoma a lunghe distanze.",
+      dataVerbale: "2017-11-20",
+      allegatiLg68: true,
+      
+      // Diagnosi Estesa da Roxanne 2
+      diagnosiLastDataDiagnosi: "2017-11-20",
+      diagnosiLastDataRelazione: "2024-11-15",
+      diagnosiLastTipoMinorazioni: "Fisica / Motoria",
+      diagnosiLastPercInvalidita: 67,
+      diagnosiLastInvalidoPsichico: "NO",
+      diagnosiLastTipoSupporto: 2,
+      diagnosiLastDescTipoSupporto: "Supporto postazione ergonomica e assenza scale",
+      diagnosiLastDettaglioSupporto: "Seduta regolabile con supporto lombare",
+      diagnosiLastElencoSupporto: "Sedia ergonomica, ascensore, parcheggio riservato",
+      diagnosiLastCodiceAsl: "ASL-LC-01",
+      diagnosiLastDescCodiceAsl: "ASST Lecco Ospedale Manzoni",
+      diagnosiLastNoteRelazione: "Piena capacità intellettiva e relazionale. Idoneo per ruoli d'ufficio.",
+      diagnosiLastSituazioneHandicap: "Comma 1 Art. 3 L. 104/92",
+      diagnosiLastDataRevisione: "2028-11-20",
+      diagnosiLastProvenienzaInformazioni: "Commissione Medica Integrata ATS Brianza",
+      diagnosiLastIdL68Patologia: "PAT-MOT-04",
+      diagnosiLastPatologia: "Poliomielite e dismetria arto inferiore",
+      diagnosiLastDataRelazioneRevisione: "2024-11-15",
+      diagnosiLastTipoMinorazioniRelazione: "Motoria",
+      diagnosiLastVerbale: "VERB-INPS-2017-9942",
+
+      // --- LIMITAZIONI E CAPACITÀ FUNZIONALI (Sì/No) ---
+      stazioneEretta: false,
+      movimentazioneManuale: false,
+      manualitaFine: true,
+      artisuperiori: true,
+      vista: true,
+      udito: true,
+      colonna: false,
+      lavoriInAltezza: false,
+      contattoPubblico: true,
+      supervisione: false,
+      precedentiPenaliAbusoSostanze: false,
+      usoPc: true,
+      ecdl: true,
+      lingueStraniere: true,
+      inglese: true,
+      spagnolo: false,
+      tedesco: false,
+      francese: false,
+      altreLingue: "",
+
+      // --- MANSIONI & ATTITUDINI (Sì/No & Dettagli) ---
+      operaioGenerico: false,
+      operaioSpecializzato: false,
+      autistaFattorino: false,
+      verde: false,
+      magazzino: false,
+      supermercato: false,
+      cassa: true,
+      commesso: true,
+      pulizie: false,
+      mense: false,
+      socialeScuola: true,
+      impiegato: true,
+      impiegatoMansione: "Impiegato Amministrativo / Data Entry / Contabilità",
+      artigiano: false,
+      artigianoMansione: "",
+      grafica: false,
+      informatica: true,
+      professionista: "Tecnico Contabile",
+      patenteMuletto: false,
+      ristorazione: false,
+      elettricista: false,
+      idraulico: false,
+      meccanico: false,
+      disegnoMeccanico: false,
+      impTecnico: true,
+      impCommerciale: true,
+      receptionSegreteria: true,
+      impAmministrativo: true,
+      altraMansione: "Archivista informatico",
+      tutteMansioni: false,
+      conoscenzaInglese: true,
+      segnalatoValPotenziale: "Consigliato per percorsi di riqualificazione digitale",
+      noteDiProgetto: "Candidato idoneo per Progetto Dote Lavoro Art. 11.",
+      supporto: true,
+      mediazione: true,
+      autonomo: true,
+      ambitoProtetto: false,
+      soloTirocinio: false,
+      ancheTirocinio: true,
+
+      // --- DISPONIBILITÀ E CONDIZIONI ---
+      disponibilita: {
+        orarioPreferito: "Part-Time 30h",
+        disponibileTurni: false,
+        disponibileFestivi: false,
+        disponibileTrasferte: false,
+        smartWorking: true,
+        raggioMaxKm: 25,
+        mezzoMunit: true,
+        noteDisponibilita: "Disponibile subito per posizioni sedute in provincia di Lecco."
+      },
+
+      // --- WALLET DOCUMENTALE ---
+      wallet: [
+        { id: 101, nome: "Verbale_Invalidita_INPS_2017.pdf", tipo: "Verbale INPS", data: "2017-11-20", dimensione: "1.4 MB" },
+        { id: 102, nome: "Relazione_Diagnostica_ASL_Lecco.pdf", tipo: "Relazione ASL", data: "2024-11-15", dimensione: "850 KB" },
+        { id: 103, nome: "Curriculum_Vitae_Rossi_2026.pdf", tipo: "Curriculum", data: "2026-01-10", dimensione: "420 KB" },
+        { id: 104, nome: "DID_Dichiarazione_Immediata_Disponibilita.pdf", tipo: "DID", data: "2026-02-15", dimensione: "310 KB" },
+        { id: 105, nome: "Relazione_Funzionale_Comitato_Tecnico.pdf", tipo: "Comitato Tecnico", data: "2024-11-12", dimensione: "1.1 MB" }
+      ],
+
+      // --- COMITATO TECNICO (DAL DB ACCESS) ---
+      comitatoTecnico: {
+        numPratica: 4520,
+        dataSeduta: "2024-11-12",
+        dataVerbale: "2024-11-15",
+        asl: "ASST Lecco",
+        altrePatologie: "Nessuna patologia concomitante rilevante.",
+        prognosi: "Favorevole ad inserimento in ambiente d'ufficio senza barriere architettoniche.",
+        mediazione: true,
+        protetto: true,
+        supporto: true,
+        adozione: false,
+        percorsoScolastico: "Diploma Ragioneria / Tecnico Commerciale",
+        percorsoLavorativo: "Operatore telefonico 3 anni, addetto archiviazione 2 anni.",
+        autonomiaPers: "Autonomo negli spostamenti con autovettura adattata.",
+        capacitaRelazionali: "Buone doti comunicative e predisposizione al lavoro in team.",
+        abilitaCognitive: "Nella norma. Ottima capacità di concentrazione e calcolo.",
+        capacitaLavorative: "Idoneo ad attività impiegatizie sedute e data entry.",
+        anamnesi: "Disabilità motoria stabilizzata.",
+        responsabile: "Dott.ssa Laura Rota (Presidente Comitato)"
+      },
+
+      // --- PROGETTO INSERIMENTO LAVORATIVO ---
+      progettoInserimento: {
+        profiloDinamicoFunzionale: "Autonomia completa nella gestione postazione lavoro ergonomica.",
+        profiloSanitario: "Limitazione funzionale arto inferiore D.",
+        profiloScolastico: "Diploma di Scuola Secondaria Superiore.",
+        profiloLavorativo: "Esperienza in contabilità di base e fatturazione elettronica.",
+        profiloPersonaleSociale: "Persona motivata al reinserimento occupazionale stabile.",
+        calutazioneLavorativa: "Alta compatibilità con ruoli di back office ed Helpdesk di 1° livello.",
+        aspettiCriticita: "Sensibile a postazioni di lavoro con scale senza ascensore.",
+        aspettiPositivita: "Puntualità, precisione, padronanza pacchetto Office.",
+        progettoInserimento: "Avviamento con Art. 11 Convenzione o Chiamata Nominativa per Ufficio Amministrativo.",
+        data: "2025-02-10",
+        profiloGiudiziario: "Incensurato",
+        iddote: "DOTE-L68-2025-88",
+        anamnesi: "Scheda aggiornata da Operatore CPI Lecco."
+      }
+    },
+    {
+      id: 2,
+      numeroIscrizione: 11208,
+      codiceFiscale: "VNTLRA85M42F205Y",
+      codice: "PERS-002",
+      nome: "Laura Visconti",
+      dataNascita: "1985-08-02",
+      natoA: "Merate",
+      sesso: "F",
+      statoCivile: "Nubile",
+      comuneResidenza: "Merate",
+      domicilioComune: "Merate",
+      domicilioIndirizzo: "Corso Martiri 12",
+      domicilioProvincia: "LC",
+      indirizzo: "Corso Martiri 12",
+      residenzaProvincia: "LC",
+      telefono: "0399901234",
+      telefono1: "3471122334",
+      telefono2: "",
+      cellulare: "3471122334",
+      email: "l.visconti@domain.com",
+      patente: "B",
+
+      categoria: "Art. 18",
+      categoriaLg6869: "Orfani e Profughi (Art. 18)",
+      dataIscrizioneCO: "",
+      dataIscrizioneFD: "2020-05-14",
+      dataIscrizioneLista: "2020-05-14",
+      tipologiaIscrizioneLista: "Lista Categorie Protette Art.18",
+      idTipologiaIscrizioneLista: "TIP-ART18-02",
+      dataAnzianita: "2020-05-14",
+      attivoNonAttivo: "Attivo",
+      stato: "Occupato T.Det",
+      disponibile: "Sì",
+      cancellato: "No",
+      ecancellato: "No",
+      lavoraSn: "Sì",
+      operatore: "CPI Merate",
+      segnalatoDa: "Autocandidatura",
+      referente: "Dott. Rota",
+      nIscrizManuale: 11208,
+
+      idTitoloStudioLast: "TS-06",
+      titoloStudioLast: "Laurea Triennale in Design & Comunicazione",
+      titoloStudioAnnoInizio: "2004",
+      titoloStudioPresso: "Politecnico di Milano",
+      votazione: "108/110",
+      anno: 2008,
+      qualifica: "Graphic & Web Designer",
+      istituto: "Politecnico di Milano",
+
+      icPercentuale: 0,
+      diagnosi: "Orfano per causa di lavoro (Art. 18 Legge 68/99)",
+      dataVerbale: "2020-01-10",
+      allegatiLg68: true,
+
+      stazioneEretta: true,
+      movimentazioneManuale: true,
+      manualitaFine: true,
+      artisuperiori: true,
+      vista: true,
+      udito: true,
+      colonna: true,
+      lavoriInAltezza: true,
+      contattoPubblico: true,
+      supervisione: false,
+      precedentiPenaliAbusoSostanze: false,
+      usoPc: true,
+      ecdl: true,
+      lingueStraniere: true,
+      inglese: true,
+      spagnolo: true,
+      tedesco: false,
+      francese: false,
+
+      impiegato: true,
+      impiegatoMansione: "Receptionist / Segreteria commerciale / Graphic Designer",
+      cassa: true,
+      commesso: true,
+      grafica: true,
+      informatica: true,
+      professionista: "Graphic Designer Freelance",
+      impCommerciale: true,
+      receptionSegreteria: true,
+      impAmministrativo: true,
+
+      disponibilita: {
+        orarioPreferito: "Full-Time 40h",
+        disponibileTurni: true,
+        disponibileFestivi: false,
+        disponibileTrasferte: true,
+        smartWorking: true,
+        raggioMaxKm: 40,
+        mezzoMunit: true,
+        noteDisponibilita: "Disponibilità immediata per mansioni grafiche o segreteria."
+      },
+
+      wallet: [
+        { id: 201, nome: "Certificato_Art18_Prefettura.pdf", tipo: "Certificazione Art.18", data: "2020-01-10", dimensione: "980 KB" },
+        { id: 202, nome: "CV_Laura_Visconti_Graphic.pdf", tipo: "Curriculum", data: "2025-11-01", dimensione: "2.1 MB" }
+      ]
+    }
+  ],
+
+  avviamenti: [
+    {
+      idAvviamento: 101,
+      nIscrizione: 11208,
+      nomeIscritto: "Laura Visconti",
+      azienda: "ElectroTech S.r.l. - Lecco",
+      tipContratto: "T. Det",
+      dataInizio: "2025-06-01",
+      dataFine: "2026-05-31",
+      orario: "Full Time",
+      ore: 40,
+      nullaOsta: true
+    }
+  ],
+
+  noteDiario: [
+    {
+      id: 401,
+      numeroIscrizione: 10452,
+      nome: "Mario Rossi",
+      tipoNota: "Diario Operativo", // Diario Operativo vs Monitoraggio Tirocinio
+      data: "2026-02-15",
+      noteDiDiario: "Effettuato colloquio di aggiornamento DID e scheda competenze. Il candidato ha manifestato interesse per posizioni part-time 30 ore presso aziende zona Lecco nord.",
+      firma: "Operatore M. Galli",
+      operatore: "CPI Lecco"
+    },
+    {
+      id: 402,
+      numeroIscrizione: 10452,
+      nome: "Mario Rossi",
+      tipoNota: "Monitoraggio Tirocinio",
+      data: "2025-10-10",
+      noteDiDiario: "Verifica intermedia tirocinio L.68 presso Ufficio Amministrativo. Il tutor aziendale segnala ottima puntualità ed autonomia.",
+      firma: "Tutor SILV Dott.ssa Bianchi",
+      operatore: "CPI Lecco"
+    },
+    {
+      id: 403,
+      numeroIscrizione: 12104,
+      nome: "Giulia Ferrari",
+      tipoNota: "Monitoraggio Tirocinio",
+      data: "2026-03-01",
+      noteDiDiario: "Incontro di monitoraggio tirocinio presso SoftData. Il tutor aziendale riferisce ottima integrazione e rendimento eccellente nella bonifica database.",
+      firma: "Tutor SILV Dott. Riva",
+      operatore: "CPI Oggiono"
+    }
+  ],
+
+  // --- TABELLA PROGETTO_INSERIMENTO_LAV (PIL L.68/99) ---
+  progettiInserimentoLav: [
+    {
+      id: 1,
+      numeroIscrizione: 10452,
+      nome: "Mario Rossi",
+      codiceFiscale: "RSSMRA78A01E507X",
+      data: "2026-01-20",
+      idDote: "DOTE-L68-2026-88",
+      profiloDinamicoFunzionale: "Buona capacità di concentrazione e precisione esecutiva. Necessita di pause programmate per mansioni a videoterminale.",
+      profiloSanitario: "Disabilità motoria lieve arto inferiore sinistro (67% IC). Nessuna limitazione cognitiva né relazionale.",
+      profiloScolastico: "Diploma di Ragioneria conseguito con votazione 85/100 presso ITC Viganò.",
+      profiloLavorativo: "Esperienza decennale come contabile junior, impiegato back office e data entry.",
+      profiloPersonaleSociale: "Persona motivata, eccellente collaborazione con i colleghi e propensione all'apprendimento continuo.",
+      valutazioneLavorativa: "Pienamente idoneo a mansioni di ufficio, protocollo, gestione archivi e supporto amministrativo.",
+      aspettiCriticita: "Evitare sollevamento carichi pesanti superiori a 10 kg e postazioni con scale ripide.",
+      aspettiPositivita: "Autonomia negli spostamenti con mezzo proprio, ottima padronanza software gestionali ed Excel.",
+      progettoInserimento: "Attivazione tirocinio di inclusione L.68/99 della durata di 6 mesi finalizzato all'assunzione a tempo indeterminato come impiegato amministrativo.",
+      profiloGiudiziario: "Nulla da segnalare (certificato carichi pendenti e casellario giudiziale negativo).",
+      anamnesi: "Iscrizione alle liste L.68 dal 2018 con percorso di riqualificazione professionale completato."
+    }
+  ]
+};

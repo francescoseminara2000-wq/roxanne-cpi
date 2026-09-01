@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roxanne — Gestionale Collocamento Mirato L.68/99 (CPI)</title>
+  
+  <!-- Google Fonts: Outfit & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS v4 CDN -->
+  <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Flatpickr Custom DatePicker CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/it.js"></script>
+
+  <!-- ApexCharts CDN for Interactive Visual Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <!-- SweetAlert2 CDN for Enterprise Modals & Toast Alerts -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <!-- Custom Light Styles -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen flex flex-col">
+
+  <!-- TOP HEADER / CPI NAVBAR (CHRONO STELLAR RESPONSIVE) -->
+  <header class="bg-white/95 backdrop-blur-md border-b border-slate-200/80 sticky top-0 z-40 px-4 md:px-8 py-3 flex items-center justify-between shadow-xs">
+    <div class="flex items-center space-x-3">
+      <!-- Mobile Menu Toggle Button -->
+      <button id="btn-mobile-menu-toggle" class="md:hidden w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center border border-slate-200" aria-label="Menu Mobile">
+        <i class="fa-solid fa-bars text-sm"></i>
+      </button>
+
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-bold shadow-md shadow-blue-500/20 font-heading shrink-0">
+        <i class="fa-solid fa-people-roof text-lg"></i>
+      </div>
+      <div>
+        <div class="flex items-center space-x-2">
+          <span class="font-extrabold text-lg md:text-xl tracking-tight text-slate-900 font-heading"><span class="text-blue-600">ROXANNE</span> <span class="text-indigo-600">STELLAR</span></span>
+          <span class="text-[9px] md:text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200">L.68/99</span>
+        </div>
+        <p class="hidden sm:block text-[11px] text-slate-500">Gestionale Collocamento Mirato &middot; Centro per l'Impiego</p>
+      </div>
+    </div>
+
+    <!-- Navigation View Mode Switcher (Desktop) -->
+    <div class="hidden lg:flex items-center space-x-1 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80">
+      <button id="nav-mode-dashboard" class="nav-mode-btn cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition font-heading flex items-center space-x-2 text-slate-600 hover:text-slate-900">
+        <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+        <span>Dashboard KPI</span>
+      </button>
+
+      <button id="nav-mode-search" class="nav-mode-btn active cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition bg-white text-blue-600 shadow-xs font-heading flex items-center space-x-2">
+        <i class="fa-solid fa-magnifying-glass text-blue-600"></i>
+        <span>Ricerca Iscritti</span>
+      </button>
+
+      <button id="nav-mode-hub" class="nav-mode-btn cursor-pointer text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-1.5 rounded-xl transition font-heading flex items-center space-x-2">
+        <i class="fa-solid fa-address-card text-slate-500"></i>
+        <span>Scheda 360°</span>
+      </button>
+
+      <button id="nav-mode-matcher" class="nav-mode-btn cursor-pointer text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-1.5 rounded-xl transition font-heading flex items-center space-x-2">
+        <i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i>
+        <span>Matcher L.68</span>
+      </button>
+
+      <button id="nav-mode-audit" class="nav-mode-btn cursor-pointer text-xs font-semibold text-slate-600 hover:text-slate-900 px-3.5 py-1.5 rounded-xl transition font-heading flex items-center space-x-2">
+        <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
+        <span>Audit Logs</span>
+      </button>
+    </div>
+
+    <!-- Right Header Actions -->
+    <div class="flex items-center space-x-2 sm:space-x-3">
+      <button id="btn-quick-new-persona" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3 sm:px-4 py-2 rounded-xl transition shadow-xs flex items-center space-x-1.5 font-heading">
+        <i class="fa-solid fa-user-plus text-xs"></i>
+        <span class="hidden sm:inline">Nuovo Iscritto</span>
+      </button>
+
+      <button id="btn-reset-db" class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium px-3 py-2 rounded-xl border border-slate-200 transition" title="Ripristina Dati Iniziali DB Access">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span class="hidden md:inline">Reset DB</span>
+      </button>
+
+      <div class="hidden sm:block h-6 w-[1px] bg-slate-200"></div>
+
+      <div class="flex items-center space-x-2 bg-slate-50 border border-slate-200/90 rounded-xl px-2.5 py-1.5">
+        <div class="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center text-[10px] font-bold font-heading">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div class="text-left text-xs">
+          <select id="select-active-user" class="bg-transparent font-bold text-slate-800 text-xs border-0 p-0 focus:ring-0 cursor-pointer font-heading">
+            <option value="usr-1">Marco Galli (Admin)</option>
+            <option value="usr-2">Elena Bianchi (SILV)</option>
+            <option value="usr-3">Roberto Rossi (Tutor)</option>
+            <option value="usr-4">Anna Verdi (ASL)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE NAVIGATION DRAWER (OFF-CANVAS FOR SMARTPHONES) -->
+  <div id="mobile-drawer" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex">
+    <div class="w-72 max-w-[80vw] bg-white h-full shadow-2xl p-5 flex flex-col justify-between animate-slide-right">
+      <div class="space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
+              <i class="fa-solid fa-people-roof text-sm"></i>
+            </div>
+            <span class="font-extrabold text-base text-slate-900 font-heading">ROXANNE</span>
+          </div>
+          <button id="btn-close-mobile-drawer" class="w-8 h-8 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <nav class="space-y-1.5 text-xs font-semibold font-heading">
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 bg-blue-50 text-blue-700" data-target="section-dashboard">
+            <i class="fa-solid fa-chart-pie text-emerald-600"></i>
+            <span>Dashboard KPI & Analytics</span>
+          </button>
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-search">
+            <i class="fa-solid fa-magnifying-glass text-blue-600"></i>
+            <span>Ricerca Generale Iscritti</span>
+          </button>
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-citizen-hub">
+            <i class="fa-solid fa-address-card text-slate-600"></i>
+            <span>Scheda Cittadino 360°</span>
+          </button>
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-matcher">
+            <i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i>
+            <span>Matcher Domanda/Offerta</span>
+          </button>
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-audit">
+            <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
+            <span>Audit Logs Operatori</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="pt-4 border-t border-slate-100 text-[11px] text-slate-400 text-center">
+        Roxanne Stellar CPI &bull; L.68/99
+      </div>
+    </div>
+    <div id="mobile-drawer-backdrop" class="flex-1"></div>
+  </div>
+
+  <!-- MAIN WRAPPER -->
+  <main class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6">
+
+    <!-- VIEW 0: DASHBOARD KPI & ANALYTICS (CHRONO STELLAR EXECUTIVE OVERVIEW) -->
+    <section id="section-dashboard" class="space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold font-heading text-slate-900 tracking-tight">Executive Dashboard & Analytics</h1>
+          <p class="text-xs text-slate-500">Panoramica strategica in tempo reale degli iscritti al collocamento mirato L.68/99 del Centro per l'Impiego.</p>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <button id="btn-dash-new-cittadino" class="cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-md shadow-blue-500/20 flex items-center space-x-2 font-heading transition">
+            <i class="fa-solid fa-plus"></i>
+            <span>Nuovo Inserimento L.68</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Summary Cards Row -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="stellar-kpi-card">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-heading">Totale Iscritti L.68</span>
+            <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-users"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span id="kpi-total-iscritti" class="text-3xl font-extrabold text-slate-900 font-heading">0</span>
+            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">100% Attivi</span>
+          </div>
+        </div>
+
+        <div class="stellar-kpi-card">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-heading">Disoccupati Pronti</span>
+            <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-briefcase"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span id="kpi-total-disoccupati" class="text-3xl font-extrabold text-slate-900 font-heading">0</span>
+            <span class="text-xs font-medium text-slate-500">In cerca attiva</span>
+          </div>
+        </div>
+
+        <div class="stellar-kpi-card">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-heading">Avviati / Tirocini</span>
+            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-handshake-angle"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span id="kpi-total-occupati" class="text-3xl font-extrabold text-slate-900 font-heading">0</span>
+            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">In Inserimento</span>
+          </div>
+        </div>
+
+        <div class="stellar-kpi-card">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-heading">Media Invalidità Civile</span>
+            <div class="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center text-sm font-bold">
+              <i class="fa-solid fa-heart-pulse"></i>
+            </div>
+          </div>
+          <div class="mt-3 flex items-baseline justify-between">
+            <span id="kpi-avg-ic" class="text-3xl font-extrabold text-rose-600 font-heading">65%</span>
+            <span class="text-xs font-medium text-slate-500">Soglia media L.68</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ApexCharts Row -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Chart 1: Ripartizione Categorie L.68 (5/12) -->
+        <div class="stellar-glass-card p-6 lg:col-span-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-slate-900 text-sm font-heading flex items-center gap-2">
+              <i class="fa-solid fa-chart-pie text-blue-600"></i> Ripartizione Categorie L.68/99
+            </h3>
+            <span class="text-[11px] text-slate-400 font-medium">Quote Riserva</span>
+          </div>
+          <div id="chart-cat-breakdown" class="h-64 flex items-center justify-center"></div>
+        </div>
+
+        <!-- Chart 2: Stato Occupazionale & Inserimenti (7/12) -->
+        <div class="stellar-glass-card p-6 lg:col-span-7 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h3 class="font-bold text-slate-900 text-sm font-heading flex items-center gap-2">
+              <i class="fa-solid fa-chart-column text-indigo-600"></i> Distribuzione Stato Occupazionale
+            </h3>
+            <span class="text-[11px] text-slate-400 font-medium">Monitoraggio CPI</span>
+          </div>
+          <div id="chart-status-breakdown" class="h-64 flex items-center justify-center"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW 1: RICERCA GENERALE ISCRITTI (FINESTRA SEPARATA) -->
+    <section id="section-search" class="space-y-6">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold font-heading text-slate-900">Ricerca & Archivio Generale Iscritti L.68/99</h1>
+          <p class="text-xs text-slate-500">Motore di ricerca avanzato per accedere alla Scheda Dettagliata 360° di ciascun cittadino.</p>
+        </div>
+
+        <div class="flex items-center space-x-3">
+          <span id="badge-search-count" class="text-xs px-3 py-1 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200 font-heading">
+            0 Iscritti nel Database
+          </span>
+        </div>
+      </div>
+
+      <!-- Advanced Multi-Field Search Panel -->
+      <div class="card-white p-6 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2 font-heading">
+            <i class="fa-solid fa-sliders text-blue-600"></i> Filtri di Ricerca Avanzata per Campo
+          </h3>
+          
+          <button id="btn-reset-advanced-search" class="cursor-pointer text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1 font-heading">
+            <i class="fa-solid fa-filter-circle-xmark"></i> Azzera Filtri Ricerca
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
+          <div>
+            <label class="rox-label">Nome / Cognome</label>
+            <input type="text" id="af-nome" placeholder="es. Mario o Rossi" class="rox-input">
+          </div>
+
+          <div>
+            <label class="rox-label">Codice Fiscale</label>
+            <input type="text" id="af-cf" placeholder="es. RSSMRA78..." class="rox-input font-mono uppercase">
+          </div>
+
+          <div>
+            <label class="rox-label">Numero Iscrizione L.68</label>
+            <input type="number" id="af-num-iscriz" placeholder="es. 10452" class="rox-input font-mono">
+          </div>
+
+          <div>
+            <label class="rox-label">Comune di Residenza</label>
+            <select id="af-comune" class="rox-select w-full">
+              <option value="">Tutti i Comuni</option>
+              <option value="Lecco">Lecco (LC)</option>
+              <option value="Abbadia Lariana">Abbadia Lariana (LC)</option>
+              <option value="Airuno">Airuno (LC)</option>
+              <option value="Annone di Brianza">Annone di Brianza (LC)</option>
+              <option value="Ballabio">Ballabio (LC)</option>
+              <option value="Barzanò">Barzanò (LC)</option>
+              <option value="Bellano">Bellano (LC)</option>
+              <option value="Bosisio Parini">Bosisio Parini (LC)</option>
+              <option value="Bulciago">Bulciago (LC)</option>
+              <option value="Calco">Calco (LC)</option>
+              <option value="Calolziocorte">Calolziocorte (LC)</option>
+              <option value="Carenno">Carenno (LC)</option>
+              <option value="Casatenovo">Casatenovo (LC)</option>
+              <option value="Cassago Brianza">Cassago Brianza (LC)</option>
+              <option value="Cernusco Lombardone">Cernusco Lombardone (LC)</option>
+              <option value="Civate">Civate (LC)</option>
+              <option value="Colico">Colico (LC)</option>
+              <option value="Costa Masnaga">Costa Masnaga (LC)</option>
+              <option value="Cremella">Cremella (LC)</option>
+              <option value="Dervio">Dervio (LC)</option>
+              <option value="Galbiate">Galbiate (LC)</option>
+              <option value="Garlate">Garlate (LC)</option>
+              <option value="Imbersago">Imbersago (LC)</option>
+              <option value="Introbio">Introbio (LC)</option>
+              <option value="Lomagna">Lomagna (LC)</option>
+              <option value="Malgrate">Malgrate (LC)</option>
+              <option value="Mandello del Lario">Mandello del Lario (LC)</option>
+              <option value="Merate">Merate (LC)</option>
+              <option value="Missaglia">Missaglia (LC)</option>
+              <option value="Molteno">Molteno (LC)</option>
+              <option value="Montevecchia">Montevecchia (LC)</option>
+              <option value="Nibionno">Nibionno (LC)</option>
+              <option value="Oggiono">Oggiono (LC)</option>
+              <option value="Olgiate Molgora">Olgiate Molgora (LC)</option>
+              <option value="Olginate">Olginate (LC)</option>
+              <option value="Osnago">Osnago (LC)</option>
+              <option value="Paderno d'Adda">Paderno d'Adda (LC)</option>
+              <option value="Robbiate">Robbiate (LC)</option>
+              <option value="Rogeno">Rogeno (LC)</option>
+              <option value="Sirone">Sirone (LC)</option>
+              <option value="Sirtori">Sirtori (LC)</option>
+              <option value="Valgreghentino">Valgreghentino (LC)</option>
+              <option value="Valmadrera">Valmadrera (LC)</option>
+              <option value="Varenna">Varenna (LC)</option>
+              <option value="Vercurago">Vercurago (LC)</option>
+              <option value="Verderio">Verderio (LC)</option>
+              <option value="Viganò">Viganò (LC)</option>
+              <option value="Milano">Milano (MI)</option>
+              <option value="Monza">Monza (MB)</option>
+              <option value="Como">Como (CO)</option>
+              <option value="Bergamo">Bergamo (BG)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="rox-label">Categoria L.68/99</label>
+            <select id="af-categoria" class="rox-select w-full">
+              <option value="ALL">Tutte le Categorie</option>
+              <option value="C.O.">C.O. Disabili (Art. 1)</option>
+              <option value="Art. 18">Art. 18 Categorie Protette</option>
+              <option value="F.D.">F.D. Disabili</option>
+              <option value="BSL">BSL</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="rox-label">Stato Occupazionale</label>
+            <select id="af-stato" class="rox-select w-full">
+              <option value="ALL">Tutti gli Stati Occupazionali</option>
+              <option value="Disoccupato">Disoccupati</option>
+              <option value="In Tirocinio">In Tirocinio</option>
+              <option value="Occupato">Occupati (T.Det / T.Indet)</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="rox-label">% Invalidità Minima (%)</label>
+            <input type="number" id="af-min-ic" min="0" max="100" placeholder="es. 46" class="rox-input">
+          </div>
+
+          <div class="flex items-end pb-1.5">
+            <label class="flex items-center space-x-2 cursor-pointer font-medium text-slate-700">
+              <input type="checkbox" id="af-noeretta" class="rounded border-slate-300 text-blue-600">
+              <span>Solo Mansione Seduta (No Eretta)</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Container Header & View Mode Switcher -->
+      <div class="flex items-center justify-between">
+        <span id="badge-search-results-title" class="text-xs font-bold text-slate-700 uppercase tracking-wider font-heading">
+          Risultati Ricerca
+        </span>
+
+        <!-- View Mode Buttons -->
+        <div class="flex items-center space-x-1 bg-white p-1 rounded-xl border border-slate-200 shadow-xs">
+          <button id="vm-table" class="view-mode-btn active cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-lg transition bg-blue-50 text-blue-700 border border-blue-200 flex items-center space-x-1.5 font-heading">
+            <i class="fa-solid fa-table-list"></i>
+            <span class="hidden sm:inline">Vista Tabella</span>
+          </button>
+
+          <button id="vm-cards" class="view-mode-btn cursor-pointer text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 font-heading">
+            <i class="fa-solid fa-table-cells-large"></i>
+            <span class="hidden sm:inline">Vista Schede / Card</span>
+          </button>
+
+          <button id="vm-compact" class="view-mode-btn cursor-pointer text-xs font-medium text-slate-600 hover:text-slate-900 px-3 py-1.5 rounded-lg transition flex items-center space-x-1.5 font-heading">
+            <i class="fa-solid fa-bars-staggered"></i>
+            <span class="hidden sm:inline">Vista Elenco Compatto</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results View 1: Table -->
+      <div id="view-results-table" class="card-white overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-700">
+            <thead class="bg-slate-100/80 text-slate-500 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 font-heading">
+              <tr>
+                <th class="px-5 py-3.5">N. Iscriz / Codice</th>
+                <th class="px-5 py-3.5">Cittadino & Codice Fiscale</th>
+                <th class="px-5 py-3.5">Categoria L.68</th>
+                <th class="px-5 py-3.5">% Invalidità Civile</th>
+                <th class="px-5 py-3.5">Comune Residenza</th>
+                <th class="px-5 py-3.5">Stato & Operatore</th>
+                <th class="px-5 py-3.5 text-right">Azioni Scheda</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-main-search" class="divide-y divide-slate-100">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Results View 2: Cards Grid -->
+      <div id="view-results-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 hidden">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- Results View 3: Compact List -->
+      <div id="view-results-compact" class="card-white divide-y divide-slate-100 hidden">
+        <!-- Rendered via JS -->
+      </div>
+    </section>
+
+    <!-- VIEW 2: CITIZEN HUB 360° (FINESTRA DETTAGLIO ISOLATA) -->
+    <section id="section-citizen-hub" class="space-y-6 hidden">
+
+        <!-- CITIZEN MASTER HEADER CARD (REDESIGNED ULTRA-CLEAN EXECUTIVE LAYOUT) -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6 space-y-5">
+          
+          <!-- MAIN ROW: Grid 12 Colonne con perfetta distribuzione degli spazi -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+            
+            <!-- Profilo Anagrafico Principale (5/12 cols - MODERNO & ISOLATO A MICRO-CARD) -->
+            <div class="lg:col-span-5 flex items-center space-x-4">
+              <!-- Avatar Premium con Badge Posizionato -->
+              <div class="relative shrink-0">
+                <div id="hub-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-700 to-indigo-700 text-white flex items-center justify-center font-extrabold text-xl shadow-md shadow-blue-500/25 font-heading">
+                  MR
+                </div>
+                <div class="absolute -bottom-1.5 -right-1.5 bg-emerald-500 w-4.5 h-4.5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white" title="Iscritto Attivo">
+                  <i class="fa-solid fa-check"></i>
+                </div>
+              </div>
+
+              <!-- Dati Anagrafici Strutturati a Micro-Contenitori Isolati -->
+              <div class="space-y-2 flex-1 min-w-0">
+                <!-- Riga 1: Nome + Categoria + Stato Occupazionale -->
+                <div class="flex items-center space-x-2 flex-wrap gap-y-1.5">
+                  <h1 id="hub-nome" class="text-xl font-extrabold text-slate-900 font-heading tracking-tight">Mario Rossi</h1>
+                  <span id="hub-cat-badge" class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs">
+                    C.O. Disabili
+                  </span>
+                  <span id="hub-stato-badge" class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs">
+                    Disoccupato
+                  </span>
+                </div>
+
+                <!-- Riga 2: Micro-Chip Isolati per Codice Fiscale & N. Iscrizione -->
+                <div class="flex items-center space-x-2 flex-wrap gap-y-1 text-xs">
+                  <div class="bg-slate-50 border border-slate-200/90 rounded-lg px-2.5 py-1 flex items-center space-x-1.5 shadow-2xs">
+                    <span class="text-[9px] uppercase font-bold text-slate-400">CF</span>
+                    <strong id="hub-cf" class="text-slate-800 font-bold tracking-wide">RSSMRA78A01E507X</strong>
+                  </div>
+
+                  <div class="bg-blue-50/60 border border-blue-200/80 rounded-lg px-2.5 py-1 flex items-center space-x-1.5 shadow-2xs">
+                    <span class="text-[9px] uppercase font-bold text-blue-500">Iscriz.</span>
+                    <strong id="hub-num-iscriz" class="text-blue-700 font-bold">#10452</strong>
+                  </div>
+                </div>
+
+                <!-- Riga 3: Recapiti Isolati a Badge Minimal -->
+                <div class="flex items-center space-x-2 text-[11px] text-slate-600 flex-wrap gap-y-1 pt-0.5">
+                  <div class="bg-slate-100/70 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium">
+                    <i class="fa-solid fa-location-dot text-rose-500 text-[10px]"></i>
+                    <span id="hub-residenza" class="font-semibold text-slate-700">Lecco</span>
+                  </div>
+
+                  <div class="bg-slate-100/70 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium">
+                    <i class="fa-solid fa-phone text-emerald-600 text-[10px]"></i>
+                    <span id="hub-tel" class="font-semibold text-slate-700">3389876543</span>
+                  </div>
+
+                  <div class="bg-slate-100/70 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium truncate max-w-[170px]">
+                    <i class="fa-solid fa-envelope text-blue-500 text-[10px]"></i>
+                    <span id="hub-email" class="font-semibold text-slate-700 truncate">mario.rossi@email.it</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Metriche & Indicatori Chiave (4/12 cols) -->
+            <div class="lg:col-span-4 flex items-center space-x-3 flex-wrap sm:flex-nowrap gap-y-2">
+              <div class="bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-2 flex items-center space-x-2.5 shrink-0">
+                <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xs font-bold">
+                  <i class="fa-solid fa-percent"></i>
+                </div>
+                <div>
+                  <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block font-heading">Invalidità</span>
+                  <span id="hub-ic-perc" class="text-xs font-extrabold text-rose-600 font-heading">67% IC</span>
+                </div>
+              </div>
+
+              <!-- Widget Ultima Nota Diario -->
+              <div id="hub-last-note-box" class="flex-1 bg-amber-50/70 border border-amber-200/80 rounded-xl px-3 py-2 space-y-0.5 overflow-hidden">
+                <div class="flex items-center justify-between text-[10px] font-heading">
+                  <span class="font-bold text-amber-900 flex items-center gap-1 truncate">
+                    <i class="fa-solid fa-note-sticky text-amber-600"></i>
+                    <span id="hub-last-note-author">Elena Bianchi</span>
+                  </span>
+                  <span id="hub-last-note-date" class="text-[9px] font-semibold text-amber-700/80 shrink-0 ml-1">05/03/2026</span>
+                </div>
+                <p id="hub-last-note-text" class="text-[11px] text-slate-700 italic truncate" title="Visualizza nel diario">
+                  Colloquio orientativo per inserimento L.68 completato con successo.
+                </p>
+              </div>
+            </div>
+
+            <!-- Pulsanti d'Azione Rapida (3/12 cols) -->
+            <div class="lg:col-span-3 flex items-center justify-start lg:justify-end space-x-2">
+              <button id="btn-back-to-search" class="cursor-pointer bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold px-2.5 py-2 rounded-xl transition border border-slate-200 shadow-2xs flex items-center space-x-1.5 font-heading">
+                <i class="fa-solid fa-arrow-left text-slate-400"></i>
+                <span>Indietro</span>
+              </button>
+
+              <button id="btn-save-inline-hub" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-3.5 py-2 rounded-xl transition shadow-sm shadow-blue-500/20 flex items-center space-x-1.5 font-heading">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>Salva</span>
+              </button>
+
+              <button id="btn-hub-add-nota" class="cursor-pointer bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-2.5 py-2 rounded-xl transition shadow-2xs flex items-center space-x-1 font-heading">
+                <i class="fa-solid fa-plus text-[10px]"></i>
+                <span>Nota</span>
+              </button>
+
+              <button id="btn-hub-upload-doc" class="cursor-pointer bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold px-2.5 py-2 rounded-xl border border-blue-200/80 transition flex items-center space-x-1 font-heading">
+                <i class="fa-solid fa-cloud-arrow-up text-[10px]"></i>
+                <span>Wallet</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- SUB-TABS NAVIGATION: Clean Minimalist Tab Bar -->
+          <div class="border-t border-slate-100 pt-3 flex items-center space-x-1 overflow-x-auto scrollbar-none text-xs">
+            <button class="hub-tab-link active px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-panoramica">
+              <i class="fa-solid fa-address-card text-blue-600"></i>
+              <span>Anagrafica & CPI</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-sanitario">
+              <i class="fa-solid fa-notes-medical text-rose-600"></i>
+              <span>Sanitario & Diagnosi</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-istruzione">
+              <i class="fa-solid fa-graduation-cap text-indigo-600"></i>
+              <span>Istruzione & Formazione</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-funzionale">
+              <i class="fa-solid fa-child text-purple-600"></i>
+              <span>Capacità & Mansioni L.68</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-disponibilita">
+              <i class="fa-solid fa-clock text-emerald-600"></i>
+              <span>Disponibilità</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-wallet">
+              <i class="fa-solid fa-wallet text-amber-500"></i>
+              <span>Wallet Allegati</span>
+              <span id="badge-wallet-count" class="ml-1 text-[10px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold border border-slate-200">0</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-comitato">
+              <i class="fa-solid fa-building-columns text-cyan-600"></i>
+              <span>Comitato ASL</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-pil">
+              <i class="fa-solid fa-file-signature text-teal-600"></i>
+              <span>Progetto Inserimento (PIL)</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-diario">
+              <i class="fa-solid fa-book-bookmark text-slate-600"></i>
+              <span>Diario Operatore</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CITIZEN HUB TAB CONTENTS (GROUPED CARDS LAYOUT) -->
+        <div class="space-y-6">
+
+          <!-- TAB 1: ANAGRAFICA & CPI (ASIMMETRIC DYNAMIC CARD LAYOUT) -->
+          <div id="hub-tab-panoramica" class="hub-tab-content space-y-6">
+            
+            <!-- Row 1: Dati Anagrafici Identificativi & Residenza -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Card 1: Dati Identificativi (7/12 cols) -->
+              <div class="form-group-card lg:col-span-7 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-user-gear text-blue-600"></i> Dati Identificativi & Anagrafica</h4>
+                
+                <div class="flex flex-wrap gap-4 text-xs">
+                  <div class="w-full sm:w-5/12">
+                    <label class="rox-label">Nome *</label>
+                    <input type="text" id="ef-nome" class="rox-input font-bold text-slate-900">
+                  </div>
+
+                  <div class="w-full sm:w-5/12">
+                    <label class="rox-label">Cognome *</label>
+                    <input type="text" id="ef-cognome" class="rox-input font-bold text-slate-900">
+                  </div>
+
+                  <div class="w-28">
+                    <label class="rox-label">Sesso</label>
+                    <select id="ef-sesso" class="rox-select w-full">
+                      <option value="M">Maschile (M)</option>
+                      <option value="F">Femminile (F)</option>
+                    </select>
+                  </div>
+
+                  <div class="w-full sm:w-6/12">
+                    <label class="rox-label">Codice Fiscale *</label>
+                    <input type="text" id="ef-cf" class="rox-input font-mono uppercase text-blue-700 font-bold">
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Data Nascita</label>
+                    <input type="date" id="ef-data-nascita" class="rox-input">
+                  </div>
+
+                  <div class="flex-1 min-w-[140px]">
+                    <label class="rox-label">Luogo di Nascita</label>
+                    <input type="text" id="ef-nato-a" class="rox-input">
+                  </div>
+
+                  <div class="w-32">
+                    <label class="rox-label">Patente</label>
+                    <input type="text" id="ef-patente" class="rox-input">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Residenza & Domicilio (5/12 cols) -->
+              <div class="form-group-card lg:col-span-5 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-location-dot text-rose-600"></i> Residenza & Domicilio</h4>
+                
+                <div class="space-y-4 text-xs">
+                  <!-- Residenza -->
+                  <div class="space-y-2 pb-3 border-b border-slate-100">
+                    <div class="flex gap-2">
+                      <div class="flex-1 min-w-[140px]">
+                        <label class="rox-label">Comune Residenza</label>
+                        <select id="ef-residenza" class="rox-select w-full">
+                          <option value="Lecco">Lecco (LC)</option>
+                          <option value="Abbadia Lariana">Abbadia Lariana (LC)</option>
+                          <option value="Airuno">Airuno (LC)</option>
+                          <option value="Annone di Brianza">Annone di Brianza (LC)</option>
+                          <option value="Ballabio">Ballabio (LC)</option>
+                          <option value="Barzanò">Barzanò (LC)</option>
+                          <option value="Bellano">Bellano (LC)</option>
+                          <option value="Bosisio Parini">Bosisio Parini (LC)</option>
+                          <option value="Bulciago">Bulciago (LC)</option>
+                          <option value="Calco">Calco (LC)</option>
+                          <option value="Calolziocorte">Calolziocorte (LC)</option>
+                          <option value="Carenno">Carenno (LC)</option>
+                          <option value="Casatenovo">Casatenovo (LC)</option>
+                          <option value="Cassago Brianza">Cassago Brianza (LC)</option>
+                          <option value="Cernusco Lombardone">Cernusco Lombardone (LC)</option>
+                          <option value="Civate">Civate (LC)</option>
+                          <option value="Colico">Colico (LC)</option>
+                          <option value="Costa Masnaga">Costa Masnaga (LC)</option>
+                          <option value="Cremella">Cremella (LC)</option>
+                          <option value="Dervio">Dervio (LC)</option>
+                          <option value="Galbiate">Galbiate (LC)</option>
+                          <option value="Garlate">Garlate (LC)</option>
+                          <option value="Imbersago">Imbersago (LC)</option>
+                          <option value="Introbio">Introbio (LC)</option>
+                          <option value="Lomagna">Lomagna (LC)</option>
+                          <option value="Malgrate">Malgrate (LC)</option>
+                          <option value="Mandello del Lario">Mandello del Lario (LC)</option>
+                          <option value="Merate">Merate (LC)</option>
+                          <option value="Missaglia">Missaglia (LC)</option>
+                          <option value="Molteno">Molteno (LC)</option>
+                          <option value="Montevecchia">Montevecchia (LC)</option>
+                          <option value="Nibionno">Nibionno (LC)</option>
+                          <option value="Oggiono">Oggiono (LC)</option>
+                          <option value="Olgiate Molgora">Olgiate Molgora (LC)</option>
+                          <option value="Olginate">Olginate (LC)</option>
+                          <option value="Osnago">Osnago (LC)</option>
+                          <option value="Paderno d'Adda">Paderno d'Adda (LC)</option>
+                          <option value="Robbiate">Robbiate (LC)</option>
+                          <option value="Rogeno">Rogeno (LC)</option>
+                          <option value="Sirone">Sirone (LC)</option>
+                          <option value="Sirtori">Sirtori (LC)</option>
+                          <option value="Valgreghentino">Valgreghentino (LC)</option>
+                          <option value="Valmadrera">Valmadrera (LC)</option>
+                          <option value="Varenna">Varenna (LC)</option>
+                          <option value="Vercurago">Vercurago (LC)</option>
+                          <option value="Verderio">Verderio (LC)</option>
+                          <option value="Viganò">Viganò (LC)</option>
+                          <option value="Milano">Milano (MI)</option>
+                          <option value="Monza">Monza (MB)</option>
+                          <option value="Como">Como (CO)</option>
+                          <option value="Bergamo">Bergamo (BG)</option>
+                        </select>
+                      </div>
+                      <div class="w-20">
+                        <label class="rox-label">Prov (PR)</label>
+                        <input type="text" id="ef-residenza-prov" readonly value="LC" class="rox-input font-bold text-center bg-slate-100 text-slate-700">
+                      </div>
+                      <div class="w-24">
+                        <label class="rox-label">CAP</label>
+                        <input type="text" id="ef-residenza-cap" readonly value="23900" class="rox-input font-bold text-center bg-slate-100 text-blue-700">
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="rox-label">Indirizzo Residenza (Via, Piazza, N. Civico)</label>
+                      <input type="text" id="ef-indirizzo" placeholder="es. Via Manzoni 12" class="rox-input">
+                    </div>
+                  </div>
+
+                  <!-- Domicilio -->
+                  <div class="space-y-2">
+                    <div class="flex gap-2">
+                      <div class="flex-1 min-w-[140px]">
+                        <label class="rox-label">Comune Domicilio</label>
+                        <select id="ef-domicilio-comune" class="rox-select w-full">
+                          <option value="Lecco">Lecco (LC)</option>
+                          <option value="Abbadia Lariana">Abbadia Lariana (LC)</option>
+                          <option value="Airuno">Airuno (LC)</option>
+                          <option value="Annone di Brianza">Annone di Brianza (LC)</option>
+                          <option value="Ballabio">Ballabio (LC)</option>
+                          <option value="Barzanò">Barzanò (LC)</option>
+                          <option value="Bellano">Bellano (LC)</option>
+                          <option value="Bosisio Parini">Bosisio Parini (LC)</option>
+                          <option value="Bulciago">Bulciago (LC)</option>
+                          <option value="Calco">Calco (LC)</option>
+                          <option value="Calolziocorte">Calolziocorte (LC)</option>
+                          <option value="Carenno">Carenno (LC)</option>
+                          <option value="Casatenovo">Casatenovo (LC)</option>
+                          <option value="Cassago Brianza">Cassago Brianza (LC)</option>
+                          <option value="Cernusco Lombardone">Cernusco Lombardone (LC)</option>
+                          <option value="Civate">Civate (LC)</option>
+                          <option value="Colico">Colico (LC)</option>
+                          <option value="Costa Masnaga">Costa Masnaga (LC)</option>
+                          <option value="Cremella">Cremella (LC)</option>
+                          <option value="Dervio">Dervio (LC)</option>
+                          <option value="Galbiate">Galbiate (LC)</option>
+                          <option value="Garlate">Garlate (LC)</option>
+                          <option value="Imbersago">Imbersago (LC)</option>
+                          <option value="Introbio">Introbio (LC)</option>
+                          <option value="Lomagna">Lomagna (LC)</option>
+                          <option value="Malgrate">Malgrate (LC)</option>
+                          <option value="Mandello del Lario">Mandello del Lario (LC)</option>
+                          <option value="Merate">Merate (LC)</option>
+                          <option value="Missaglia">Missaglia (LC)</option>
+                          <option value="Molteno">Molteno (LC)</option>
+                          <option value="Montevecchia">Montevecchia (LC)</option>
+                          <option value="Nibionno">Nibionno (LC)</option>
+                          <option value="Oggiono">Oggiono (LC)</option>
+                          <option value="Olgiate Molgora">Olgiate Molgora (LC)</option>
+                          <option value="Olginate">Olginate (LC)</option>
+                          <option value="Osnago">Osnago (LC)</option>
+                          <option value="Paderno d'Adda">Paderno d'Adda (LC)</option>
+                          <option value="Robbiate">Robbiate (LC)</option>
+                          <option value="Rogeno">Rogeno (LC)</option>
+                          <option value="Sirone">Sirone (LC)</option>
+                          <option value="Sirtori">Sirtori (LC)</option>
+                          <option value="Valgreghentino">Valgreghentino (LC)</option>
+                          <option value="Valmadrera">Valmadrera (LC)</option>
+                          <option value="Varenna">Varenna (LC)</option>
+                          <option value="Vercurago">Vercurago (LC)</option>
+                          <option value="Verderio">Verderio (LC)</option>
+                          <option value="Viganò">Viganò (LC)</option>
+                          <option value="Milano">Milano (MI)</option>
+                          <option value="Monza">Monza (MB)</option>
+                          <option value="Como">Como (CO)</option>
+                          <option value="Bergamo">Bergamo (BG)</option>
+                        </select>
+                      </div>
+                      <div class="w-20">
+                        <label class="rox-label">Prov (PR)</label>
+                        <input type="text" id="ef-domicilio-prov" readonly value="LC" class="rox-input font-bold text-center bg-slate-100 text-slate-700">
+                      </div>
+                      <div class="w-24">
+                        <label class="rox-label">CAP</label>
+                        <input type="text" id="ef-domicilio-cap" readonly value="23900" class="rox-input font-bold text-center bg-slate-100 text-blue-700">
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="rox-label">Indirizzo Domicilio (Via, Piazza, N. Civico)</label>
+                      <input type="text" id="ef-domicilio-indirizzo" placeholder="es. Corso Martiri 45" class="rox-input">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Row 2: Recapiti & CPI Details -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Card 3: Recapiti (4/12 cols) -->
+              <div class="form-group-card lg:col-span-4 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-phone text-emerald-600"></i> Recapiti Telefonici & Email</h4>
+                
+                <div class="space-y-3 text-xs">
+                  <div>
+                    <label class="rox-label">Cellulare / Primario</label>
+                    <input type="text" id="ef-tel2" class="rox-input font-mono font-bold text-slate-800">
+                  </div>
+                  <div>
+                    <label class="rox-label">Telefono Fisso</label>
+                    <input type="text" id="ef-tel" class="rox-input font-mono">
+                  </div>
+                  <div>
+                    <label class="rox-label">Email di Contatto</label>
+                    <input type="email" id="ef-email" class="rox-input font-semibold text-blue-700">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 4: Stato Iscrizione & Operatore CPI (8/12 cols) -->
+              <div class="form-group-card lg:col-span-8 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-building-user text-indigo-600"></i> Stato Iscrizione & Riferimenti CPI</h4>
+                
+                <div class="flex flex-wrap gap-4 text-xs">
+                  <div class="w-36">
+                    <label class="rox-label">N. Iscrizione L.68</label>
+                    <input type="number" id="ef-num-iscriz" class="rox-input font-mono font-extrabold text-blue-600">
+                  </div>
+
+                  <div class="w-44">
+                    <label class="rox-label">Stato Occupazionale</label>
+                    <select id="ef-stato-occup" class="rox-select w-full text-emerald-700 font-bold">
+                      <option value="Disoccupato">Disoccupato</option>
+                      <option value="Occupato T.Det">Occupato T.Det</option>
+                      <option value="Occupato T.Indet">Occupato T.Indet</option>
+                      <option value="In Tirocinio">In Tirocinio</option>
+                    </select>
+                  </div>
+
+                  <div class="w-40">
+                    <label class="rox-label">Categoria L.68/99</label>
+                    <select id="ef-categoria" class="rox-select w-full text-blue-700 font-bold">
+                      <option value="C.O.">C.O. Disabili (Art. 1)</option>
+                      <option value="Art. 18">Art. 18 Categorie Protette</option>
+                      <option value="F.D.">F.D. Disabili</option>
+                      <option value="BSL">BSL</option>
+                    </select>
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Data Iscrizione</label>
+                    <input type="date" id="ef-data-co" class="rox-input">
+                  </div>
+
+                  <div class="flex-1 min-w-[180px]">
+                    <label class="rox-label">Dettaglio Categoria</label>
+                    <input type="text" id="ef-categoria-lg6869" class="rox-input">
+                  </div>
+
+                  <div class="flex-1 min-w-[180px]">
+                    <label class="rox-label">Operatore CPI Referente</label>
+                    <input type="text" id="ef-operatore" class="rox-input font-bold text-slate-800">
+                  </div>
+
+                  <div class="w-44">
+                    <label class="rox-label">Ente Segnalante</label>
+                    <input type="text" id="ef-segnalato" class="rox-input">
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Referente Speciale</label>
+                    <input type="text" id="ef-referente" class="rox-input">
+                  </div>
+
+                  <div class="w-28">
+                    <label class="rox-label">N. Manuale</label>
+                    <input type="number" id="ef-niscriz-manuale" class="rox-input font-mono">
+                  </div>
+
+                  <input type="hidden" id="ef-codice">
+                  <input type="hidden" id="ef-tipologia-lista">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB 2: SANITARIO, DIAGNOSI & INPS (ASIMMETRIC DYNAMIC CARD LAYOUT) -->
+          <div id="hub-tab-sanitario" class="hub-tab-content space-y-6 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Card 1: Sintesi Invalidità Civile & Verbale INPS (5/12 cols) -->
+              <div class="form-group-card lg:col-span-5 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-notes-medical text-rose-600"></i> Sintesi Invalidità & Verbale INPS</h4>
+                
+                <div class="flex flex-wrap gap-3 text-xs">
+                  <div class="w-28">
+                    <label class="rox-label">% Invalidità</label>
+                    <input type="number" id="ef-ic-perc" min="0" max="100" class="rox-input font-black text-rose-600 text-sm">
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Data Verbale INPS</label>
+                    <input type="date" id="ef-data-verbale" class="rox-input">
+                  </div>
+
+                  <div class="flex-1 min-w-[120px]">
+                    <label class="rox-label">N. Verbale INPS</label>
+                    <input type="text" id="ef-verbale-num" class="rox-input font-mono font-bold text-slate-800">
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Data Prossima Revisione</label>
+                    <input type="date" id="ef-data-revisione" class="rox-input font-bold text-amber-700">
+                  </div>
+
+                  <div class="w-full">
+                    <label class="rox-label">Situazione Handicap L.104/92</label>
+                    <input type="text" id="ef-handicap" class="rox-input font-medium text-slate-800">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Struttura ASL & Minorazioni (7/12 cols) -->
+              <div class="form-group-card lg:col-span-7 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-hospital text-blue-600"></i> Struttura ASL & Patologia L.68</h4>
+                
+                <div class="flex flex-wrap gap-3 text-xs">
+                  <div class="w-48">
+                    <label class="rox-label">Tipo Minorazione Principal</label>
+                    <input type="text" id="ef-tipo-minorazione" class="rox-input">
+                  </div>
+
+                  <div class="w-28">
+                    <label class="rox-label">Invalido Psichico</label>
+                    <select id="ef-invalido-psichico" class="rox-select w-full">
+                      <option value="NO">NO</option>
+                      <option value="SI">SI</option>
+                    </select>
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Codice ASL</label>
+                    <input type="text" id="ef-codice-asl" class="rox-input font-mono">
+                  </div>
+
+                  <div class="flex-1 min-w-[200px]">
+                    <label class="rox-label">Struttura ASL Riferimento</label>
+                    <input type="text" id="ef-desc-asl" class="rox-input font-semibold">
+                  </div>
+
+                  <div class="w-full">
+                    <label class="rox-label">Patologia Principale (L.68/99)</label>
+                    <input type="text" id="ef-patologia" class="rox-input font-bold text-slate-900">
+                  </div>
+
+                  <div class="flex-1 min-w-[200px]">
+                    <label class="rox-label">Provenienza Informazioni Medica</label>
+                    <input type="text" id="ef-provenienza" class="rox-input">
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Allegati L.68 Status</label>
+                    <select id="ef-allegati-status" class="rox-select w-full text-emerald-700 font-bold">
+                      <option value="true">Sì (Caricati)</option>
+                      <option value="false">No</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 3: Diagnosi Clinica Estesa & Presidi (Full 12 cols) -->
+              <div class="form-group-card lg:col-span-12 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-file-waveform text-purple-600"></i> Diagnosi Clinica Funzionale & Presidi Richiesti</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label class="rox-label">Diagnosi Clinica Funzionale Estesa</label>
+                    <textarea id="ef-diagnosi" rows="3" class="rox-input text-slate-800 italic leading-relaxed"></textarea>
+                  </div>
+
+                  <div>
+                    <label class="rox-label">Dettaglio Supporto, Ausili & Presidi ergonomici</label>
+                    <textarea id="ef-desc-supporto" rows="3" class="rox-input text-slate-800 italic leading-relaxed"></textarea>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB 3: ISTRUZIONE, FORMAZIONE & COMPETENZE (ASIMMETRIC LAYOUT) -->
+          <div id="hub-tab-istruzione" class="hub-tab-content space-y-6 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Card 1: Titoli di Studio & Qualifiche (7/12 cols) -->
+              <div class="form-group-card lg:col-span-7 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-graduation-cap text-indigo-600"></i> Titoli di Studio & Qualifiche (Studiamo)</h4>
+                
+                <div class="flex flex-wrap gap-4 text-xs">
+                  <div class="w-full">
+                    <label class="rox-label">Ultimo Titolo di Studio Conseguito *</label>
+                    <input type="text" id="ef-titolo-last" class="rox-input font-bold text-indigo-950">
+                  </div>
+
+                  <div class="w-32">
+                    <label class="rox-label">Anno Fine</label>
+                    <input type="text" id="ef-titolo-anno" class="rox-input font-bold text-center">
+                  </div>
+
+                  <div class="w-36">
+                    <label class="rox-label">Votazione</label>
+                    <input type="text" id="ef-titolo-voto" class="rox-input font-bold text-emerald-700 text-center">
+                  </div>
+
+                  <div class="flex-1 min-w-[200px]">
+                    <label class="rox-label">Istituto / Università</label>
+                    <input type="text" id="ef-titolo-presso" class="rox-input">
+                  </div>
+
+                  <div class="w-full">
+                    <label class="rox-label">Qualifica Professionale Principale</label>
+                    <input type="text" id="ef-qualifica" class="rox-input font-semibold text-slate-900">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Card 2: Abilitazioni & Competenze Digitali/Lingue (5/12 cols) -->
+              <div class="form-group-card lg:col-span-5 space-y-4">
+                <h4 class="form-group-title"><i class="fa-solid fa-laptop-code text-blue-600"></i> Abilitazioni, Informatica & Lingue</h4>
+                
+                <div class="space-y-3 text-xs">
+                  <div class="flex gap-3">
+                    <div class="flex-1">
+                      <label class="rox-label">Patente Muletto</label>
+                      <select id="ef-muletto" class="rox-select w-full">
+                        <option value="false">No</option>
+                        <option value="true">Sì (Abilitato)</option>
+                      </select>
+                    </div>
+
+                    <div class="flex-1">
+                      <label class="rox-label">Certificazione ECDL</label>
+                      <select id="ef-ecdl" class="rox-select w-full">
+                        <option value="Base">Uso PC Base</option>
+                        <option value="Sì (Certificato PC)">Patentino ECDL</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="flex gap-3">
+                    <div class="flex-1">
+                      <label class="rox-label">Inglese</label>
+                      <select id="ef-inglese" class="rox-select w-full">
+                        <option value="No">No</option>
+                        <option value="Sì (Buono)">Sì (Buono)</option>
+                      </select>
+                    </div>
+
+                    <div class="flex-1">
+                      <label class="rox-label">Spagnolo</label>
+                      <select id="ef-spagnolo" class="rox-select w-full">
+                        <option value="No">No</option>
+                        <option value="Sì">Sì</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="rox-label">Altre Lingue Conosciute</label>
+                    <input type="text" id="ef-altre-lingue" placeholder="es. Francese, Tedesco..." class="rox-input">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB 4: CAPACITÀ FUNZIONALI & MANSIONI (CHRONO STELLAR INTERACTIVE CHIPS) -->
+          <div id="hub-tab-funzionale" class="hub-tab-content space-y-6 hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              
+              <!-- Capacità fisiche residue (6/12 cols) -->
+              <div class="form-group-card lg:col-span-6 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h4 class="form-group-title mb-0 pb-0 border-0"><i class="fa-solid fa-child text-purple-600"></i> Scheda Capacità Residue L.68/99</h4>
+                  <span class="text-[10px] uppercase font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">Autonomia</span>
+                </div>
+                <div id="hub-funzionale-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                  <!-- Rendered via JS as modern interactive check-cards -->
+                </div>
+              </div>
+
+              <!-- Mansioni idonee (6/12 cols) -->
+              <div class="form-group-card lg:col-span-6 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <h4 class="form-group-title mb-0 pb-0 border-0"><i class="fa-solid fa-list-check text-blue-600"></i> Mansioni & Attitudini Lavorative</h4>
+                  <span class="text-[10px] uppercase font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md">Matching</span>
+                </div>
+                <div id="hub-mansioni-list" class="flex flex-wrap gap-2 text-xs">
+                  <!-- Rendered via JS as interactive chips -->
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- TAB 5: DISPONIBILITÀ & CONDIZIONI LAVORATIVE -->
+          <div id="hub-tab-disponibilita" class="hub-tab-content space-y-6 hidden">
+            <div class="form-group-card space-y-6">
+              
+              <div class="border-b border-slate-100 pb-3 flex items-center justify-between">
+                <div>
+                  <h4 class="form-group-title mb-0 pb-0 border-0"><i class="fa-solid fa-clock text-emerald-600"></i> Gestione Disponibilità Lavorativa & Mobilità</h4>
+                  <p class="text-xs text-slate-500 mt-1">Definisci l'orario di lavoro idoneo, turni, trasferte e raggio di spostamento sul territorio.</p>
+                </div>
+                <button type="submit" form="form-disponibilita-hub" class="cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center space-x-1.5 font-heading">
+                  <i class="fa-solid fa-check"></i>
+                  <span>Salva Disponibilità</span>
+                </button>
+              </div>
+
+              <form id="form-disponibilita-hub" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 text-xs">
+                
+                <div class="space-y-1.5">
+                  <label class="rox-label">Orario Desiderato</label>
+                  <select id="disp-orario" class="rox-select w-full font-bold text-emerald-700">
+                    <option value="Part-Time 20h">Part-Time 20 ore/settimana</option>
+                    <option value="Part-Time 24h">Part-Time 24 ore/settimana</option>
+                    <option value="Part-Time 30h">Part-Time 30 ore/settimana</option>
+                    <option value="Full-Time 40h">Full-Time 40 ore/settimana</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="rox-label">Disponibilità ai Turni</label>
+                  <select id="disp-turni" class="rox-select w-full">
+                    <option value="Solo Diurno">Solo Diurno</option>
+                    <option value="Turni Diurni (Mattina/Pomeriggio)">Turni Diurni (Mattina/Pomeriggio)</option>
+                    <option value="Anche Turno Notturno">Anche Turno Notturno</option>
+                    <option value="Festivi e Weekend">Festivi e Weekend</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="rox-label">Raggio di Spostamento (KM)</label>
+                  <select id="disp-raggio" class="rox-select w-full">
+                    <option value="10">Entro 10 km (Solo proprio comune)</option>
+                    <option value="20">Entro 20 km (Provincia limitrofa)</option>
+                    <option value="35">Entro 35 km (Tutta la provincia)</option>
+                    <option value="50">Oltre 50 km / Regionale</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="rox-label">Sede / Territorio Preferito</label>
+                  <input type="text" id="disp-sede" placeholder="es. Lecco centro, Meratese, Brianza" class="rox-input font-medium">
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="rox-label">Automunito / Mezzo Proprio</label>
+                  <select id="disp-automunito" class="rox-select w-full font-semibold">
+                    <option value="true">Sì (Automunito)</option>
+                    <option value="false">No (Mezzi Pubblici)</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1.5">
+                  <label class="rox-label">Disponibilità Smart Working</label>
+                  <select id="disp-smart" class="rox-select w-full font-semibold text-blue-700">
+                    <option value="Ibrido">Lavoro Ibrido (Presenza + Remoto)</option>
+                    <option value="Solo Presenza">Solo in Presenza</option>
+                    <option value="Full Remote">Completamente da Remoto</option>
+                  </select>
+                </div>
+
+                <div class="sm:col-span-2 lg:col-span-3 space-y-1.5">
+                  <label class="rox-label">Note Aggiuntive su Disponibilità e Limitazioni Lavorative</label>
+                  <textarea id="disp-note" rows="2" placeholder="Annotazioni specifiche dell'operatore sulle esigenze logistiche..." class="rox-input text-slate-800"></textarea>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+          <!-- TAB 6: WALLET DOCUMENTALE -->
+          <div id="hub-tab-wallet" class="hub-tab-content space-y-6 hidden">
+            <div class="card-white p-6 space-y-6">
+              
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading">
+                    <i class="fa-solid fa-wallet text-amber-500"></i> Wallet Documentazione & Allegati L.68
+                  </h3>
+                  <p class="text-xs text-slate-500">Tutti i verbali INPS/ASL, DID, certificati ed allegati dell'iscritto in un unico archivio.</p>
+                </div>
+
+                <button id="btn-upload-file-wallet-tab" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-xs flex items-center space-x-2 font-heading">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Aggiungi Documento File</span>
+                </button>
+              </div>
+
+              <!-- Wallet File Grid -->
+              <div id="wallet-files-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 7: COMITATO TECNICO ASL (GESTIONE MULTI-VERBALI E STORICO RELAZIONI) -->
+          <div id="hub-tab-comitato" class="hub-tab-content space-y-6 hidden">
+            <div class="card-white p-6 space-y-6">
+              
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading">
+                    <i class="fa-solid fa-building-columns text-cyan-600"></i> Verbali & Relazioni Comitato Tecnico ASL
+                  </h3>
+                  <p class="text-xs text-slate-500">Storico completo delle relazioni collegiali, valutazioni d'idoneità, prognosi lavorative e capacità relazionali.</p>
+                </div>
+
+                <button id="btn-add-verbale-comitato" class="cursor-pointer bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center space-x-2 font-heading">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Nuovo Verbale Comitato</span>
+                </button>
+              </div>
+
+              <!-- Lista Verbali e Relazioni Storiche del Cittadino -->
+              <div id="hub-comitato-det-content" class="space-y-4">
+                <!-- Rendered via JS as interactive report cards -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 8: PROGETTO INSERIMENTO LAVORATIVO (PIL L.68/99) -->
+          <div id="hub-tab-pil" class="hub-tab-content space-y-6 hidden">
+            <div class="card-white p-6 space-y-6">
+              
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading">
+                    <i class="fa-solid fa-file-signature text-teal-600"></i> Progetto di Inserimento Lavorativo (PIL)
+                  </h3>
+                  <p class="text-xs text-slate-500">Piani individuali di inserimento, profili dinamici-funzionali, percorsi dote e piani di accompagnamento al lavoro.</p>
+                </div>
+
+                <button id="btn-add-pil-tab" class="cursor-pointer bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition shadow-xs flex items-center space-x-2 font-heading">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>Nuovo Progetto PIL</span>
+                </button>
+              </div>
+
+              <!-- Lista Schede PIL Storiche del Cittadino -->
+              <div id="hub-pil-content-list" class="space-y-4">
+                <!-- Rendered via JS as interactive PIL cards -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 9: DIARIO OPERATORE -->
+          <div id="hub-tab-diario" class="hub-tab-content space-y-6 hidden">
+            <div class="card-white p-6 space-y-4">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-slate-900 text-base font-heading">Diario Colloqui & Note Operatore</h3>
+                <button id="btn-add-diario-tab" class="cursor-pointer bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-3 py-1.5 rounded-lg font-heading">
+                  + Nuova Nota Diario
+                </button>
+              </div>
+
+              <div id="hub-diario-timeline" class="space-y-4">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- SECTION 3: MATCHER VIEW -->
+      <section id="section-matcher" class="space-y-6 hidden">
+        <div>
+          <h1 class="text-2xl font-bold font-heading text-slate-900">Incrocio Domanda / Offerta L.68/99</h1>
+          <p class="text-xs text-slate-500">Trova i candidati idonei per le aziende clienti in base ai fabbisogni fisici e professionali.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="card-white p-6 space-y-4">
+            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2 font-heading">
+              <i class="fa-solid fa-sliders text-blue-600"></i> Requisiti Aziendali
+            </h3>
+
+            <form id="form-full-matcher" class="space-y-4 text-xs">
+              <div>
+                <label class="rox-label">Mansione Ricercata</label>
+                <select id="m-mansione" class="rox-select w-full">
+                  <option value="ALL">Tutte le Mansioni</option>
+                  <option value="impiegato">Impiegato / Data Entry</option>
+                  <option value="cassa">Addetto Cassa / Commesso</option>
+                  <option value="magazzino">Magazziniere / Muletti</option>
+                  <option value="socialeScuola">Servizi Scolastici</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="rox-label">% Invalidità Minima</label>
+                <input type="number" id="m-min-ic" value="46" min="0" max="100" class="rox-input">
+              </div>
+
+              <div class="space-y-2 border-t border-slate-100 pt-3">
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="checkbox" id="m-noeretta" class="rounded border-slate-300 text-blue-600">
+                  <span>Richiede Lavoro Seduto (No stazione eretta)</span>
+                </label>
+
+                <label class="flex items-center space-x-2 cursor-pointer">
+                  <input type="checkbox" id="m-nocarichi" class="rounded border-slate-300 text-blue-600">
+                  <span>No Sollevamento Carichi</span>
+                </label>
+              </div>
+
+              <button type="submit" class="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl shadow-xs transition font-heading">
+                Calcola Match Candidati
+              </button>
+            </form>
+          </div>
+
+          <div id="matcher-results-container" class="lg:col-span-2 space-y-4">
+            <!-- Matcher results rendered via JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: AUDIT LOGS & TRACCIAMENTO ATTIVITÀ OPERATORI -->
+      <section id="section-audit" class="space-y-6 hidden">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold font-heading text-slate-900">Registro Audit & Tracciamento Attività Operatori</h1>
+            <p class="text-xs text-slate-500">Log completo delle operazioni effettuate nel sistema con marcatura oraria ed identificativo operatore.</p>
+          </div>
+
+          <button id="btn-export-audit-csv" class="cursor-pointer bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-xs flex items-center space-x-2 font-heading">
+            <i class="fa-solid fa-file-csv text-emerald-400"></i>
+            <span>Esporta Registro Audit (CSV)</span>
+          </button>
+        </div>
+
+        <div class="card-white overflow-hidden">
+          <div class="p-4 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3 text-xs">
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-slate-700">Filtra per Operatore:</span>
+              <select id="audit-filter-user" class="rox-select">
+                <option value="ALL">Tutti gli Operatori</option>
+                <option value="Marco Galli (Admin CPI)">Marco Galli (Admin CPI)</option>
+                <option value="Elena Bianchi (Operatore SILV)">Elena Bianchi (Operatore SILV)</option>
+                <option value="Roberto Rossi (Tutor L.68)">Roberto Rossi (Tutor L.68)</option>
+                <option value="Anna Verdi (Coordinatore ASL)">Anna Verdi (Coordinatore ASL)</option>
+              </select>
+            </div>
+
+            <span id="badge-audit-count" class="text-xs font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200">
+              0 Eventi Registrati
+            </span>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-700">
+              <thead class="bg-slate-100/80 text-slate-500 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 font-heading">
+                <tr>
+                  <th class="px-5 py-3.5">Data & Ora Evento</th>
+                  <th class="px-5 py-3.5">Operatore Loggato</th>
+                  <th class="px-5 py-3.5">Azione Eseguita</th>
+                  <th class="px-5 py-3.5">Modulo / Sezione</th>
+                  <th class="px-5 py-3.5">Target / Iscritto</th>
+                  <th class="px-5 py-3.5">Dettagli Operazione</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-audit-logs" class="divide-y divide-slate-100">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+  <!-- MODAL EDIT PERSONA -->
+  <div id="modal-persona" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-2xl rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 id="modal-persona-title" class="font-bold text-slate-900 text-base font-heading">Modifica Anagrafica Iscritto</h3>
+        <button id="btn-close-modal-persona" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="rox-label">Nome *</label>
+          <input type="text" id="m-nome" class="rox-input">
+        </div>
+        <div>
+          <label class="rox-label">Cognome *</label>
+          <input type="text" id="m-cognome" class="rox-input">
+        </div>
+        <div>
+          <label class="rox-label">Codice Fiscale *</label>
+          <input type="text" id="m-cf" class="rox-input font-mono uppercase">
+        </div>
+        <div>
+          <label class="rox-label">Categoria L.68</label>
+          <select id="m-cat-select" class="rox-select w-full">
+            <option value="C.O.">C.O. Disabili</option>
+            <option value="Art. 18">Art. 18 Protette</option>
+            <option value="F.D.">F.D. Disabili</option>
+          </select>
+        </div>
+        <div>
+          <label class="rox-label">% Invalidità Civile</label>
+          <input type="number" id="m-ic-perc" class="rox-input">
+        </div>
+        <div>
+          <label class="rox-label">Comune Residenza</label>
+          <input type="text" id="m-residenza" class="rox-input">
+        </div>
+        <div>
+          <label class="rox-label">Telefono / Cellulare</label>
+          <input type="text" id="m-telefono" class="rox-input">
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
+        <button id="btn-cancel-modal-persona" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
+        <button id="btn-save-modal-persona" type="button" class="cursor-pointer px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold font-heading">Salva Modifiche</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL UPLOAD DOCUMENT FILE (WALLET) -->
+  <div id="modal-upload-doc" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-md rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading"><i class="fa-solid fa-cloud-arrow-up text-blue-600"></i> Carica Documento nel Wallet</h3>
+        <button id="btn-close-modal-doc" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="form-upload-doc" class="space-y-4">
+        <div>
+          <label class="rox-label">Seleziona File Documentale *</label>
+          <input type="file" id="doc-file-input" required class="rox-input file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+        </div>
+
+        <div>
+          <label class="rox-label">Nome Identificativo del Documento</label>
+          <input type="text" id="doc-nome" placeholder="es. Verbale_INPS_2026.pdf" class="rox-input">
+        </div>
+
+        <div>
+          <label class="rox-label">Tipologia Documento</label>
+          <select id="doc-tipo" class="rox-select w-full">
+            <option value="Verbale INPS">Verbale INPS / ASL</option>
+            <option value="DID">Dichiarazione Immediata Disponibilità (DID)</option>
+            <option value="Curriculum">Curriculum Vitae (CV)</option>
+            <option value="Relazione ASL">Relazione Diagnostica ASL/SILV</option>
+            <option value="Progetto Dote">Progetto Dote Lavoro</option>
+            <option value="Certificato Medico">Certificato Medico / Idoneità</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="rox-label">Descrizione & Note Documento</label>
+          <textarea id="doc-descrizione" rows="2" placeholder="Note sulla validità o dettagli..." class="rox-input"></textarea>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-2">
+          <button id="btn-cancel-doc" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold font-heading">Carica File in Wallet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL NUOVA NOTA DIARIO -->
+  <div id="modal-nota-diario" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-lg rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading"><i class="fa-solid fa-book-bookmark text-blue-600"></i> Aggiungi Nota Diario Operatore</h3>
+        <button id="btn-close-modal-nota" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="form-nota-diario" class="space-y-4">
+        <div>
+          <label class="rox-label">Tipologia Nota *</label>
+          <select id="nota-tipo-select" class="rox-select w-full">
+            <option value="Diario Operativo">Diario Operativo (Colloquio / DID)</option>
+            <option value="Monitoraggio Tirocinio">Note Tirocinio / SILV</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="rox-label">Contenuto Nota Colloquio *</label>
+          <textarea id="nota-testo" rows="4" placeholder="Es. Effettuato colloquio di aggiornamento DID e verifica disponibilità..." required class="rox-input"></textarea>
+        </div>
+
+        <div>
+          <label class="rox-label">Firma Operatore</label>
+          <input type="text" id="nota-firma" value="Operatore CPI Lecco" class="rox-input">
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-2">
+          <button id="btn-cancel-nota" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-slate-900 text-white font-semibold font-heading">Salva Nota</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL NUOVO VERBALE COMITATO TECNICO ASL (FULLSCREEN EXECUTIVE RECORDING) -->
+  <div id="modal-verbale-comitato" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 hidden">
+    <div class="bg-white w-full max-w-6xl rounded-3xl border border-slate-200 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[95vh] overflow-y-auto flex flex-col justify-between">
+      
+      <!-- Modal Header -->
+      <div class="flex justify-between items-start border-b border-slate-100 pb-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-11 h-11 rounded-2xl bg-cyan-50 text-cyan-700 flex items-center justify-center text-xl font-bold font-heading shadow-xs">
+            <i class="fa-solid fa-building-columns"></i>
+          </div>
+          <div>
+            <h3 class="font-extrabold text-slate-900 text-lg sm:text-xl font-heading">
+              Verbale Collegiale Comitato Tecnico ASL
+            </h3>
+            <p class="text-xs text-slate-500">Valutazione clinico-funzionale, diagnosi estesa, prognosi lavorativa e idoneità L.68/99</p>
+          </div>
+        </div>
+        <button id="btn-close-modal-comitato" class="cursor-pointer text-slate-400 hover:text-slate-700 text-lg w-8 h-8 rounded-xl hover:bg-slate-100 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <!-- Form Full-Scale -->
+      <form id="form-verbale-comitato" class="space-y-6">
+        
+        <!-- SEZIONE 1: Dati Seduta & Riferimenti ASL -->
+        <div class="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-800 font-heading flex items-center gap-2">
+            <i class="fa-solid fa-calendar-check text-cyan-600"></i> 1. Riferimenti Seduta & Protocollo ASL
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div>
+              <label class="rox-label font-bold">N. Pratica Verbale *</label>
+              <input type="text" id="com-pratica" placeholder="es. 4521/ASL" required class="rox-input font-mono font-bold text-cyan-800 bg-white">
+            </div>
+            <div>
+              <label class="rox-label font-bold">Data Seduta ASL *</label>
+              <input type="date" id="com-data-seduta" required class="rox-input font-semibold bg-white">
+            </div>
+            <div>
+              <label class="rox-label">Data Verbale Ufficiale</label>
+              <input type="date" id="com-data-verbale" class="rox-input font-semibold bg-white">
+            </div>
+            <div>
+              <label class="rox-label">Struttura ASL / Presidio</label>
+              <input type="text" id="com-asl" value="ASST Lecco Ospedale Manzoni" class="rox-input font-medium bg-white">
+            </div>
+          </div>
+        </div>
+
+        <!-- SEZIONE 2: Prognosi Lavorativa & Valutazione Idoneità (Campi Lunghi Auto-Espandibili) -->
+        <div class="p-5 rounded-2xl bg-cyan-50/30 border border-cyan-200/80 space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-cyan-800 font-heading flex items-center gap-2">
+            <i class="fa-solid fa-stethoscope text-cyan-600"></i> 2. Prognosi Lavorativa & Anamnesi Clinica
+          </h4>
+          
+          <div class="space-y-3">
+            <div>
+              <label class="rox-label font-bold text-cyan-950">Prognosi Lavorativa Formulata dal Collegio ASL *</label>
+              <textarea id="com-prognosi" rows="3" placeholder="Descrizione approfondita della prognosi lavorativa, potenzialità di inserimento, limitazioni specifiche di mansione..." required class="rox-input bg-white text-slate-800 font-medium auto-expand-textarea"></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <label class="rox-label">Anamnesi Clinica & Percorso Terapeutico</label>
+                <textarea id="com-anamnesi" rows="3" placeholder="Anamnesi remota e prossima, percorsi di riabilitazione o terapie in corso..." class="rox-input bg-white auto-expand-textarea"></textarea>
+              </div>
+              <div>
+                <label class="rox-label">Altre Patologie Concorrenti / Diagnosi Specialistica</label>
+                <textarea id="com-altre-patologie" rows="3" placeholder="Eventuali patologie secondarie, limitazioni sensoriali o osteoarticolari..." class="rox-input bg-white auto-expand-textarea"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEZIONE 3: Profili Funzionali & Valutazioni Multidimensionali (Campi Auto-Espandibili) -->
+        <div class="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 font-heading flex items-center gap-2">
+            <i class="fa-solid fa-id-card-clip text-blue-600"></i> 3. Profili Funzionali, Competenze & Relazioni
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="rox-label">Capacità Lavorative & Tecnico-Operative</label>
+              <textarea id="com-cap-lavorative" rows="3" placeholder="Attitudini tecnico-manuali, precisione, rispetto dei compiti assegnati..." class="rox-input bg-white auto-expand-textarea"></textarea>
+            </div>
+            <div>
+              <label class="rox-label">Capacità Relazionali & Sociali</label>
+              <textarea id="com-relazionali" rows="3" placeholder="Integrazione con colleghi, tolleranza allo stress, attitudine al lavoro di squadra o individuale..." class="rox-input bg-white auto-expand-textarea"></textarea>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="rox-label">Percorso Scolastico & Formativo Dettagliato</label>
+              <textarea id="com-scolastico" rows="2" placeholder="Titoli di studio, corsi professionali, competenze certificate..." class="rox-input bg-white auto-expand-textarea"></textarea>
+            </div>
+            <div>
+              <label class="rox-label">Percorso Lavorativo Pregresso & Esperienze</label>
+              <textarea id="com-lavorativo" rows="2" placeholder="Settori di impiego precedenti, mansioni consolidate, motivi di interruzione..." class="rox-input bg-white auto-expand-textarea"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- SEZIONE 4: Livelli di Autonomia & Misure di Accompagnamento -->
+        <div class="p-5 rounded-2xl bg-slate-50/70 border border-slate-200 space-y-4">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700 font-heading flex items-center gap-2">
+            <i class="fa-solid fa-handshake-angle text-emerald-600"></i> 4. Livelli di Autonomia & Misure di Sostegno
+          </h4>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div>
+              <label class="rox-label">Autonomia Spostamenti</label>
+              <select id="com-autonomia" class="rox-select w-full bg-white">
+                <option value="Autonomo Mezzi Propri">Autonomo (Mezzo Proprio)</option>
+                <option value="Autonomo Mezzi Pubblici">Autonomo (Mezzi Pubblici / Treni)</option>
+                <option value="Accompagnato">Necessita Accompagnamento</option>
+              </select>
+            </div>
+            <div>
+              <label class="rox-label">Abilità Cognitive</label>
+              <select id="com-cognitive" class="rox-select w-full bg-white">
+                <option value="Nella norma">Nella norma</option>
+                <option value="Buone / Elevate">Buone / Elevate</option>
+                <option value="Lievi limitazioni">Lievi limitazioni</option>
+                <option value="Supporto dedicato">Necessita Supporto</option>
+              </select>
+            </div>
+            <div>
+              <label class="rox-label">Presidente / Medico Responsabile *</label>
+              <input type="text" id="com-responsabile" value="Dott.ssa Anna Verdi (Coordinatore ASL)" required class="rox-input font-bold text-slate-900 bg-white">
+            </div>
+          </div>
+
+          <!-- Indicatori di Sostegno (Checkboxes L.68) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+            <label class="flex items-center space-x-2 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer hover:bg-slate-50">
+              <input type="checkbox" id="com-supporto" class="rounded text-cyan-600 focus:ring-0">
+              <span class="font-semibold text-slate-700">Supporto Dedicato</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer hover:bg-slate-50">
+              <input type="checkbox" id="com-mediazione" class="rounded text-cyan-600 focus:ring-0">
+              <span class="font-semibold text-slate-700">Mediazione L.68</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer hover:bg-slate-50">
+              <input type="checkbox" id="com-protetto" class="rounded text-cyan-600 focus:ring-0">
+              <span class="font-semibold text-slate-700">Ambito Protetto</span>
+            </label>
+            <label class="flex items-center space-x-2 p-2.5 rounded-xl bg-white border border-slate-200 cursor-pointer hover:bg-slate-50">
+              <input type="checkbox" id="com-adozione" class="rounded text-cyan-600 focus:ring-0">
+              <span class="font-semibold text-slate-700">Adozione / Tutor</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Action Footer -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+          <span class="text-xs text-slate-400">Tutti i campi con * sono obbligatori per il verbale collegiale.</span>
+          
+          <div class="flex space-x-3">
+            <button id="btn-cancel-modal-comitato" type="button" class="cursor-pointer px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
+              Annulla
+            </button>
+            <button type="submit" class="cursor-pointer px-7 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold font-heading shadow-md shadow-cyan-600/20 transition flex items-center space-x-2">
+              <i class="fa-solid fa-save"></i>
+              <span>Salva Verbale ASL</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL NUOVO PROGETTO INSERIMENTO LAVORATIVO (PIL L.68/99) -->
+  <div id="modal-progetto-pil" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-3xl rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading">
+          <i class="fa-solid fa-file-signature text-teal-600"></i> Registra Nuovo Progetto di Inserimento Lavorativo (PIL)
+        </h3>
+        <button id="btn-close-modal-pil" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="form-progetto-pil" class="space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="rox-label">Data Redazione PIL *</label>
+            <input type="date" id="pil-data" required class="rox-input font-semibold">
+          </div>
+          <div>
+            <label class="rox-label">Codice ID Dote / Bando</label>
+            <input type="text" id="pil-iddote" placeholder="es. DOTE-L68-2026-92" class="rox-input font-mono font-bold text-teal-700">
+          </div>
+          <div>
+            <label class="rox-label">Tutor / Operatore Referente</label>
+            <input type="text" id="pil-operatore" value="Marco Galli (Admin CPI)" class="rox-input font-medium">
+          </div>
+        </div>
+
+        <div>
+          <label class="rox-label">Progetto di Inserimento & Obiettivi Lavorativi *</label>
+          <textarea id="pil-progetto" rows="3" placeholder="Sintesi del percorso di inserimento, percorso di tirocinio/assunzione, mansioni target e tutoraggio..." required class="rox-input text-slate-800 font-medium"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Profilo Dinamico Funzionale</label>
+            <textarea id="pil-funzionale" rows="2" placeholder="Autonomia operativa, capacità esecutiva, ritmo di lavoro..." class="rox-input"></textarea>
+          </div>
+          <div>
+            <label class="rox-label">Profilo Sanitario & Adattamenti</label>
+            <textarea id="pil-sanitario" rows="2" placeholder="Quadro sanitario sintetico e ausili necessari..." class="rox-input"></textarea>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Profilo Scolastico & Formativo</label>
+            <textarea id="pil-scolastico" rows="2" placeholder="Competenze acquisite e corsi di formazione seguiti..." class="rox-input"></textarea>
+          </div>
+          <div>
+            <label class="rox-label">Profilo Lavorativo Pregresso</label>
+            <textarea id="pil-lavorativo" rows="2" placeholder="Esperienze e mansioni svolte in precedenza..." class="rox-input"></textarea>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Profilo Personale & Sociale</label>
+            <textarea id="pil-sociale" rows="2" placeholder="Attitudini relazionali, motivazione e contesto familiare..." class="rox-input"></textarea>
+          </div>
+          <div>
+            <label class="rox-label">Valutazione Lavorativa Complessiva</label>
+            <textarea id="pil-valutazione" rows="2" placeholder="Sintesi del livello di occupabilità e compatibilità con le quote d'obbligo..." class="rox-input"></textarea>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label text-rose-600">Aspetti di Criticità / Da Evitare</label>
+            <textarea id="pil-criticita" rows="2" placeholder="Limitazioni ambientali, carichi, orari o mansioni non idonee..." class="rox-input border-rose-200 bg-rose-50/20"></textarea>
+          </div>
+          <div>
+            <label class="rox-label text-emerald-600">Aspetti di Positività / Punti di Forza</label>
+            <textarea id="pil-positivita" rows="2" placeholder="Capacità relazionali, puntualità, competenze informatiche o tecniche..." class="rox-input border-emerald-200 bg-emerald-50/20"></textarea>
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
+          <button id="btn-cancel-modal-pil" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold font-heading shadow-xs">Salva Progetto PIL</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DATALIST COMUNI PROVINCIA DI LECCO & TERRITORIO PER RICERCA RAPIDA -->
+  <datalist id="dl-comuni-lecco">
+    <option value="Lecco (LC)">
+    <option value="Abbadia Lariana (LC)">
+    <option value="Airuno (LC)">
+    <option value="Annone di Brianza (LC)">
+    <option value="Ballabio (LC)">
+    <option value="Barzanò (LC)">
+    <option value="Bellano (LC)">
+    <option value="Bosisio Parini (LC)">
+    <option value="Bulciago (LC)">
+    <option value="Calco (LC)">
+    <option value="Calolziocorte (LC)">
+    <option value="Carenno (LC)">
+    <option value="Casatenovo (LC)">
+    <option value="Cassago Brianza (LC)">
+    <option value="Cassina Valsassina (LC)">
+    <option value="Castello di Brianza (LC)">
+    <option value="Cernusco Lombardone (LC)">
+    <option value="Cesana Brianza (LC)">
+    <option value="Civate (LC)">
+    <option value="Colico (LC)">
+    <option value="Colle Brianza (LC)">
+    <option value="Corta Nova (LC)">
+    <option value="Costa Masnaga (LC)">
+    <option value="Cranadola Valsassina (LC)">
+    <option value="Cremella (LC)">
+    <option value="Cremeno (LC)">
+    <option value="Dervio (LC)">
+    <option value="Dolzago (LC)">
+    <option value="Dorio (LC)">
+    <option value="Ello (LC)">
+    <option value="Erve (LC)">
+    <option value="Esino Lario (LC)">
+    <option value="Galbiate (LC)">
+    <option value="Garbagnate Monastero (LC)">
+    <option value="Garlate (LC)">
+    <option value="Imbersago (LC)">
+    <option value="Introbio (LC)">
+    <option value="Lierna (LC)">
+    <option value="Lomagna (LC)">
+    <option value="Malgrate (LC)">
+    <option value="Mandello del Lario (LC)">
+    <option value="Margno (LC)">
+    <option value="Merate (LC)">
+    <option value="Missaglia (LC)">
+    <option value="Moggio (LC)">
+    <option value="Molteno (LC)">
+    <option value="Monte Marenzo (LC)">
+    <option value="Montevecchia (LC)">
+    <option value="Monticello Brianza (LC)">
+    <option value="Nibionno (LC)">
+    <option value="Oggiono (LC)">
+    <option value="Olgiate Molgora (LC)">
+    <option value="Olginate (LC)">
+    <option value="Oliveto Lario (LC)">
+    <option value="Osnago (LC)">
+    <option value="Paderno d'Adda (LC)">
+    <option value="Pagnona (LC)">
+    <option value="Parlasco (LC)">
+    <option value="Pasturo (LC)">
+    <option value="Perledo (LC)">
+    <option value="Pescate (LC)">
+    <option value="Premana (LC)">
+    <option value="Primaluna (LC)">
+    <option value="Robbiate (LC)">
+    <option value="Rogeno (LC)">
+    <option value="Santa Maria Hoè (LC)">
+    <option value="Sirone (LC)">
+    <option value="Sirtori (LC)">
+    <option value="Souico (LC)">
+    <option value="Suello (LC)">
+    <option value="Taceno (LC)">
+    <option value="Valgreghentino (LC)">
+    <option value="Valmadrera (LC)">
+    <option value="Varenna (LC)">
+    <option value="Vendrogno (LC)">
+    <option value="Vercurago (LC)">
+    <option value="Verderio (LC)">
+    <option value="Viganò (LC)">
+    <option value="Milano (MI)">
+    <option value="Monza (MB)">
+    <option value="Como (CO)">
+    <option value="Bergamo (BG)">
+  </datalist>
+
+  <!-- JavaScript Modules -->
+  <script src="js/data.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/matcher.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
