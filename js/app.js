@@ -2431,7 +2431,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (currentUserDisplay) {
         currentUserDisplay.textContent = `${savedUser.nomeCompleto} (${savedUser.ruolo})`;
       }
-    } catch (e) {}
+      if (modalLogin) modalLogin.classList.add("hidden");
+    } catch (e) {
+      if (modalLogin) modalLogin.classList.remove("hidden");
+    }
+  } else {
+    if (modalLogin) modalLogin.classList.remove("hidden");
   }
 
   if (formLogin) {
@@ -2460,24 +2465,27 @@ document.addEventListener("DOMContentLoaded", () => {
               toast: true,
               position: 'top-end',
               icon: 'success',
-              title: `Benvenuto, ${data.user.nomeCompleto}!`,
+              title: `Autenticato: ${data.user.nomeCompleto} (${data.user.ruolo})`,
               showConfirmButton: false,
               timer: 2000
             });
           }
         } else {
-          alert(data.error || "Credenziali non corrette.");
+          // Errore reale dal backend MySQL
+          if (typeof Swal !== "undefined") {
+            Swal.fire({
+              icon: 'error',
+              title: 'Accesso Negato',
+              text: data.error || 'Credenziali non valide o utente inesistente.',
+              confirmButtonColor: '#ef4444'
+            });
+          } else {
+            alert(data.error || "Credenziali non valide.");
+          }
         }
       } catch (err) {
-        // Fallback demo local login
-        if (username === "admin" && password === "admin") {
-          const mockUser = { nomeCompleto: "Marco Galli", ruolo: "ADMIN", username: "admin" };
-          localStorage.setItem("ROXANNE_CURRENT_USER", JSON.stringify(mockUser));
-          if (currentUserDisplay) currentUserDisplay.textContent = "Marco Galli (ADMIN)";
-          modalLogin.classList.add("hidden");
-        } else {
-          alert("Credenziali errate.");
-        }
+        console.error("Errore connessione server:", err);
+        alert("Errore di connessione con il database di autenticazione.");
       }
     });
   }
