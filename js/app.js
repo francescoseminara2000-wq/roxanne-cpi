@@ -2594,6 +2594,111 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- CONTROLLER BRANDING & PERSONALIZZAZIONE LOGO CPI ---
+  let currentCustomLogoData = localStorage.getItem("ROXANNE_CUSTOM_LOGO") || null;
+
+  function loadBrandingConfig() {
+    const savedTitle = localStorage.getItem("ROXANNE_BRAND_TITLE") || "ROXANNE STELLAR";
+    const savedTag = localStorage.getItem("ROXANNE_BRAND_TAG") || "L.68/99";
+    const savedSubtitle = localStorage.getItem("ROXANNE_BRAND_SUBTITLE") || "Gestionale Collocamento Mirato · Centro per l'Impiego";
+    const savedLogo = localStorage.getItem("ROXANNE_CUSTOM_LOGO");
+
+    // Update Header Text Elements
+    const hTitle = document.getElementById("header-brand-title");
+    const hTag = document.getElementById("header-brand-tag");
+    const hSubtitle = document.getElementById("header-brand-subtitle");
+
+    if (hTitle) hTitle.innerHTML = `<span class="text-blue-600">${escapeHtml(savedTitle)}</span>`;
+    if (hTag) hTag.textContent = savedTag;
+    if (hSubtitle) hSubtitle.textContent = savedSubtitle;
+
+    // Update Admin Inputs
+    const inTitle = document.getElementById("brand-title-input");
+    const inTag = document.getElementById("brand-tag-input");
+    const inSubtitle = document.getElementById("brand-subtitle-input");
+
+    if (inTitle) inTitle.value = savedTitle;
+    if (inTag) inTag.value = savedTag;
+    if (inSubtitle) inSubtitle.value = savedSubtitle;
+
+    // Apply Logo
+    applyLogoToHeader(savedLogo);
+  }
+
+  function applyLogoToHeader(logoData) {
+    const hImg = document.getElementById("header-logo-img");
+    const hIcon = document.getElementById("header-logo-icon");
+    const pImg = document.getElementById("brand-logo-img-preview");
+    const pIcon = document.getElementById("brand-logo-icon-preview");
+
+    if (logoData) {
+      if (hImg) { hImg.src = logoData; hImg.classList.remove("hidden"); }
+      if (hIcon) { hIcon.classList.add("hidden"); }
+      if (pImg) { pImg.src = logoData; pImg.classList.remove("hidden"); }
+      if (pIcon) { pIcon.classList.add("hidden"); }
+    } else {
+      if (hImg) { hImg.src = ""; hImg.classList.add("hidden"); }
+      if (hIcon) { hIcon.classList.remove("hidden"); }
+      if (pImg) { pImg.src = ""; pImg.classList.add("hidden"); }
+      if (pIcon) { pIcon.classList.remove("hidden"); }
+    }
+  }
+
+  // Upload Custom Logo Handler
+  const btnUploadLogo = document.getElementById("btn-upload-custom-logo");
+  const inputLogo = document.getElementById("input-custom-logo");
+  if (btnUploadLogo && inputLogo) {
+    btnUploadLogo.addEventListener("click", () => inputLogo.click());
+    inputLogo.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          currentCustomLogoData = evt.target.result;
+          applyLogoToHeader(currentCustomLogoData);
+          RoxToast.info("Anteprima Logo", "Premi 'Salva Configurazione' per applicare il nuovo logo definitivamente.", 3000);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Reset Logo Handler
+  const btnResetLogo = document.getElementById("btn-reset-logo");
+  if (btnResetLogo) {
+    btnResetLogo.addEventListener("click", () => {
+      currentCustomLogoData = null;
+      applyLogoToHeader(null);
+      RoxToast.info("Ripristino", "Logo predefinito reimpostato in anteprima.");
+    });
+  }
+
+  // Save Branding Handler
+  const btnSaveBranding = document.getElementById("btn-save-branding");
+  if (btnSaveBranding) {
+    btnSaveBranding.addEventListener("click", () => {
+      const titleVal = document.getElementById("brand-title-input").value.trim() || "ROXANNE STELLAR";
+      const tagVal = document.getElementById("brand-tag-input").value.trim() || "L.68/99";
+      const subtitleVal = document.getElementById("brand-subtitle-input").value.trim() || "Gestionale Collocamento Mirato · Centro per l'Impiego";
+
+      localStorage.setItem("ROXANNE_BRAND_TITLE", titleVal);
+      localStorage.setItem("ROXANNE_BRAND_TAG", tagVal);
+      localStorage.setItem("ROXANNE_BRAND_SUBTITLE", subtitleVal);
+
+      if (currentCustomLogoData) {
+        localStorage.setItem("ROXANNE_CUSTOM_LOGO", currentCustomLogoData);
+      } else {
+        localStorage.removeItem("ROXANNE_CUSTOM_LOGO");
+      }
+
+      loadBrandingConfig();
+      RoxToast.success("Identità Visiva Aggiornata", "Logo e diciture istituzionali aggiornati con successo.");
+    });
+  }
+
+  // Load Initial Branding
+  loadBrandingConfig();
+
   // --- GESTIONE LOGIN & SESSIONE PROTETTA ---
   const modalLogin = document.getElementById("modal-login");
   const formLogin = document.getElementById("form-login");
