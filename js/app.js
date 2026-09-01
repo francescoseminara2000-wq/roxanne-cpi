@@ -789,6 +789,59 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("ef-diagnosi").value = p.diagnosi || "";
     document.getElementById("ef-desc-supporto").value = p.diagnosiLastDescTipoSupporto || "";
 
+    // Aggiornamento Stato Allegati Verbali Specifici
+    const wallet = p.wallet || [];
+    const docL68 = wallet.find(d => (d.nome && d.nome.toLowerCase().includes("l68")) || (d.tipo && d.tipo.toLowerCase().includes("legge 68")) || (d.tipo && d.tipo.toLowerCase().includes("verbale l.68")));
+    const docIC = wallet.find(d => (d.nome && (d.nome.toLowerCase().includes("inps") || d.nome.toLowerCase().includes("invalidita") || d.nome.toLowerCase().includes("ic"))) || (d.tipo && d.tipo.toLowerCase().includes("inps")) || (d.tipo && d.tipo.toLowerCase().includes("invalidit")));
+
+    const badgeL68 = document.getElementById("badge-verbale-l68");
+    const btnPreviewL68 = document.getElementById("btn-preview-verbale-l68");
+    if (badgeL68) {
+      if (docL68) {
+        badgeL68.textContent = "Allegato Presente";
+        badgeL68.className = "text-[9px] font-bold px-2 py-0.2 rounded bg-emerald-100 text-emerald-800";
+        if (btnPreviewL68) {
+          btnPreviewL68.classList.remove("hidden");
+          btnPreviewL68.onclick = () => {
+            if (docL68.fileContent) {
+              const win = window.open();
+              if (win) win.document.write(`<iframe src="${docL68.fileContent}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+            } else {
+              alert(`Documento presente nel fascicolo: ${docL68.nome}`);
+            }
+          };
+        }
+      } else {
+        badgeL68.textContent = "Non allegato";
+        badgeL68.className = "text-[9px] font-bold px-2 py-0.2 rounded bg-slate-200 text-slate-600";
+        if (btnPreviewL68) btnPreviewL68.classList.add("hidden");
+      }
+    }
+
+    const badgeIC = document.getElementById("badge-verbale-ic");
+    const btnPreviewIC = document.getElementById("btn-preview-verbale-ic");
+    if (badgeIC) {
+      if (docIC) {
+        badgeIC.textContent = "Allegato Presente";
+        badgeIC.className = "text-[9px] font-bold px-2 py-0.2 rounded bg-emerald-100 text-emerald-800";
+        if (btnPreviewIC) {
+          btnPreviewIC.classList.remove("hidden");
+          btnPreviewIC.onclick = () => {
+            if (docIC.fileContent) {
+              const win = window.open();
+              if (win) win.document.write(`<iframe src="${docIC.fileContent}" style="width:100vw;height:100vh;border:none;"></iframe>`);
+            } else {
+              alert(`Documento presente nel fascicolo: ${docIC.nome}`);
+            }
+          };
+        }
+      } else {
+        badgeIC.textContent = "Non allegato";
+        badgeIC.className = "text-[9px] font-bold px-2 py-0.2 rounded bg-slate-200 text-slate-600";
+        if (btnPreviewIC) btnPreviewIC.classList.add("hidden");
+      }
+    }
+
     // Trigger sync for all custom UI selects
     document.querySelectorAll("select").forEach(sel => {
       sel.dispatchEvent(new Event("updateCustomUI"));
@@ -2038,6 +2091,58 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-upload-file-wallet-tab").addEventListener("click", () => modalDoc.classList.remove("hidden"));
   document.getElementById("btn-close-modal-doc").addEventListener("click", () => modalDoc.classList.add("hidden"));
   document.getElementById("btn-cancel-doc").addEventListener("click", () => modalDoc.classList.add("hidden"));
+
+  // Quick Direct Upload for Verbale L.68
+  const btnUploadL68 = document.getElementById("btn-upload-verbale-l68");
+  const fileInputL68 = document.getElementById("file-verbale-l68");
+  if (btnUploadL68 && fileInputL68) {
+    btnUploadL68.addEventListener("click", () => fileInputL68.click());
+    fileInputL68.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      const p = window.store.getSelectedPersona();
+      if (file && p) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          window.store.addDocumentToWallet(p.id, {
+            nome: file.name,
+            tipo: "Verbale Legge 68",
+            descrizione: "Verbale collegiale L.68/99 allegato direttamente dalla sezione sanitaria",
+            dimensione: (file.size / 1024).toFixed(1) + " KB",
+            fileContent: evt.target.result,
+            fileType: file.type
+          });
+          renderCitizenHub();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  // Quick Direct Upload for Verbale Invalidità Civile
+  const btnUploadIC = document.getElementById("btn-upload-verbale-ic");
+  const fileInputIC = document.getElementById("file-verbale-ic");
+  if (btnUploadIC && fileInputIC) {
+    btnUploadIC.addEventListener("click", () => fileInputIC.click());
+    fileInputIC.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      const p = window.store.getSelectedPersona();
+      if (file && p) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          window.store.addDocumentToWallet(p.id, {
+            nome: file.name,
+            tipo: "Verbale INPS / Invalidità Civile",
+            descrizione: "Verbale di invalidità civile allegato direttamente dalla sezione sanitaria",
+            dimensione: (file.size / 1024).toFixed(1) + " KB",
+            fileContent: evt.target.result,
+            fileType: file.type
+          });
+          renderCitizenHub();
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
 
   document.getElementById("form-upload-doc").addEventListener("submit", (e) => {
     e.preventDefault();

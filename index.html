@@ -963,6 +963,49 @@
                     <label class="rox-label">Situazione Handicap L.104/92</label>
                     <input type="text" id="ef-handicap" class="rox-input font-medium text-slate-800">
                   </div>
+
+                  <!-- Sezione Allegati Verbali Specifici Richiesti -->
+                  <div class="w-full pt-3 mt-1 border-t border-slate-100 space-y-2.5">
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-rose-700 font-heading block flex items-center gap-1.5">
+                      <i class="fa-solid fa-paperclip text-rose-600"></i> Allegati Documentali Verbali
+                    </span>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      <!-- Allegato 1: Verbale Legge 68 -->
+                      <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-1.5">
+                        <div class="flex justify-between items-center">
+                          <label class="rox-label mb-0 text-slate-700 font-bold">Verbale Legge 68</label>
+                          <span id="badge-verbale-l68" class="text-[9px] font-bold px-2 py-0.2 rounded bg-slate-200 text-slate-600">Non allegato</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                          <input type="file" id="file-verbale-l68" class="hidden">
+                          <button type="button" id="btn-upload-verbale-l68" class="cursor-pointer text-[11px] font-semibold text-rose-700 bg-white border border-rose-200 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 font-heading">
+                            <i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Carica Verbale L.68
+                          </button>
+                          <button type="button" id="btn-preview-verbale-l68" class="cursor-pointer text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 px-2 py-1.5 rounded-lg hidden" title="Visualizza Verbale L.68">
+                            <i class="fa-solid fa-eye text-blue-600"></i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Allegato 2: Verbale Invalidità Civile -->
+                      <div class="p-2.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-1.5">
+                        <div class="flex justify-between items-center">
+                          <label class="rox-label mb-0 text-slate-700 font-bold">Verbale Invalidità Civile</label>
+                          <span id="badge-verbale-ic" class="text-[9px] font-bold px-2 py-0.2 rounded bg-slate-200 text-slate-600">Non allegato</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                          <input type="file" id="file-verbale-ic" class="hidden">
+                          <button type="button" id="btn-upload-verbale-ic" class="cursor-pointer text-[11px] font-semibold text-rose-700 bg-white border border-rose-200 hover:bg-rose-50 px-2.5 py-1.5 rounded-lg flex items-center gap-1 font-heading">
+                            <i class="fa-solid fa-cloud-arrow-up text-rose-500"></i> Carica Verbale IC
+                          </button>
+                          <button type="button" id="btn-preview-verbale-ic" class="cursor-pointer text-[11px] font-semibold text-slate-700 bg-white border border-slate-200 hover:bg-slate-100 px-2 py-1.5 rounded-lg hidden" title="Visualizza Verbale Invalidità">
+                            <i class="fa-solid fa-eye text-blue-600"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
