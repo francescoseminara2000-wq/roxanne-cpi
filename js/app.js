@@ -2101,9 +2101,25 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = e.target.files[0];
       const p = window.store.getSelectedPersona();
       if (file && p) {
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            title: 'Caricamento Verbale Legge 68...',
+            html: `
+              <div class="space-y-3 pt-2">
+                <p class="text-xs text-slate-600 font-medium">Lettura file <b>${file.name}</b> e memorizzazione su MySQL...</p>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200">
+                  <div class="bg-rose-600 h-2.5 rounded-full animate-pulse" style="width: 100%"></div>
+                </div>
+              </div>
+            `,
+            allowOutsideClick: false,
+            showConfirmButton: false
+          });
+        }
+
         const reader = new FileReader();
-        reader.onload = function(evt) {
-          window.store.addDocumentToWallet(p.id, {
+        reader.onload = async function(evt) {
+          await window.store.addDocumentToWallet(p.id, {
             nome: file.name,
             tipo: "Verbale Legge 68",
             descrizione: "Verbale collegiale L.68/99 allegato direttamente dalla sezione sanitaria",
@@ -2111,7 +2127,18 @@ document.addEventListener("DOMContentLoaded", () => {
             fileContent: evt.target.result,
             fileType: file.type
           });
+
           renderCitizenHub();
+
+          if (typeof Swal !== "undefined") {
+            Swal.fire({
+              icon: 'success',
+              title: 'Verbale L.68 Salvato!',
+              text: 'Il documento è stato registrato nel database MySQL e nel fascicolo del cittadino.',
+              timer: 1800,
+              showConfirmButton: false
+            });
+          }
         };
         reader.readAsDataURL(file);
       }
@@ -2127,9 +2154,25 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = e.target.files[0];
       const p = window.store.getSelectedPersona();
       if (file && p) {
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            title: 'Caricamento Verbale Invalidità...',
+            html: `
+              <div class="space-y-3 pt-2">
+                <p class="text-xs text-slate-600 font-medium">Lettura file <b>${file.name}</b> e memorizzazione su MySQL...</p>
+                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200">
+                  <div class="bg-rose-600 h-2.5 rounded-full animate-pulse" style="width: 100%"></div>
+                </div>
+              </div>
+            `,
+            allowOutsideClick: false,
+            showConfirmButton: false
+          });
+        }
+
         const reader = new FileReader();
-        reader.onload = function(evt) {
-          window.store.addDocumentToWallet(p.id, {
+        reader.onload = async function(evt) {
+          await window.store.addDocumentToWallet(p.id, {
             nome: file.name,
             tipo: "Verbale INPS / Invalidità Civile",
             descrizione: "Verbale di invalidità civile allegato direttamente dalla sezione sanitaria",
@@ -2137,7 +2180,18 @@ document.addEventListener("DOMContentLoaded", () => {
             fileContent: evt.target.result,
             fileType: file.type
           });
+
           renderCitizenHub();
+
+          if (typeof Swal !== "undefined") {
+            Swal.fire({
+              icon: 'success',
+              title: 'Verbale IC Salvato!',
+              text: 'Il documento è stato registrato nel database MySQL e nel fascicolo del cittadino.',
+              timer: 1800,
+              showConfirmButton: false
+            });
+          }
         };
         reader.readAsDataURL(file);
       }
@@ -2158,10 +2212,26 @@ document.addEventListener("DOMContentLoaded", () => {
     if (file) {
       const fileName = nomeCustom || file.name;
       const fileSize = (file.size / 1024).toFixed(1) + " KB";
-      const reader = new FileReader();
 
-      reader.onload = function(evt) {
-        window.store.addDocumentToWallet(p.id, {
+      if (typeof Swal !== "undefined") {
+        Swal.fire({
+          title: 'Caricamento Allegato nel Wallet...',
+          html: `
+            <div class="space-y-3 pt-2">
+              <p class="text-xs text-slate-600 font-medium">Invio file <b>${fileName}</b> (${fileSize}) su MySQL...</p>
+              <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200">
+                <div class="bg-amber-500 h-2.5 rounded-full animate-pulse" style="width: 100%"></div>
+              </div>
+            </div>
+          `,
+          allowOutsideClick: false,
+          showConfirmButton: false
+        });
+      }
+
+      const reader = new FileReader();
+      reader.onload = async function(evt) {
+        await window.store.addDocumentToWallet(p.id, {
           nome: fileName,
           tipo: tipo,
           descrizione: descrizione,
@@ -2173,6 +2243,16 @@ document.addEventListener("DOMContentLoaded", () => {
         modalDoc.classList.add("hidden");
         document.getElementById("form-upload-doc").reset();
         renderCitizenHub();
+
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            icon: 'success',
+            title: 'File Salvato nel Wallet!',
+            text: 'Documento memorizzato in modo permanente su MySQL.',
+            timer: 1800,
+            showConfirmButton: false
+          });
+        }
       };
 
       reader.readAsDataURL(file);

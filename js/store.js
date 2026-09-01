@@ -190,7 +190,7 @@ class StoreManager {
         nome: doc.nome,
         tipo: doc.tipo || "Documento Allegato",
         descrizione: doc.descrizione || "",
-        data: new Date().toISOString().split('T')[0],
+        data: new Date().toISOString(),
         dimensione: doc.dimensione || "520 KB",
         fileContent: doc.fileContent || null,
         fileType: doc.fileType || "application/pdf"
@@ -201,11 +201,28 @@ class StoreManager {
       this.addAuditLog("CARICAMENTO_WALLET", "Wallet Documentale", `${persona.nome} (#${persona.numeroIscrizione})`, `Caricato file ${doc.nome}`);
 
       try {
-        await fetch('/api/wallet', {
+        const res = await fetch('/api/wallet', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...newDoc, personaId: parseInt(personaId) })
+          body: JSON.stringify({
+            personaId: parseInt(personaId),
+            nome: newDoc.nome,
+            tipo: newDoc.tipo,
+            descrizione: newDoc.descrizione,
+            dimensione: newDoc.dimensione,
+            fileContent: newDoc.fileContent,
+            fileType: newDoc.fileType,
+            data: newDoc.data
+          })
         });
+
+        if (res.ok) {
+          const savedDoc = await res.json();
+          if (savedDoc && savedDoc.id) {
+            newDoc.id = savedDoc.id;
+            this.saveData();
+          }
+        }
       } catch (e) {
         console.warn("Wallet sync pending:", e);
       }

@@ -143,7 +143,7 @@ model DocumentoWallet {
   descrizione String?  @db.Text
   data        DateTime @default(now())
   dimensione  String?
-  fileContent String?  @db.Text
+  fileContent String?  @db.LongText
   fileType    String?
 }
 
