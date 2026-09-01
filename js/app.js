@@ -3095,6 +3095,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const pBox = document.getElementById("brand-logo-preview-box");
     const pImg = document.getElementById("brand-logo-img-preview");
     const pIcon = document.getElementById("brand-logo-icon-preview");
+    const dynamicFavicon = document.getElementById("dynamic-favicon");
+
+    const defaultFaviconSvg = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12 3L2 12h3v8h14v-8h3L12 3zm0 4.5c1.38 0 2.5 1.12 2.5 2.5S13.38 12.5 12 12.5 9.5 11.38 9.5 10 10.62 7.5 12 7.5zm-5 11.5c0-1.66 2.24-3 5-3s5 1.34 5 3H7z'/></svg>";
 
     if (logoData) {
       if (hImg) { 
@@ -3124,6 +3127,11 @@ document.addEventListener("DOMContentLoaded", () => {
         pBox.className = "w-full h-16 rounded-2xl mx-auto flex items-center justify-center overflow-hidden border border-slate-200 bg-white shadow-xs p-1";
         pBox.style.background = "#ffffff";
       }
+
+      // Update Browser Tab Favicon
+      if (dynamicFavicon) {
+        dynamicFavicon.href = logoData;
+      }
     } else {
       if (hImg) { 
         hImg.src = ""; 
@@ -3151,6 +3159,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (pBox) {
         pBox.className = "w-16 h-16 rounded-2xl mx-auto flex items-center justify-center overflow-hidden border border-slate-200 bg-gradient-to-tr from-blue-600 to-indigo-600 shadow-md shadow-blue-500/15";
         pBox.style.background = "";
+      }
+
+      // Reset Browser Tab Favicon
+      if (dynamicFavicon) {
+        dynamicFavicon.href = defaultFaviconSvg;
       }
     }
   }
