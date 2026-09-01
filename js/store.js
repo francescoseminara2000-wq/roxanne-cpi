@@ -77,6 +77,26 @@ class StoreManager {
     return this.data;
   }
 
+  async initRemoteSync() {
+    try {
+      const res = await fetch('/api/persone');
+      if (res.ok) {
+        const personeDb = await res.json();
+        if (personeDb && personeDb.length > 0) {
+          this.data.persone = personeDb;
+          if (!this.selectedPersonaId && this.data.persone.length > 0) {
+            this.selectedPersonaId = this.data.persone[0].id;
+          }
+          this.saveData();
+          if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
+          if (typeof window.renderCitizenHub === "function") window.renderCitizenHub();
+        }
+      }
+    } catch (e) {
+      console.log("Modalità standalone locale o API offline:", e.message);
+    }
+  }
+
   // --- PERSONE & CITIZEN HUB ---
   getPersone() {
     return this.data.persone || [];
@@ -93,7 +113,7 @@ class StoreManager {
     this.selectedPersonaId = parseInt(id);
   }
 
-  addPersona(personaData) {
+  async addPersona(personaData) {
     const newId = this.data.persone.length > 0 ? Math.max(...this.data.persone.map(p => p.id)) + 1 : 1;
     const newNumIscrizione = this.data.persone.length > 0 ? Math.max(...this.data.persone.map(p => p.numeroIscrizione || 10000)) + 1 : 10001;
     
@@ -120,10 +140,22 @@ class StoreManager {
     this.data.persone.unshift(newPersona);
     this.selectedPersonaId = newId;
     this.saveData();
+
+    // Sincronizzazione remota MySQL API
+    try {
+      await fetch('/api/persone', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPersona)
+      });
+    } catch (err) {
+      console.warn("API Sync pending:", err);
+    }
+
     return newPersona;
   }
 
-  updatePersona(id, updatedFields) {
+  async updatePersona(id, updatedFields) {
     const index = this.data.persone.findIndex(p => p.id === parseInt(id));
     if (index !== -1) {
       this.data.persone[index] = { ...this.data.persone[index], ...updatedFields };
@@ -131,13 +163,25 @@ class StoreManager {
       
       const p = this.data.persone[index];
       this.addAuditLog("MODIFICA_SCHEDA", "Scheda Cittadino", `${p.nome} (#${p.numeroIscrizione})`, "Aggiornamento dati anagrafici/sanitari");
+      
+      // Sincronizzazione remota MySQL API
+      try {
+        await fetch(`/api/persone/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(p)
+        });
+      } catch (err) {
+        console.warn("API Sync pending:", err);
+      }
+
       return this.data.persone[index];
     }
     return null;
   }
 
   // --- WALLET DOCUMENTALE COMPLETO ---
-  addDocumentToWallet(personaId, doc) {
+  async addDocumentToWallet(personaId, doc) {
     const persona = this.data.persone.find(p => p.id === parseInt(personaId));
     if (persona) {
       if (!persona.wallet) persona.wallet = [];
@@ -155,17 +199,34 @@ class StoreManager {
       this.saveData();
 
       this.addAuditLog("CARICAMENTO_WALLET", "Wallet Documentale", `${persona.nome} (#${persona.numeroIscrizione})`, `Caricato file ${doc.nome}`);
+
+      try {
+        await fetch('/api/wallet', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...newDoc, personaId: parseInt(personaId) })
+        });
+      } catch (e) {
+        console.warn("Wallet sync pending:", e);
+      }
+
       return newDoc;
     }
     return null;
   }
 
-  deleteDocumentFromWallet(personaId, docId) {
+  async deleteDocumentFromWallet(personaId, docId) {
     const persona = this.data.persone.find(p => p.id === parseInt(personaId));
     if (persona && persona.wallet) {
       persona.wallet = persona.wallet.filter(d => d.id !== parseInt(docId));
       this.saveData();
       this.addAuditLog("ELIMINAZIONE_WALLET", "Wallet Documentale", `${persona.nome}`, `Rimossa allegato #${docId}`);
+
+      try {
+        await fetch(`/api/wallet/${docId}`, { method: 'DELETE' });
+      } catch (e) {
+        console.warn("Wallet delete sync pending:", e);
+      }
     }
   }
 
@@ -175,7 +236,7 @@ class StoreManager {
     return list.sort((a, b) => new Date(b.dataSeduta) - new Date(a.dataSeduta));
   }
 
-  addVerbaleComitato(comitatoData) {
+  async addVerbaleComitato(comitatoData) {
     if (!this.data.comitatoTecnico) this.data.comitatoTecnico = [];
     const newId = this.data.comitatoTecnico.length > 0 ? Math.max(...this.data.comitatoTecnico.map(c => c.id || 0)) + 1 : 1;
     const newVerbale = {
@@ -187,14 +248,31 @@ class StoreManager {
     this.saveData();
 
     this.addAuditLog("AGGIUNTA_VERBALE_COMITATO", "Comitato Tecnico ASL", `Iscritto #${comitatoData.numeroIscrizione}`, `Verbale ASL n. ${comitatoData.numPratica || newId}`);
+
+    try {
+      await fetch('/api/comitato', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newVerbale)
+      });
+    } catch (e) {
+      console.warn("Comitato sync pending:", e);
+    }
+
     return newVerbale;
   }
 
-  deleteVerbaleComitato(verbaleId) {
+  async deleteVerbaleComitato(verbaleId) {
     if (this.data.comitatoTecnico) {
       this.data.comitatoTecnico = this.data.comitatoTecnico.filter(c => c.id !== parseInt(verbaleId));
       this.saveData();
       this.addAuditLog("ELIMINAZIONE_VERBALE_COMITATO", "Comitato Tecnico ASL", `Verbale #${verbaleId}`, "Eliminazione record verbale ASL");
+
+      try {
+        await fetch(`/api/comitato/${verbaleId}`, { method: 'DELETE' });
+      } catch (e) {
+        console.warn("Comitato delete sync pending:", e);
+      }
     }
   }
 
@@ -205,7 +283,7 @@ class StoreManager {
     return list.sort((a, b) => new Date(b.data) - new Date(a.data));
   }
 
-  addProgettoInserimentoLav(pilData) {
+  async addProgettoInserimentoLav(pilData) {
     if (!this.data.progettiInserimentoLav) this.data.progettiInserimentoLav = [];
     const newId = this.data.progettiInserimentoLav.length > 0 ? Math.max(...this.data.progettiInserimentoLav.map(p => p.id || 0)) + 1 : 1;
     const newPil = {
@@ -217,14 +295,31 @@ class StoreManager {
     this.saveData();
 
     this.addAuditLog("AGGIUNTA_PIL", "Progetto Inserimento (PIL)", `${pilData.nome || 'Iscritto'} (#${pilData.numeroIscrizione})`, `Nuovo PIL registrato`);
+
+    try {
+      await fetch('/api/pil', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newPil)
+      });
+    } catch (e) {
+      console.warn("PIL sync pending:", e);
+    }
+
     return newPil;
   }
 
-  deleteProgettoInserimentoLav(pilId) {
+  async deleteProgettoInserimentoLav(pilId) {
     if (this.data.progettiInserimentoLav) {
       this.data.progettiInserimentoLav = this.data.progettiInserimentoLav.filter(p => p.id !== parseInt(pilId));
       this.saveData();
       this.addAuditLog("ELIMINAZIONE_PIL", "Progetto Inserimento (PIL)", `PIL #${pilId}`, "Eliminazione scheda PIL");
+
+      try {
+        await fetch(`/api/pil/${pilId}`, { method: 'DELETE' });
+      } catch (e) {
+        console.warn("PIL delete sync pending:", e);
+      }
     }
   }
 
@@ -234,7 +329,7 @@ class StoreManager {
     return this.data.noteDiario.filter(n => parseInt(n.numeroIscrizione) === parseInt(numIscriz));
   }
 
-  addNotaDiario(notaData) {
+  async addNotaDiario(notaData) {
     if (!this.data.noteDiario) this.data.noteDiario = [];
     const newId = this.data.noteDiario.length > 0 ? Math.max(...this.data.noteDiario.map(n => n.id || 0)) + 1 : 401;
     const newNota = { ...notaData, id: newId, operatore: this.getActiveUser(), firma: this.getActiveUser() };
@@ -242,14 +337,31 @@ class StoreManager {
     this.saveData();
 
     this.addAuditLog("AGGIUNTA_NOTA", "Diario Operatore", `${notaData.nome || 'Iscritto'} (#${notaData.numeroIscrizione})`, `Nota ${notaData.tipoNota || 'Diario'}`);
+
+    try {
+      await fetch('/api/diario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newNota)
+      });
+    } catch (e) {
+      console.warn("Diario sync pending:", e);
+    }
+
     return newNota;
   }
 
-  deleteNotaDiario(notaId) {
+  async deleteNotaDiario(notaId) {
     if (this.data.noteDiario) {
       this.data.noteDiario = this.data.noteDiario.filter(n => n.id !== parseInt(notaId));
       this.saveData();
       this.addAuditLog("ELIMINAZIONE_NOTA", "Diario Operatore", `Nota #${notaId}`, "Eliminazione annotazione diario");
+
+      try {
+        await fetch(`/api/diario/${notaId}`, { method: 'DELETE' });
+      } catch (e) {
+        console.warn("Diario delete sync pending:", e);
+      }
     }
   }
 

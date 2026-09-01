@@ -211,6 +211,11 @@ document.addEventListener("DOMContentLoaded", () => {
   renderDashboardAnalytics();
   renderMainSearchTable();
 
+  // Remote Database Auto-Sync (MySQL via Prisma)
+  if (window.store && typeof window.store.initRemoteSync === "function") {
+    window.store.initRemoteSync();
+  }
+
   // --- MOBILE DRAWER NAVIGATION ---
   function initMobileDrawer() {
     const btnToggle = document.getElementById("btn-mobile-menu-toggle");
