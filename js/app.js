@@ -429,6 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnSearch = document.getElementById("nav-mode-search");
     const btnHub = document.getElementById("nav-mode-hub");
     const btnMatcher = document.getElementById("nav-mode-matcher");
+    const btnUsers = document.getElementById("nav-mode-users");
     const btnAudit = document.getElementById("nav-mode-audit");
     const btnBackSearch = document.getElementById("btn-back-to-search");
 
@@ -437,7 +438,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const sectionHub = document.getElementById("section-citizen-hub");
     const sectionMatcher = document.getElementById("section-matcher");
     const sectionAudit = document.getElementById("section-audit");
-
     const sectionUsers = document.getElementById("section-users");
 
     function hideAllSections() {
