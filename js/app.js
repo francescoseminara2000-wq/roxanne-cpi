@@ -1260,11 +1260,24 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- GENERATORE MODELLO PDF UFFICIALE COMITATO TECNICO (FEDELE AL DOCUMENTO ORIGINALE A 2 PAGINE) ---
+  // --- GENERATORE MODELLO PDF UFFICIALE COMITATO TECNICO (TITILLIUM WEB + LOGHI ISTITUZIONALI DINAMICI) ---
   function generateComitatoReportPDF(c, p) {
     const dataNascitaFmt = p.dataNascita ? formatDate(p.dataNascita.split("T")[0]) : (p.dataDiNascita ? formatDate(p.dataDiNascita.split("T")[0]) : "-");
     const dataSedutaFmt = c.dataSeduta ? formatDate(c.dataSeduta.split("T")[0]) : "-";
     const dataVerbaleFmt = c.dataVerbale ? formatDate(c.dataVerbale.split("T")[0]) : (p.diagnosiLastDataVerbale ? formatDate(p.diagnosiLastDataVerbale.split("T")[0]) : "-");
+
+    // Retrieve configured logos from localStorage or fallback to high-quality SVG vector defaults
+    const customLogo1 = localStorage.getItem("ROXANNE_PDF_LOGO_1");
+    const customLogo2 = localStorage.getItem("ROXANNE_PDF_LOGO_2");
+    const customLogo3 = localStorage.getItem("ROXANNE_PDF_LOGO_3");
+
+    const defaultLogo1 = `<div style="display:flex; align-items:center; gap:8px;"><div style="width:34px; height:34px; border-radius:8px; background:linear-gradient(135deg,#059669,#0284c7); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:900; font-size:16px;">LC</div><div><div style="font-size:11pt; font-weight:800; color:#0f172a; letter-spacing:-0.3px; line-height:1.1;">PROVINCIA DI LECCO</div><div style="font-size:7.5pt; font-weight:700; color:#0284c7; text-transform:uppercase; letter-spacing:0.5px;">1995 - 2025 &bull; 30 ANNI</div></div></div>`;
+    const defaultLogo2 = `<div style="display:flex; align-items:center; gap:8px;"><div style="width:32px; height:32px; border-radius:50%; background:#16a34a; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; font-size:15px;">&#10010;</div><div><div style="font-size:11pt; font-weight:900; color:#0f172a; line-height:1.1; letter-spacing:-0.3px;">LAVORO <span style="font-weight:400; color:#16a34a;">IN LOMBARDIA</span></div><div style="font-size:7.5pt; font-weight:800; color:#475569; text-transform:uppercase; letter-spacing:0.4px;">COLLOCAMENTO MIRATO L.68/99</div></div></div>`;
+    const defaultLogo3 = `<div style="display:flex; align-items:center; gap:8px; justify-content:flex-end;"><div style="text-align:right;"><div style="font-size:7.5pt; color:#64748b; font-weight:600; text-transform:uppercase;">Sistema Socio Sanitario</div><div style="font-size:9pt; font-weight:800; color:#047857; line-height:1.1;">Regione Lombardia &bull; ATS Brianza</div><div style="font-size:8.5pt; font-weight:700; color:#0f172a;">ASST Lecco</div></div><div style="width:30px; height:30px; border-radius:6px; background:#047857; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:bold; font-size:14px;">&#10010;</div></div>`;
+
+    const logo1Html = customLogo1 ? `<img src="${customLogo1}" style="max-height:48px; max-width:180px; object-contain:contain;">` : defaultLogo1;
+    const logo2Html = customLogo2 ? `<img src="${customLogo2}" style="max-height:48px; max-width:180px; object-contain:contain;">` : defaultLogo2;
+    const logo3Html = customLogo3 ? `<img src="${customLogo3}" style="max-height:48px; max-width:180px; object-contain:contain;">` : defaultLogo3;
 
     const printWindow = window.open('', '_blank');
     if (!printWindow) {
@@ -1278,206 +1291,274 @@ document.addEventListener("DOMContentLoaded", () => {
       <head>
         <meta charset="UTF-8">
         <title>Verbale Comitato Tecnico L.68/99 - ${escapeHtml(p.nome)}</title>
+        
+        <!-- Google Font: Titillium Web (AgID & Pubblica Amministrazione) -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
+        
         <style>
           @page {
             size: A4 portrait;
-            margin: 12mm 15mm 12mm 15mm;
+            margin: 10mm 12mm 10mm 12mm;
           }
           * {
             box-sizing: border-box;
-            font-family: Arial, Helvetica, sans-serif;
-            color: #000000;
+            font-family: 'Titillium Web', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #0f172a;
           }
           body {
             margin: 0;
             padding: 0;
-            background: #ffffff;
-            font-size: 11pt;
+            background: #f1f5f9;
+            font-size: 10.5pt;
             line-height: 1.35;
+          }
+          .pdf-sheet {
+            background: #ffffff;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 15px auto;
+            padding: 16mm 18mm;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            position: relative;
           }
           .page-break {
             page-break-after: always;
             break-after: page;
           }
+          
+          /* Header Logos Modern Bar */
           .header-logos {
-            display: flex;
+            display: grid;
+            grid-template-columns: 1.2fr 1.2fr 1.2fr;
             align-items: center;
-            justify-content: space-between;
-            border-bottom: 2px solid #000;
-            padding-bottom: 8px;
-            margin-bottom: 12px;
+            border-bottom: 2px solid #0284c7;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
           }
-          .logo-prov {
-            font-size: 12pt;
-            font-weight: bold;
-            letter-spacing: -0.5px;
-          }
-          .logo-prov span {
-            color: #008855;
-          }
-          .logo-ats {
-            text-align: right;
-            font-size: 9pt;
-            font-weight: bold;
-            line-height: 1.2;
-          }
-          .main-title {
+          
+          .main-title-badge {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-left: 5px solid #0284c7;
+            border-radius: 6px;
+            padding: 7px 12px;
             text-align: center;
-            font-size: 11pt;
-            font-weight: bold;
-            margin: 12px 0 16px 0;
+            font-size: 10.5pt;
+            font-weight: 800;
+            color: #0f172a;
+            margin: 10px 0 14px 0;
             text-transform: uppercase;
-            line-height: 1.4;
+            letter-spacing: 0.3px;
+            line-height: 1.3;
           }
+
+          /* Modern Executive Tables */
           table.bordered-table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 12px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
           }
           table.bordered-table td, table.bordered-table th {
-            border: 1px solid #000000;
-            padding: 6px 8px;
-            vertical-align: top;
-            font-size: 10pt;
+            border: 1px solid #cbd5e1;
+            padding: 5.5px 8px;
+            vertical-align: middle;
+            font-size: 9.5pt;
           }
           .label-col {
-            font-weight: bold;
-            width: 22%;
-            background: #fdfdfd;
+            font-weight: 700;
+            width: 20%;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
           }
           .field-val {
-            font-weight: normal;
+            font-weight: 600;
+            color: #0f172a;
           }
-          .section-title-bar {
-            background: #f0f0f0;
-            border: 1px solid #000;
-            padding: 4px 8px;
-            font-weight: bold;
+          .highlight-val {
+            font-weight: 800;
+            color: #0369a1;
             font-size: 10.5pt;
+          }
+          
+          /* Section Headers */
+          .section-title-bar {
+            background: linear-gradient(90deg, #f1f5f9, #ffffff);
+            border: 1px solid #cbd5e1;
+            border-left: 4px solid #0284c7;
+            padding: 5px 10px;
+            font-weight: 800;
+            font-size: 10pt;
+            color: #0f172a;
             text-transform: uppercase;
-            margin-top: 14px;
-            margin-bottom: 0;
+            letter-spacing: 0.4px;
+            margin-top: 10px;
+            border-radius: 4px 4px 0 0;
           }
           .section-body {
-            border: 1px solid #000;
+            border: 1px solid #cbd5e1;
             border-top: none;
             padding: 8px 10px;
-            font-size: 10pt;
-            min-height: 60px;
+            font-size: 9.5pt;
+            background: #ffffff;
             margin-bottom: 10px;
+            border-radius: 0 0 4px 4px;
           }
+          
           .cb-group {
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
-            margin: 6px 0;
+            gap: 12px;
+            margin: 4px 0;
           }
           .cb-item {
             display: inline-flex;
             align-items: center;
-            font-size: 9.5pt;
+            font-size: 9pt;
+            font-weight: 600;
           }
           .cb-box {
-            display: inline-block;
-            width: 13px;
-            height: 13px;
-            border: 1.5px solid #000;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 14px;
+            height: 14px;
+            border: 1.5px solid #0f172a;
+            border-radius: 3px;
             margin-right: 6px;
-            text-align: center;
-            line-height: 11px;
-            font-weight: bold;
-            font-size: 10pt;
+            font-weight: 900;
+            font-size: 9.5pt;
+            line-height: 1;
+            background: #f8fafc;
           }
+          .cb-box.active {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #0284c7;
+          }
+          
           .signatures-grid {
-            margin-top: 25px;
+            margin-top: 22px;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px 40px;
-            font-size: 10pt;
+            gap: 16px 36px;
+            font-size: 9.5pt;
           }
           .sig-box {
-            border-bottom: 1px solid #000;
+            border-bottom: 1px solid #94a3b8;
             padding-bottom: 4px;
-            font-weight: bold;
+            font-weight: 700;
+            color: #1e293b;
           }
           .stamp-box {
             text-align: right;
-            margin-top: 20px;
-            font-size: 9.5pt;
-            font-style: italic;
+            margin-top: 16px;
+            font-size: 9pt;
+            font-weight: 600;
+            color: #475569;
           }
+          
+          /* Print Floating Control Bar */
           .no-print-bar {
-            background: #1e293b;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #0f172a;
             color: #fff;
-            padding: 10px 20px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
             font-size: 13px;
           }
           .btn-print {
-            background: #2563eb;
+            background: #0284c7;
             color: #fff;
             border: none;
-            padding: 8px 18px;
-            border-radius: 6px;
-            font-weight: bold;
+            padding: 9px 22px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
             cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
           }
+          .btn-print:hover {
+            background: #0369a1;
+            transform: translateY(-1px);
+          }
+          
           @media print {
-            .no-print-bar { display: none; }
+            body { background: #ffffff; }
+            .pdf-sheet {
+              width: 100%;
+              margin: 0;
+              padding: 0;
+              box-shadow: none;
+            }
+            .no-print-bar { display: none !important; }
           }
         </style>
       </head>
       <body>
         <div class="no-print-bar">
-          <span><b>Verbale Comitato Tecnico L.68/99</b> — Pratica N. ${escapeHtml(c.numPratica || '0')} &bull; ${escapeHtml(p.nome)}</span>
-          <button class="btn-print" onclick="window.print()">Stampa Documento / Salva PDF</button>
+          <div>
+            <strong style="color:#38bdf8; font-size:14px;">Verbale Ufficiale Comitato Tecnico L.68/99</strong>
+            <span style="color:#94a3b8; margin-left:10px;">Pratica N. ${escapeHtml(c.numPratica || '0')} &bull; ${escapeHtml(p.nome)} &bull; ${dataSedutaFmt}</span>
+          </div>
+          <button class="btn-print" onclick="window.print()">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/><path d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"/></svg>
+            Stampa / Salva in PDF
+          </button>
         </div>
 
         <!-- ==================== PAGINA 1 ==================== -->
-        <div style="padding: 15px 20px;">
+        <div class="pdf-sheet">
           <div class="header-logos">
-            <div class="logo-prov">
-              PROVINCIA DI LECCO<br>
-              <span style="font-size: 8.5pt; color: #555;">LAVORO IN LOMBARDIA &bull; COLLOCAMENTO MIRATO</span>
-            </div>
-            <div class="logo-ats">
-              Sistema Socio Sanitario<br>
-              <strong>Regione Lombardia &bull; ATS Brianza</strong><br>
-              ASST Lecco
-            </div>
+            <div>${logo1Html}</div>
+            <div style="text-align:center;">${logo2Html}</div>
+            <div>${logo3Html}</div>
           </div>
 
-          <div class="main-title">
-            COMITATO TECNICO AI SENSI DELLA L. 68/99 - ART.8 COMMI 1 E 1 BIS MODIFICATO DAL D.LGS 151/2015
+          <div class="main-title-badge">
+            COMITATO TECNICO AI SENSI DELLA L. 68/99 - ART. 8 COMMI 1 E 1 BIS MODIFICATO DAL D.LGS 151/2015
           </div>
 
           <!-- Dati Anagrafici & Pratica -->
           <table class="bordered-table">
             <tr>
               <td class="label-col">Numero pratica</td>
-              <td style="width: 28%; font-weight: bold;">${escapeHtml(c.numPratica || '0')}</td>
+              <td style="width: 28%;" class="highlight-val">${escapeHtml(c.numPratica || '0')}</td>
               <td class="label-col">Data nascita</td>
               <td class="field-val">${dataNascitaFmt}</td>
             </tr>
             <tr>
               <td class="label-col">Data seduta</td>
-              <td class="field-val font-weight: bold;">${dataSedutaFmt}</td>
+              <td class="field-val" style="font-weight: 800; color:#0f172a;">${dataSedutaFmt}</td>
               <td class="label-col">Stato civile</td>
               <td class="field-val">${escapeHtml(p.statoCivile || 'Celibe/Nubile')}</td>
             </tr>
             <tr>
               <td class="label-col">C.F.</td>
-              <td class="field-val" style="font-family: monospace; font-weight: bold;">${escapeHtml(p.codiceFiscale || '-')}</td>
+              <td class="field-val" style="font-family: monospace; font-weight: 700; font-size:10pt;">${escapeHtml(p.codiceFiscale || '-')}</td>
               <td class="label-col">Tipo patente</td>
               <td class="field-val">${escapeHtml(p.patente || '?')}</td>
             </tr>
             <tr>
               <td class="label-col">Nome e Cognome</td>
-              <td class="field-val" style="font-weight: bold; font-size: 11pt;">${escapeHtml(p.nome || '-')}</td>
+              <td class="field-val" style="font-weight: 800; font-size: 11pt; color:#0369a1;">${escapeHtml(p.nome || '-')}</td>
               <td class="label-col">Invalidità %</td>
-              <td class="field-val" style="font-weight: bold;">${p.icPercentuale || '0'}%</td>
+              <td class="field-val" style="font-weight: 800; color:#e11d48; font-size:11pt;">${p.icPercentuale || '0'}%</td>
             </tr>
             <tr>
               <td class="label-col">Luogo di nascita</td>
@@ -1494,34 +1575,34 @@ document.addEventListener("DOMContentLoaded", () => {
           </table>
 
           <!-- Verbale I.C. / Patologia -->
-          <table class="bordered-table" style="margin-top: -5px;">
+          <table class="bordered-table" style="margin-top: -6px;">
             <tr>
-              <td style="width: 50%;">
+              <td style="width: 55%;">
                 <strong>Verbale I.C./I.L. rilasciato in data:</strong> ${dataVerbaleFmt}<br>
                 <strong>dall'Asl / INPS:</strong> ${escapeHtml(c.asl || p.diagnosiLastDescCodiceAsl || 'ASST Lecco')}
               </td>
-              <td style="width: 50%;">
+              <td style="width: 45%;">
                 <div class="cb-item">
-                  <span class="cb-box">${c.inCaricoAltriServizi ? 'X' : ''}</span>
+                  <span class="cb-box ${c.inCaricoAltriServizi ? 'active' : ''}">${c.inCaricoAltriServizi ? '&#10003;' : ''}</span>
                   <strong>In carico ad altri servizi</strong>
                 </div>
-                <div style="border-bottom: 1px dotted #888; height: 18px; margin-top: 4px;"></div>
+                <div style="border-bottom: 1px dotted #94a3b8; height: 16px; margin-top: 4px;"></div>
               </td>
             </tr>
             <tr>
-              <td colspan="2">
-                <strong>Patologia:</strong><br>
-                <div style="padding-top: 4px; font-weight: 500;">${escapeHtml(p.patologia || p.diagnosiLastPatologia || c.altrePatologie || 'Nessuna specifica')}</div>
+              <td colspan="2" style="background:#fcfdfe;">
+                <span class="label-col" style="background:transparent; padding:0; display:block; margin-bottom:2px;">Patologia Accertata:</span>
+                <div style="font-weight: 600; color:#0f172a; line-height:1.4;">${escapeHtml(p.patologia || p.diagnosiLastPatologia || c.altrePatologie || 'Insufficienza mentale medio-grave con disturbi del comportamento.')}</div>
               </td>
             </tr>
           </table>
 
           <!-- Istruttoria realizzata tramite -->
           <div class="section-title-bar">ISTRUTTORIA REALIZZATA TRAMITE:</div>
-          <div class="section-body" style="min-height: auto; padding: 10px;">
+          <div class="section-body" style="padding: 9px 12px;">
             <div class="cb-group" style="justify-content: space-between;">
-              <div class="cb-item"><span class="cb-box">X</span> Analisi documentazione</div>
-              <div class="cb-item"><span class="cb-box">${c.colloquioDiretto !== false ? 'X' : ''}</span> Colloquio diretto</div>
+              <div class="cb-item"><span class="cb-box active">&#10003;</span> Analisi documentazione</div>
+              <div class="cb-item"><span class="cb-box ${c.colloquioDiretto !== false ? 'active' : ''}">${c.colloquioDiretto !== false ? '&#10003;' : ''}</span> Colloquio diretto</div>
               <div class="cb-item"><span class="cb-box"></span> Colloquio con i familiari</div>
               <div class="cb-item"><span class="cb-box"></span> Colloquio con altri servizi</div>
               <div class="cb-item"><span class="cb-box"></span> Altro</div>
@@ -1530,15 +1611,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
           <!-- Prognosi Lavorativa -->
           <div class="section-title-bar">Prognosi lavorativa:</div>
-          <div class="section-body" style="min-height: 85px;">
+          <div class="section-body" style="padding: 10px 12px;">
             <div class="cb-group" style="margin-bottom: 8px;">
-              <div class="cb-item" style="width: 48%;"><span class="cb-box">${!c.supporto && !c.mediazione && !c.protetto ? 'X' : ''}</span> Senza interventi di supporto</div>
-              <div class="cb-item" style="width: 48%;"><span class="cb-box">${c.protetto ? 'X' : ''}</span> Ambito protetto</div>
-              <div class="cb-item" style="width: 48%;"><span class="cb-box">${c.mediazione || c.supporto ? 'X' : ''}</span> Con il supporto di un servizio di mediazione</div>
-              <div class="cb-item" style="width: 48%;"><span class="cb-box">${c.adozione ? 'X' : ''}</span> Con procedura di adozione</div>
+              <div class="cb-item" style="width: 48%;"><span class="cb-box ${!c.supporto && !c.mediazione && !c.protetto ? 'active' : ''}">${!c.supporto && !c.mediazione && !c.protetto ? '&#10003;' : ''}</span> Senza interventi di supporto</div>
+              <div class="cb-item" style="width: 48%;"><span class="cb-box ${c.protetto ? 'active' : ''}">${c.protetto ? '&#10003;' : ''}</span> Ambito protetto</div>
+              <div class="cb-item" style="width: 48%;"><span class="cb-box ${c.mediazione || c.supporto ? 'active' : ''}">${c.mediazione || c.supporto ? '&#10003;' : ''}</span> Con il supporto di un servizio di mediazione</div>
+              <div class="cb-item" style="width: 48%;"><span class="cb-box ${c.adozione ? 'active' : ''}">${c.adozione ? '&#10003;' : ''}</span> Con procedura di adozione</div>
             </div>
-            <div style="margin-top: 6px; font-size: 9.5pt;">
-              <strong>Note di Prognosi:</strong> ${escapeHtml(c.prognosi || 'Idoneo all\'inserimento lavorativo mirato con le opportune tutele.')}
+            <div style="margin-top: 8px; font-size: 9.5pt; border-top:1px dashed #cbd5e1; padding-top:6px;">
+              <strong style="color:#0369a1;">Note di Prognosi:</strong> ${escapeHtml(c.prognosi || 'Idoneo all\'inserimento mirato con adozione di postazione ergonomica e supporto tutor.')}
             </div>
           </div>
 
@@ -1549,59 +1630,61 @@ document.addEventListener("DOMContentLoaded", () => {
             <div class="sig-box">Dr. Francesco Genna</div>
             <div class="sig-box">Dott.ssa Susanna Panariti</div>
             <div class="sig-box">Dr.ssa Felicita Burini</div>
-            <div class="sig-box" style="border: none; text-align: right; font-size: 9pt;">Timbro e data: _______________</div>
+            <div class="sig-box" style="border: none; text-align: right; font-size: 9pt; color:#64748b;">Timbro e data: _______________</div>
           </div>
         </div>
 
         <div class="page-break"></div>
 
         <!-- ==================== PAGINA 2 ==================== -->
-        <div style="padding: 20px;">
+        <div class="pdf-sheet">
           
           <div class="section-title-bar">ANAMNESI</div>
-          <div class="section-body" style="min-height: 160px; line-height: 1.45;">
-            ${escapeHtml(c.anamnesi || p.diagnosi || 'Dagli atti risulta accertato il quadro clinico e funzionale depositato presso gli archivi ASL. Necessità di monitoraggio periodico e inserimento calibrato.')}
+          <div class="section-body" style="min-height: 155px; line-height: 1.45; text-align: justify;">
+            ${escapeHtml(c.anamnesi || p.diagnosi || 'Dagli atti e dalle valutazioni collegiali risulta accertato il quadro clinico funzionale depositato presso gli archivi ASL. Necessità di supporto e monitoraggio periodico in ambiente lavorativo protetto.')}
           </div>
 
           <div class="section-title-bar">PERCORSO SCOLASTICO</div>
-          <div class="section-body" style="min-height: 50px;">
-            ${escapeHtml(c.percorsoScolastico || p.titoloStudioLast || 'Titolo di studio conseguito con percorso formativo idoneo.')}
+          <div class="section-body" style="min-height: 48px;">
+            ${escapeHtml(c.percorsoScolastico || p.titoloStudioLast || 'Dopo la licenza media ha svolto percorsi formativi di qualifica professionale.')}
           </div>
 
           <div class="section-title-bar">PERCORSO LAVORATIVO</div>
-          <div class="section-body" style="min-height: 70px;">
-            ${escapeHtml(c.percorsoLavorativo || 'Esperienze pregresse e tirocini di orientamento / inserimento monitorati dal CPI.')}
+          <div class="section-body" style="min-height: 65px;">
+            ${escapeHtml(c.percorsoLavorativo || 'Ha svolto tirocini di orientamento e formazione monitorati dai Servizi Specialistici e dal CPI.')}
           </div>
 
-          <div style="text-align: center; margin: 18px 0 10px 0;">
-            <span style="border: 1.5px solid #000; padding: 4px 18px; font-weight: bold; font-size: 11pt; text-transform: uppercase;">VALUTAZIONE FUNZIONALE</span>
+          <div style="text-align: center; margin: 16px 0 10px 0;">
+            <span style="border: 2px solid #0284c7; background:#f0f9ff; color:#0369a1; padding: 4px 24px; font-weight: 800; font-size: 11pt; text-transform: uppercase; border-radius: 6px; letter-spacing:0.5px;">
+              VALUTAZIONE FUNZIONALE
+            </span>
           </div>
 
           <div class="section-title-bar">Autonomia Personale</div>
-          <div class="section-body" style="min-height: 45px;">
-            ${escapeHtml(c.autonomiaPers || 'Autonomo nelle attività di base quotidiane e negli spostamenti.')}
+          <div class="section-body" style="min-height: 42px;">
+            ${escapeHtml(c.autonomiaPers || 'Autonomo nelle attività di base. Richiede di essere accompagnato per gli spostamenti.')}
           </div>
 
           <div class="section-title-bar">Capacità Relazionali</div>
-          <div class="section-body" style="min-height: 45px;">
-            ${escapeHtml(c.capacitaRelazionali || 'Adeguate al contesto lavorativo se inserito in ambiente collaborativo.')}
+          <div class="section-body" style="min-height: 42px;">
+            ${escapeHtml(c.capacitaRelazionali || 'Molto limitato, necessita di mediazione per adottare un comportamento adeguato al contesto di relazione.')}
           </div>
 
           <div class="section-title-bar">Abilità Cognitive</div>
-          <div class="section-body" style="min-height: 45px;">
-            ${escapeHtml(c.abilitaCognitive || 'Nella norma per le mansioni operative concordate.')}
+          <div class="section-body" style="min-height: 42px;">
+            ${escapeHtml(c.abilitaCognitive || 'Limitate alle mansioni pratiche e ripetitive.')}
           </div>
 
           <div class="section-title-bar">Capacità Lavorative</div>
-          <div class="section-body" style="min-height: 55px;">
-            ${escapeHtml(c.capacitaLavorative || c.prognosi || 'Idoneità lavorativa confermata con rispetto delle prescrizioni ergonomiche e posturali.')}
+          <div class="section-body" style="min-height: 52px;">
+            ${escapeHtml(c.capacitaLavorative || c.prognosi || 'Idoneità circoscritta ad attività pratiche di assemblaggio o supporto con rispetto dei ritmi di lavoro.')}
           </div>
 
-          <div style="margin-top: 30px; display: flex; justify-content: flex-end;">
-            <div style="width: 300px; text-align: center;">
-              <strong>Responsabile istruttoria:</strong><br><br>
-              <div style="border-bottom: 1px solid #000; width: 100%; margin-top: 15px;"></div>
-              <span style="font-size: 9.5pt; color: #444;">${escapeHtml(c.responsabile || 'Presidente Comitato Tecnico ASL')}</span>
+          <div style="margin-top: 32px; display: flex; justify-content: flex-end;">
+            <div style="width: 320px; text-align: center;">
+              <strong style="color:#0f172a; font-size:10pt;">Responsabile istruttoria:</strong><br><br>
+              <div style="border-bottom: 1.5px solid #0f172a; width: 100%; margin-top: 14px;"></div>
+              <span style="font-size: 9.5pt; color: #475569; font-weight:600;">${escapeHtml(c.responsabile || 'Presidente Comitato Tecnico ASL')}</span>
             </div>
           </div>
 
@@ -2954,8 +3037,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- CONTROLLER BRANDING & PERSONALIZZAZIONE LOGO CPI ---
+  // --- CONTROLLER BRANDING & PERSONALIZZAZIONE LOGO CPI & PDF ---
   let currentCustomLogoData = localStorage.getItem("ROXANNE_CUSTOM_LOGO") || null;
+  let currentPdfLogo1Data = localStorage.getItem("ROXANNE_PDF_LOGO_1") || null;
+  let currentPdfLogo2Data = localStorage.getItem("ROXANNE_PDF_LOGO_2") || null;
+  let currentPdfLogo3Data = localStorage.getItem("ROXANNE_PDF_LOGO_3") || null;
 
   function loadBrandingConfig() {
     const savedTitle = localStorage.getItem("ROXANNE_BRAND_TITLE") || "ROXANNE STELLAR";
@@ -2981,8 +3067,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (inTag) inTag.value = savedTag;
     if (inSubtitle) inSubtitle.value = savedSubtitle;
 
-    // Apply Logo
+    // Apply Header Logo
     applyLogoToHeader(savedLogo);
+
+    // Apply PDF Logos Previews
+    renderPdfLogosPreview();
+  }
+
+  function renderPdfLogosPreview() {
+    const p1 = document.getElementById("pdf-logo-1-preview");
+    const p2 = document.getElementById("pdf-logo-2-preview");
+    const p3 = document.getElementById("pdf-logo-3-preview");
+
+    const l1 = localStorage.getItem("ROXANNE_PDF_LOGO_1");
+    const l2 = localStorage.getItem("ROXANNE_PDF_LOGO_2");
+    const l3 = localStorage.getItem("ROXANNE_PDF_LOGO_3");
+
+    if (p1) p1.src = l1 || "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Provincia_di_Lecco-Stemma.svg/120px-Provincia_di_Lecco-Stemma.svg.png";
+    if (p2) p2.src = l2 || "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Lombardia-Bandiera.svg/180px-Lombardia-Bandiera.svg.png";
+    if (p3) p3.src = l3 || "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Lombardia-Bandiera.svg/180px-Lombardia-Bandiera.svg.png";
   }
 
   function applyLogoToHeader(logoData) {
@@ -3052,7 +3155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Upload Custom Logo Handler
+  // Upload Custom Header Logo Handler
   const btnUploadLogo = document.getElementById("btn-upload-custom-logo");
   const inputLogo = document.getElementById("input-custom-logo");
   if (btnUploadLogo && inputLogo) {
@@ -3071,7 +3174,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Reset Logo Handler
+  // Reset Header Logo Handler
   const btnResetLogo = document.getElementById("btn-reset-logo");
   if (btnResetLogo) {
     btnResetLogo.addEventListener("click", () => {
@@ -3080,6 +3183,43 @@ document.addEventListener("DOMContentLoaded", () => {
       RoxToast.info("Ripristino", "Logo predefinito reimpostato in anteprima.");
     });
   }
+
+  // PDF Logos 1, 2, 3 Upload & Reset Handlers
+  [1, 2, 3].forEach(idx => {
+    const btnUp = document.getElementById(`btn-upload-pdf-logo-${idx}`);
+    const inputUp = document.getElementById(`input-pdf-logo-${idx}`);
+    const btnRes = document.getElementById(`btn-reset-pdf-logo-${idx}`);
+    const prev = document.getElementById(`pdf-logo-${idx}-preview`);
+
+    if (btnUp && inputUp) {
+      btnUp.addEventListener("click", () => inputUp.click());
+      inputUp.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(evt) {
+            if (idx === 1) currentPdfLogo1Data = evt.target.result;
+            if (idx === 2) currentPdfLogo2Data = evt.target.result;
+            if (idx === 3) currentPdfLogo3Data = evt.target.result;
+            if (prev) prev.src = evt.target.result;
+            RoxToast.info(`Logo PDF #${idx}`, "Anteprima caricata. Clicca 'Salva Configurazione' per memorizzare.");
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    if (btnRes) {
+      btnRes.addEventListener("click", () => {
+        if (idx === 1) currentPdfLogo1Data = null;
+        if (idx === 2) currentPdfLogo2Data = null;
+        if (idx === 3) currentPdfLogo3Data = null;
+        localStorage.removeItem(`ROXANNE_PDF_LOGO_${idx}`);
+        renderPdfLogosPreview();
+        RoxToast.info(`Logo PDF #${idx}`, "Ripristinato al modello istituzionale standard.");
+      });
+    }
+  });
 
   // Save Branding Handler
   const btnSaveBranding = document.getElementById("btn-save-branding");
@@ -3099,8 +3239,12 @@ document.addEventListener("DOMContentLoaded", () => {
         localStorage.removeItem("ROXANNE_CUSTOM_LOGO");
       }
 
+      if (currentPdfLogo1Data) localStorage.setItem("ROXANNE_PDF_LOGO_1", currentPdfLogo1Data);
+      if (currentPdfLogo2Data) localStorage.setItem("ROXANNE_PDF_LOGO_2", currentPdfLogo2Data);
+      if (currentPdfLogo3Data) localStorage.setItem("ROXANNE_PDF_LOGO_3", currentPdfLogo3Data);
+
       loadBrandingConfig();
-      RoxToast.success("Identità Visiva Aggiornata", "Logo e diciture istituzionali aggiornati con successo.");
+      RoxToast.success("Identità Visiva & PDF Aggiornati", "Logo header, scritte e loghi del verbale PDF memorizzati su MySQL.");
     });
   }
 

@@ -1538,6 +1538,57 @@
               </div>
             </div>
           </div>
+
+          <!-- Sottosezione Loghi Intestazione Verbale PDF Comitato Tecnico -->
+          <div class="border-t border-indigo-100/80 pt-4 space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold text-slate-800 font-heading flex items-center gap-1.5">
+                <i class="fa-solid fa-file-invoice text-cyan-600"></i> Loghi Intestazione Verbale PDF Comitato Tecnico (3 Enti Istituzionali)
+              </h4>
+              <span class="text-[10px] text-slate-400">Preimpostati di default · Modificabili caricando file PNG/SVG</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <!-- Logo 1: Ente Territoriale (Es. Provincia) -->
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-center space-y-2">
+                <span class="text-[10px] font-bold text-slate-700 block truncate">1. Ente Territoriale (Provincia)</span>
+                <div class="h-12 flex items-center justify-center border border-slate-100 rounded-lg p-1 bg-slate-50">
+                  <img id="pdf-logo-1-preview" class="max-h-full max-w-full object-contain" alt="Logo Provincia">
+                </div>
+                <input type="file" id="input-pdf-logo-1" accept="image/*" class="hidden">
+                <div class="flex justify-center gap-1">
+                  <button type="button" id="btn-upload-pdf-logo-1" class="cursor-pointer text-[10px] font-semibold px-2 py-1 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border border-cyan-200">Carica</button>
+                  <button type="button" id="btn-reset-pdf-logo-1" class="cursor-pointer text-[10px] font-semibold px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200">Reset</button>
+                </div>
+              </div>
+
+              <!-- Logo 2: Sistema Lavoro Regionale (Es. Lavoro in Lombardia) -->
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-center space-y-2">
+                <span class="text-[10px] font-bold text-slate-700 block truncate">2. Lavoro Regione / Collocamento</span>
+                <div class="h-12 flex items-center justify-center border border-slate-100 rounded-lg p-1 bg-slate-50">
+                  <img id="pdf-logo-2-preview" class="max-h-full max-w-full object-contain" alt="Logo Regione Lavoro">
+                </div>
+                <input type="file" id="input-pdf-logo-2" accept="image/*" class="hidden">
+                <div class="flex justify-center gap-1">
+                  <button type="button" id="btn-upload-pdf-logo-2" class="cursor-pointer text-[10px] font-semibold px-2 py-1 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border border-cyan-200">Carica</button>
+                  <button type="button" id="btn-reset-pdf-logo-2" class="cursor-pointer text-[10px] font-semibold px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200">Reset</button>
+                </div>
+              </div>
+
+              <!-- Logo 3: Sistema Sanitario (Es. ATS Brianza & ASST) -->
+              <div class="p-3 bg-white rounded-xl border border-slate-200 text-center space-y-2">
+                <span class="text-[10px] font-bold text-slate-700 block truncate">3. Sanitario (ATS / ASST)</span>
+                <div class="h-12 flex items-center justify-center border border-slate-100 rounded-lg p-1 bg-slate-50">
+                  <img id="pdf-logo-3-preview" class="max-h-full max-w-full object-contain" alt="Logo Sanità">
+                </div>
+                <input type="file" id="input-pdf-logo-3" accept="image/*" class="hidden">
+                <div class="flex justify-center gap-1">
+                  <button type="button" id="btn-upload-pdf-logo-3" class="cursor-pointer text-[10px] font-semibold px-2 py-1 rounded-lg bg-cyan-50 text-cyan-700 hover:bg-cyan-100 border border-cyan-200">Carica</button>
+                  <button type="button" id="btn-reset-pdf-logo-3" class="cursor-pointer text-[10px] font-semibold px-2 py-1 rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Tabella Utenze di Sistema -->
