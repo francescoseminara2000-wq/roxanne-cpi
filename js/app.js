@@ -438,8 +438,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const sectionMatcher = document.getElementById("section-matcher");
     const sectionAudit = document.getElementById("section-audit");
 
+    const sectionUsers = document.getElementById("section-users");
+
+    function hideAllSections() {
+      const allSecs = [sectionDash, sectionSearch, sectionHub, sectionMatcher, sectionAudit, sectionUsers];
+      allSecs.forEach(s => {
+        if (s) s.classList.add("hidden");
+      });
+    }
+
     function setActiveBtn(activeBtn) {
-      [btnDash, btnSearch, btnHub, btnMatcher, btnAudit].forEach(btn => {
+      [btnDash, btnSearch, btnHub, btnMatcher, btnAudit, btnUsers].forEach(btn => {
         if (btn) {
           btn.classList.remove("active", "bg-white", "text-blue-600", "shadow-xs", "font-semibold");
           btn.classList.add("text-slate-600", "font-medium");
@@ -454,7 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnDash) {
       btnDash.addEventListener("click", () => {
         setActiveBtn(btnDash);
-        [sectionDash, sectionSearch, sectionHub, sectionMatcher, sectionAudit].forEach(s => s && s.classList.add("hidden"));
+        hideAllSections();
         if (sectionDash) sectionDash.classList.remove("hidden");
         renderDashboardAnalytics();
       });
@@ -470,36 +479,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     btnSearch.addEventListener("click", () => {
       setActiveBtn(btnSearch);
-      [sectionDash, sectionSearch, sectionHub, sectionMatcher, sectionAudit].forEach(s => s && s.classList.add("hidden"));
-      sectionSearch.classList.remove("hidden");
+      hideAllSections();
+      if (sectionSearch) sectionSearch.classList.remove("hidden");
       renderMainSearchTable();
     });
 
     btnHub.addEventListener("click", () => {
       setActiveBtn(btnHub);
-      sectionSearch.classList.add("hidden");
-      sectionHub.classList.remove("hidden");
-      sectionMatcher.classList.add("hidden");
-      if (sectionAudit) sectionAudit.classList.add("hidden");
+      hideAllSections();
+      if (sectionHub) sectionHub.classList.remove("hidden");
       renderCitizenHub();
     });
 
     btnMatcher.addEventListener("click", () => {
       setActiveBtn(btnMatcher);
-      sectionSearch.classList.add("hidden");
-      sectionHub.classList.add("hidden");
-      sectionMatcher.classList.remove("hidden");
-      if (sectionAudit) sectionAudit.classList.add("hidden");
+      hideAllSections();
+      if (sectionMatcher) sectionMatcher.classList.remove("hidden");
       runMatcher();
     });
-
-    const btnUsers = document.getElementById("nav-mode-users");
-    const sectionUsers = document.getElementById("section-users");
 
     if (btnUsers) {
       btnUsers.addEventListener("click", () => {
         setActiveBtn(btnUsers);
-        [sectionDash, sectionSearch, sectionHub, sectionMatcher, sectionAudit, sectionUsers].forEach(s => s && s.classList.add("hidden"));
+        hideAllSections();
         if (sectionUsers) sectionUsers.classList.remove("hidden");
         renderUsersTable();
       });
