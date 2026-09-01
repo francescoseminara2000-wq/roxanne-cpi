@@ -2402,6 +2402,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- GESTIONE LOGIN & SESSIONE PROTETTA ---
+  const modalLogin = document.getElementById("modal-login");
+  const formLogin = document.getElementById("form-login");
+  const currentUserDisplay = document.getElementById("current-user-display");
+
   // Toggle Show/Hide Password
   const btnTogglePass = document.getElementById("btn-toggle-password");
   const loginPassInput = document.getElementById("login-password");
