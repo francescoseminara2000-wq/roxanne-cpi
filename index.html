@@ -1630,53 +1630,501 @@
     </div>
   </div>
 
-  <!-- MODAL EDIT PERSONA -->
-  <div id="modal-persona" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-2xl rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-        <h3 id="modal-persona-title" class="font-bold text-slate-900 text-base font-heading">Modifica Anagrafica Iscritto</h3>
-        <button id="btn-close-modal-persona" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+  <!-- MODAL WIZARD GUIDATO INSERIMENTO / MODIFICA ISCRITTO L.68/99 (STEP-BY-STEP STEPPER) -->
+  <div id="modal-persona" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 hidden">
+    <div class="bg-white w-full max-w-5xl rounded-3xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-scale-up text-xs">
+      
+      <!-- Stepper Header con Indicatore Avanzamento -->
+      <div class="px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-blue-400 font-bold text-[11px] uppercase tracking-wider font-heading">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span id="wizard-badge-mode">Nuova Presa in Carico L.68/99</span>
+          </div>
+          <h2 id="modal-persona-title" class="text-xl font-bold font-heading text-white">Procedura Guidata Inserimento Iscritto</h2>
+        </div>
+
+        <button id="btn-close-modal-persona" class="self-end sm:self-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
       </div>
 
-      <div class="grid grid-cols-2 gap-4">
-        <div>
-          <label class="rox-label">Nome *</label>
-          <input type="text" id="m-nome" class="rox-input">
-        </div>
-        <div>
-          <label class="rox-label">Cognome *</label>
-          <input type="text" id="m-cognome" class="rox-input">
-        </div>
-        <div>
-          <label class="rox-label">Codice Fiscale *</label>
-          <input type="text" id="m-cf" class="rox-input font-mono uppercase">
-        </div>
-        <div>
-          <label class="rox-label">Categoria L.68</label>
-          <select id="m-cat-select" class="rox-select w-full">
-            <option value="C.O.">C.O. Disabili</option>
-            <option value="Art. 18">Art. 18 Protette</option>
-            <option value="F.D.">F.D. Disabili</option>
-          </select>
-        </div>
-        <div>
-          <label class="rox-label">% Invalidità Civile</label>
-          <input type="number" id="m-ic-perc" class="rox-input">
-        </div>
-        <div>
-          <label class="rox-label">Comune Residenza</label>
-          <input type="text" id="m-residenza" class="rox-input">
-        </div>
-        <div>
-          <label class="rox-label">Telefono / Cellulare</label>
-          <input type="text" id="m-telefono" class="rox-input">
+      <!-- Barra di Navigazione degli Step (Stepper Tabs) -->
+      <div class="bg-slate-50 border-b border-slate-200 px-6 py-3 overflow-x-auto">
+        <div class="flex items-center justify-between min-w-[650px] text-xs">
+          
+          <button type="button" class="wizard-step-tab active flex items-center gap-2.5 font-heading font-bold text-blue-600 transition" data-step="1">
+            <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px]">1</span>
+            <span>1. Anagrafica & Recapiti</span>
+          </button>
+          
+          <div class="h-[2px] w-8 bg-slate-200"></div>
+
+          <button type="button" class="wizard-step-tab flex items-center gap-2.5 font-heading font-bold text-slate-400 transition" data-step="2">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px]">2</span>
+            <span>2. L.68 & Sanitario</span>
+          </button>
+
+          <div class="h-[2px] w-8 bg-slate-200"></div>
+
+          <button type="button" class="wizard-step-tab flex items-center gap-2.5 font-heading font-bold text-slate-400 transition" data-step="3">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px]">3</span>
+            <span>3. Istruzione & Titoli</span>
+          </button>
+
+          <div class="h-[2px] w-8 bg-slate-200"></div>
+
+          <button type="button" class="wizard-step-tab flex items-center gap-2.5 font-heading font-bold text-slate-400 transition" data-step="4">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px]">4</span>
+            <span>4. Capacità & Mansioni</span>
+          </button>
+
+          <div class="h-[2px] w-8 bg-slate-200"></div>
+
+          <button type="button" class="wizard-step-tab flex items-center gap-2.5 font-heading font-bold text-slate-400 transition" data-step="5">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px]">5</span>
+            <span>5. Disponibilità</span>
+          </button>
+
         </div>
       </div>
 
-      <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
-        <button id="btn-cancel-modal-persona" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
-        <button id="btn-save-modal-persona" type="button" class="cursor-pointer px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold font-heading">Salva Modifiche</button>
+      <!-- Contenitore Scrollabile dei Form Step -->
+      <form id="form-wizard-persona" class="flex-1 overflow-y-auto p-6 space-y-6">
+        <input type="hidden" id="wizard-persona-id">
+
+        <!-- STEP 1: ANAGRAFICA, RESIDENZA E RECAPITI -->
+        <div class="wizard-step-content" id="wizard-step-1">
+          <div class="space-y-4">
+            <div class="p-3 bg-blue-50/70 border border-blue-200/80 rounded-2xl flex items-center gap-3">
+              <i class="fa-solid fa-id-card text-blue-600 text-base"></i>
+              <div>
+                <h4 class="font-bold text-blue-900 font-heading">Dati Identificativi & Anagrafici</h4>
+                <p class="text-[11px] text-blue-700">Inserisci i dati essenziali di riconoscimento e contatto del cittadino.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="rox-label">Nome *</label>
+                <input type="text" id="w-nome" required placeholder="es. Mario" class="rox-input font-medium">
+              </div>
+              <div>
+                <label class="rox-label">Cognome *</label>
+                <input type="text" id="w-cognome" required placeholder="es. Rossi" class="rox-input font-medium">
+              </div>
+              <div>
+                <label class="rox-label">Codice Fiscale *</label>
+                <input type="text" id="w-cf" required placeholder="RSSMRA78A01E507X" class="rox-input font-mono uppercase font-bold">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="rox-label">Data di Nascita</label>
+                <input type="date" id="w-data-nascita" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Luogo di Nascita</label>
+                <input type="text" id="w-nato-a" placeholder="es. Lecco" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Sesso</label>
+                <select id="w-sesso" class="rox-select w-full">
+                  <option value="M">Maschile (M)</option>
+                  <option value="F">Femminile (F)</option>
+                </select>
+              </div>
+              <div>
+                <label class="rox-label">Stato Civile</label>
+                <select id="w-stato-civile" class="rox-select w-full">
+                  <option value="Celibe/Nubile">Celibe / Nubile</option>
+                  <option value="Coniugato/a">Coniugato/a</option>
+                  <option value="Separato/a">Separato/a</option>
+                  <option value="Divorziato/a">Divorziato/a</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div>
+                <label class="rox-label">Comune di Residenza *</label>
+                <input type="text" id="w-comune-res" placeholder="es. Lecco" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Provincia Residenza</label>
+                <input type="text" id="w-prov-res" value="LC" class="rox-input uppercase font-mono">
+              </div>
+              <div>
+                <label class="rox-label">Indirizzo di Residenza</label>
+                <input type="text" id="w-indirizzo-res" placeholder="es. Via Roma 12" class="rox-input">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="rox-label">Cellulare Principale *</label>
+                <input type="text" id="w-cellulare" placeholder="es. 338 1234567" class="rox-input font-medium">
+              </div>
+              <div>
+                <label class="rox-label">Telefono Fisso</label>
+                <input type="text" id="w-telefono" placeholder="es. 0341 123456" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Indirizzo Email</label>
+                <input type="email" id="w-email" placeholder="mario.rossi@email.it" class="rox-input">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: INQUADRAMENTO L.68/99 & QUADRO SANITARIO -->
+        <div class="wizard-step-content hidden" id="wizard-step-2">
+          <div class="space-y-4">
+            <div class="p-3 bg-rose-50/70 border border-rose-200/80 rounded-2xl flex items-center gap-3">
+              <i class="fa-solid fa-heart-pulse text-rose-600 text-base"></i>
+              <div>
+                <h4 class="font-bold text-rose-900 font-heading">Inquadramento Legge 68/99 & Dati Clinici ASL</h4>
+                <p class="text-[11px] text-rose-700">Specifiche sulla categoria di collocamento mirato, percentuale e diagnosi.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="rox-label">Categoria L.68/99 *</label>
+                <select id="w-categoria" class="rox-select w-full font-bold">
+                  <option value="C.O.">C.O. Disabili (Art. 1)</option>
+                  <option value="Art. 18">Art. 18 Categorie Protette</option>
+                  <option value="F.D.">F.D. Disabili</option>
+                  <option value="BSL">BSL Borsa Lavoro</option>
+                </select>
+              </div>
+              <div>
+                <label class="rox-label">Sotto-Categoria Specifica</label>
+                <input type="text" id="w-cat-specifica" placeholder="es. Disabili Fisici (Art. 1)" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">% Invalidità Civile (IC) *</label>
+                <input type="number" id="w-ic-perc" min="0" max="100" placeholder="es. 67" class="rox-input font-bold text-rose-700">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+              <div>
+                <label class="rox-label">Stato Iscrizione</label>
+                <select id="w-attivo" class="rox-select w-full font-semibold">
+                  <option value="Attivo">Attivo</option>
+                  <option value="Sospeso">Sospeso</option>
+                  <option value="Cancellato">Cancellato</option>
+                </select>
+              </div>
+              <div>
+                <label class="rox-label">Condizione Occupazionale</label>
+                <select id="w-stato-occup" class="rox-select w-full">
+                  <option value="Disoccupato">Disoccupato</option>
+                  <option value="Occupato">Occupato</option>
+                  <option value="In Tirocinio">In Tirocinio</option>
+                </select>
+              </div>
+              <div>
+                <label class="rox-label">Data Iscrizione L.68</label>
+                <input type="date" id="w-data-iscrizione" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Data Revisione Verbale</label>
+                <input type="date" id="w-data-revisione" class="rox-input">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="rox-label">Presidio Sanitario / ASL di Riferimento</label>
+                <input type="text" id="w-asl" placeholder="es. ASST Lecco Ospedale Manzoni" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Patologia Prevalente</label>
+                <input type="text" id="w-patologia" placeholder="es. Minorazione Motoria Arto Inferiore" class="rox-input">
+              </div>
+            </div>
+
+            <div>
+              <label class="rox-label">Diagnosi Funzionale & Quadro Clinico</label>
+              <textarea id="w-diagnosi" rows="3" placeholder="Sintesi della diagnosi e limitazioni operative certificate dalla commissione ASL..." class="rox-input auto-expand-textarea"></textarea>
+            </div>
+
+            <div>
+              <label class="rox-label">Tipo di Supporto & Adattamento Postazione Raccomandato</label>
+              <textarea id="w-supporto-postazione" rows="2" placeholder="es. Postazione ergonomica con seduta regolabile, pause a videoterminale..." class="rox-input auto-expand-textarea"></textarea>
+            </div>
+
+            <div class="flex flex-wrap gap-4 pt-1">
+              <label class="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="w-l104" class="rounded text-rose-600 focus:ring-0">
+                <span class="font-bold text-slate-700">Titolare Legge 104/92</span>
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="w-allegati-l68" checked class="rounded text-rose-600 focus:ring-0">
+                <span class="font-bold text-slate-700">Allegati Sanitari L.68 Presenti nel Fascicolo</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: ISTRUZIONE, TITOLI & FORMAZIONE -->
+        <div class="wizard-step-content hidden" id="wizard-step-3">
+          <div class="space-y-4">
+            <div class="p-3 bg-indigo-50/70 border border-indigo-200/80 rounded-2xl flex items-center gap-3">
+              <i class="fa-solid fa-graduation-cap text-indigo-600 text-base"></i>
+              <div>
+                <h4 class="font-bold text-indigo-900 font-heading">Percorso Formativo, Titoli & Competenze</h4>
+                <p class="text-[11px] text-indigo-700">Titoli di studio conseguiti, certificazioni informatiche e lingue straniere.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label class="rox-label">Titolo di Studio Principale *</label>
+                <input type="text" id="w-titolo-studio" placeholder="es. Diploma di Ragioneria / Perito Aziendale" class="rox-input font-medium">
+              </div>
+              <div>
+                <label class="rox-label">Istituto / Ente di Formazione</label>
+                <input type="text" id="w-istituto" placeholder="es. I.T.C. G. Viganò - Merate" class="rox-input">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="rox-label">Anno Conseguimento</label>
+                <input type="number" id="w-anno-titolo" placeholder="es. 2015" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Votazione / Esito</label>
+                <input type="text" id="w-votazione" placeholder="es. 85/100" class="rox-input">
+              </div>
+              <div>
+                <label class="rox-label">Qualifica Professionale</label>
+                <input type="text" id="w-qualifica" placeholder="es. Contabile / Addetto Back Office" class="rox-input">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div>
+                <label class="rox-label">Competenze Digitali / ECDL</label>
+                <select id="w-ecdl" class="rox-select w-full">
+                  <option value="Sì (Certificato PC)">Sì (Certificato PC / ECDL)</option>
+                  <option value="Buona">Buona conoscenza pacchetto Office/Web</option>
+                  <option value="Base">Uso base computer</option>
+                  <option value="No">Nessuna competenza digitale</option>
+                </select>
+              </div>
+              <div>
+                <label class="rox-label">Patenti di Guida & Speciali</label>
+                <input type="text" id="w-patente" placeholder="es. B, Patente Muletto / Carrello" class="rox-input font-medium">
+              </div>
+            </div>
+
+            <div class="pt-2">
+              <label class="rox-label">Lingue Straniere Conosciute</label>
+              <div class="flex flex-wrap gap-4 pt-1">
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="w-lang-en" checked class="rounded text-indigo-600 focus:ring-0">
+                  <span class="font-medium text-slate-700">Inglese</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="w-lang-fr" class="rounded text-indigo-600 focus:ring-0">
+                  <span class="font-medium text-slate-700">Francese</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="w-lang-es" class="rounded text-indigo-600 focus:ring-0">
+                  <span class="font-medium text-slate-700">Spagnolo</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="w-lang-de" class="rounded text-indigo-600 focus:ring-0">
+                  <span class="font-medium text-slate-700">Tedesco</span>
+                </label>
+                <label class="inline-flex items-center gap-1.5 cursor-pointer">
+                  <input type="checkbox" id="w-patente-muletto" class="rounded text-indigo-600 focus:ring-0">
+                  <span class="font-bold text-indigo-700">Patentino Carrello / Muletto</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: CAPACITÀ FUNZIONALI & MANSIONI IDONEE -->
+        <div class="wizard-step-content hidden" id="wizard-step-4">
+          <div class="space-y-4">
+            <div class="p-3 bg-purple-50/70 border border-purple-200/80 rounded-2xl flex items-center gap-3">
+              <i class="fa-solid fa-person-walking text-purple-600 text-base"></i>
+              <div>
+                <h4 class="font-bold text-purple-900 font-heading">Capacità Funzionali & Mansioni Idonee L.68</h4>
+                <p class="text-[11px] text-purple-700">Filtri incrociati essenziali per l'algoritmo di Matching Domanda/Offerta con le aziende.</p>
+              </div>
+            </div>
+
+            <!-- Griglia Capacità Funzionali -->
+            <div>
+              <span class="font-bold text-slate-800 block mb-2 font-heading">Valutazione Abilità & Capacità Motorie:</span>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-stazione-eretta" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Stazione Eretta</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-movimentazione" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Moviment. Carichi</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-manualita" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Manualità Fine</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-arti-superiori" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Arti Superiori</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-vista" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Funzione Visiva</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-udito" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Funzione Uditiva</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-colonna" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Colonna / Postura</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-pubblico" checked class="rounded text-purple-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Contatto Pubblico</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Griglia Mansioni Idonee -->
+            <div class="pt-2">
+              <span class="font-bold text-slate-800 block mb-2 font-heading">Mansioni & Profili Lavorativi Idonei:</span>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-impiegato" checked class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Impiegato / Data Entry</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-reception" class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Reception / Centralino</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-magazzino" class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Magazzino Leggero</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-cassa" class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Cassa / Vendita</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-pulizie" class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Pulizie / Ausiliario</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-verde" class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Cura del Verde</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-artigiano" class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Artigiano / Tecnico</span>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
+                  <input type="checkbox" id="w-m-informatica" class="rounded text-blue-600 focus:ring-0">
+                  <span class="font-semibold text-slate-700">Informatica / Grafica</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: DISPONIBILITÀ LAVORATIVA & MOBILITÀ -->
+        <div class="wizard-step-content hidden" id="wizard-step-5">
+          <div class="space-y-4">
+            <div class="p-3 bg-emerald-50/70 border border-emerald-200/80 rounded-2xl flex items-center gap-3">
+              <i class="fa-solid fa-briefcase text-emerald-600 text-base"></i>
+              <div>
+                <h4 class="font-bold text-emerald-900 font-heading">Disponibilità Lavorativa, Orari & Mezzo Proprio</h4>
+                <p class="text-[11px] text-emerald-700">Preferenze contrattuali, turni, raggio di spostamento e note conclusive.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="rox-label">Orario Preferito *</label>
+                <select id="w-orario" class="rox-select w-full font-bold">
+                  <option value="Full-Time (40h)">Full-Time (40 ore)</option>
+                  <option value="Part-Time Mattina (20-25h)">Part-Time Mattina (20-25 ore)</option>
+                  <option value="Part-Time Pomeriggio">Part-Time Pomeriggio</option>
+                  <option value="Part-Time Ridotto (15-20h)">Part-Time Ridotto (15-20 ore)</option>
+                </select>
+              </div>
+              <div>
+                <label class="rox-label">Raggio Max Spostamento (Km)</label>
+                <input type="number" id="w-raggio-km" value="25" class="rox-input font-bold text-emerald-700">
+              </div>
+              <div>
+                <label class="rox-label">Operatore Incaricato CPI</label>
+                <input type="text" id="w-operatore-cpi" value="Marco Galli (Admin CPI)" class="rox-input font-medium">
+              </div>
+            </div>
+
+            <div class="flex flex-wrap gap-4 pt-2">
+              <label class="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="w-mezzo-munito" checked class="rounded text-emerald-600 focus:ring-0">
+                <span class="font-bold text-slate-700">Automunito / Mezzo Proprio</span>
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="w-smartworking" checked class="rounded text-emerald-600 focus:ring-0">
+                <span class="font-bold text-slate-700">Disponibile a Smart Working</span>
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="w-turni" class="rounded text-emerald-600 focus:ring-0">
+                <span class="font-bold text-slate-700">Disponibile ai Turni</span>
+              </label>
+              <label class="inline-flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="w-festivi" class="rounded text-emerald-600 focus:ring-0">
+                <span class="font-bold text-slate-700">Disponibile Lavoro Festivo</span>
+              </label>
+            </div>
+
+            <div class="pt-2">
+              <label class="rox-label">Note Integrative sulla Disponibilità</label>
+              <textarea id="w-note-disponibilita" rows="3" placeholder="Specificare eventuali vincoli di trasporto o preferenze geografiche..." class="rox-input auto-expand-textarea"></textarea>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+      <!-- Stepper Footer con Pulsanti Indietro / Avanti / Salva -->
+      <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
+        <button id="btn-wizard-prev" type="button" class="cursor-pointer px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 font-bold font-heading transition flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span>Indietro</span>
+        </button>
+
+        <div class="text-[11px] text-slate-500 font-medium hidden sm:block">
+          Passaggio <span id="wizard-current-step-label" class="font-bold text-slate-800">1</span> di 5
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button id="btn-wizard-next" type="button" class="cursor-pointer px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold font-heading transition flex items-center gap-2 shadow-xs">
+            <span>Avanti</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+
+          <button id="btn-wizard-submit" type="button" class="cursor-pointer px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold font-heading transition flex items-center gap-2 shadow-md shadow-emerald-600/20 hidden">
+            <i class="fa-solid fa-check-double"></i>
+            <span>Salva Scheda Iscritto</span>
+          </button>
+        </div>
       </div>
+
     </div>
   </div>
 
