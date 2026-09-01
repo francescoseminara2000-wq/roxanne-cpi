@@ -2145,7 +2145,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btn-close-modal-doc").addEventListener("click", () => modalDoc.classList.add("hidden"));
   document.getElementById("btn-cancel-doc").addEventListener("click", () => modalDoc.classList.add("hidden"));
 
-  // Quick Direct Upload for Verbale L.68
+  // Quick Direct Upload for Verbale Legge 68
   const btnUploadL68 = document.getElementById("btn-upload-verbale-l68");
   const fileInputL68 = document.getElementById("file-verbale-l68");
   if (btnUploadL68 && fileInputL68) {
@@ -2154,18 +2154,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const file = e.target.files[0];
       const p = window.store.getSelectedPersona();
       if (file && p) {
-        if (typeof Swal !== "undefined") {
-          Swal.fire({
-            title: 'Caricamento Verbale Legge 68...',
-            html: `
-              <div class="space-y-3 pt-2">
-                <p class="text-xs text-slate-600 font-medium">Lettura file <b>${file.name}</b> e memorizzazione su MySQL...</p>
-                <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200">
-                  <div class="bg-rose-600 h-2.5 rounded-full animate-pulse" style="width: 100%"></div>
-                </div>
-              </div>
-            `,
-            allowOutsideClick: false,
+        RoxToast.info("Caricamento in corso...", `Salvataggio ${file.name} su MySQL...`, 2000);
+
         const reader = new FileReader();
         reader.onload = async function(evt) {
           await window.store.addDocumentToWallet(p.id, {
