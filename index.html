@@ -707,82 +707,113 @@
           <!-- TAB 1: ANAGRAFICA & CPI (ASIMMETRIC DYNAMIC CARD LAYOUT) -->
           <div id="hub-tab-panoramica" class="hub-tab-content space-y-6">
             
-            <!-- Row 1: Dati Anagrafici Identificativi & Residenza (MANTINE 2-COLUMN BALANCED GRID) -->
+            <!-- Row 1: Dati Anagrafici Identificativi & Residenza (MANTINE FIELDSET + PRIMETEK ICONFIELD) -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
               
-              <!-- Card 1: Dati Identificativi (Simmetrica 1/2 col) -->
+              <!-- Card 1: Dati Identificativi (Simmetrica 1/2 col con Sottosezioni Grafiche) -->
               <div class="form-group-card flex flex-col justify-between">
                 <div>
                   <h4 class="form-group-title">
-                    <i class="pi pi-user text-blue-600 text-sm"></i>
+                    <i class="pi pi-id-card text-blue-600 text-sm"></i>
                     <span>Dati Identificativi & Anagrafica</span>
                   </h4>
                   
                   <div class="space-y-3.5 text-xs">
-                    <!-- Riga 1: Nome, Cognome, Sesso (3 Colonne Simmetriche) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                      <div class="sm:col-span-5">
-                        <label class="rox-label">Nome *</label>
-                        <input type="text" id="ef-nome" class="rox-input font-bold text-slate-900" placeholder="Nome">
+                    <!-- Sottosezione 1: Generalità della Persona -->
+                    <div class="mantine-form-section">
+                      <div class="mantine-section-header">
+                        <i class="pi pi-user"></i>
+                        <span>Generalità & Dati Personali</span>
                       </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div class="sm:col-span-5">
+                          <label class="rox-label"><i class="pi pi-user text-[10px]"></i> Nome *</label>
+                          <div class="p-input-icon-wrapper">
+                            <i class="pi pi-user"></i>
+                            <input type="text" id="ef-nome" class="rox-input font-bold text-slate-900" placeholder="Nome">
+                          </div>
+                        </div>
 
-                      <div class="sm:col-span-5">
-                        <label class="rox-label">Cognome *</label>
-                        <input type="text" id="ef-cognome" class="rox-input font-bold text-slate-900" placeholder="Cognome">
-                      </div>
+                        <div class="sm:col-span-5">
+                          <label class="rox-label"><i class="pi pi-user text-[10px]"></i> Cognome *</label>
+                          <div class="p-input-icon-wrapper">
+                            <i class="pi pi-user"></i>
+                            <input type="text" id="ef-cognome" class="rox-input font-bold text-slate-900" placeholder="Cognome">
+                          </div>
+                        </div>
 
-                      <div class="sm:col-span-2">
-                        <label class="rox-label">Sesso</label>
-                        <select id="ef-sesso" class="rox-select w-full">
-                          <option value="M">M</option>
-                          <option value="F">F</option>
-                        </select>
+                        <div class="sm:col-span-2">
+                          <label class="rox-label"><i class="pi pi-tag text-[10px]"></i> Sesso</label>
+                          <select id="ef-sesso" class="rox-select w-full">
+                            <option value="M">M</option>
+                            <option value="F">F</option>
+                          </select>
+                        </div>
                       </div>
                     </div>
 
-                    <!-- Riga 2: Codice Fiscale & Data di Nascita (8 col / 4 col) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                      <div class="sm:col-span-7">
-                        <label class="rox-label">Codice Fiscale *</label>
-                        <input type="text" id="ef-cf" class="rox-input font-mono uppercase text-blue-700 font-bold" placeholder="Codice Fiscale">
+                    <!-- Sottosezione 2: Documenti & Nascita -->
+                    <div class="mantine-form-section">
+                      <div class="mantine-section-header">
+                        <i class="pi pi-calendar"></i>
+                        <span>Dati Fiscali & Nascita</span>
+                      </div>
+                      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                        <div class="sm:col-span-7">
+                          <label class="rox-label"><i class="pi pi-hashtag text-[10px]"></i> Codice Fiscale *</label>
+                          <div class="p-input-icon-wrapper">
+                            <i class="pi pi-id-card"></i>
+                            <input type="text" id="ef-cf" class="rox-input font-mono uppercase text-blue-700 font-bold" placeholder="Codice Fiscale">
+                          </div>
+                        </div>
+
+                        <div class="sm:col-span-5">
+                          <label class="rox-label"><i class="pi pi-calendar text-[10px]"></i> Data di Nascita</label>
+                          <input type="date" id="ef-data-nascita" class="rox-input">
+                        </div>
                       </div>
 
-                      <div class="sm:col-span-5">
-                        <label class="rox-label">Data di Nascita</label>
-                        <input type="date" id="ef-data-nascita" class="rox-input">
+                      <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mt-3">
+                        <div class="sm:col-span-8">
+                          <label class="rox-label"><i class="pi pi-map text-[10px]"></i> Luogo di Nascita</label>
+                          <div class="p-input-icon-wrapper">
+                            <i class="pi pi-compass"></i>
+                            <input type="text" id="ef-nato-a" class="rox-input" placeholder="es. Lecco (LC)">
+                          </div>
+                        </div>
+
+                        <div class="sm:col-span-4">
+                          <label class="rox-label"><i class="pi pi-car text-[10px]"></i> Patente di Guida</label>
+                          <div class="p-input-icon-wrapper">
+                            <i class="pi pi-car"></i>
+                            <input type="text" id="ef-patente" class="rox-input" placeholder="es. B, C">
+                          </div>
+                        </div>
                       </div>
                     </div>
 
-                    <!-- Riga 3: Luogo di Nascita & Patente (8 col / 4 col) -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3">
-                      <div class="sm:col-span-8">
-                        <label class="rox-label">Luogo di Nascita</label>
-                        <input type="text" id="ef-nato-a" class="rox-input" placeholder="es. Lecco (LC)">
-                      </div>
-
-                      <div class="sm:col-span-4">
-                        <label class="rox-label">Patente di Guida</label>
-                        <input type="text" id="ef-patente" class="rox-input" placeholder="es. B, C, Nessuna">
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
 
-              <!-- Card 2: Residenza & Domicilio (Simmetrica 1/2 col) -->
+              <!-- Card 2: Residenza & Domicilio (Simmetrica 1/2 col con Sottosezioni Grafiche) -->
               <div class="form-group-card flex flex-col justify-between">
                 <div>
                   <h4 class="form-group-title">
                     <i class="pi pi-map-marker text-rose-600 text-sm"></i>
-                    <span>Residenza & Domicilio</span>
+                    <span>Residenza Legale & Domicilio Operativo</span>
                   </h4>
                   
-                  <div class="space-y-4 text-xs">
-                    <!-- Gruppo Residenza Legale -->
-                    <div class="space-y-2.5 pb-3 border-b border-slate-100">
+                  <div class="space-y-3.5 text-xs">
+                    <!-- Sottosezione 1: Residenza Legale Anagrafica -->
+                    <div class="mantine-form-section">
+                      <div class="mantine-section-header">
+                        <i class="pi pi-home text-rose-600"></i>
+                        <span>Residenza Legale Iscritto</span>
+                      </div>
                       <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
                         <div class="sm:col-span-6">
-                          <label class="rox-label">Comune Residenza</label>
+                          <label class="rox-label"><i class="pi pi-building text-[10px]"></i> Comune Residenza</label>
                           <select id="ef-residenza" class="rox-select w-full">
                             <option value="Lecco">Lecco (LC)</option>
                             <option value="Abbadia Lariana">Abbadia Lariana (LC)</option>
@@ -838,26 +869,33 @@
                           </select>
                         </div>
                         <div class="sm:col-span-3">
-                          <label class="rox-label">Prov (PR)</label>
-                          <input type="text" id="ef-residenza-prov" readonly value="LC" class="rox-input font-bold text-center bg-slate-50 text-slate-700">
+                          <label class="rox-label"><i class="pi pi-map text-[10px]"></i> Prov (PR)</label>
+                          <input type="text" id="ef-residenza-prov" readonly value="LC" class="rox-input font-bold text-center bg-slate-100 text-slate-700">
                         </div>
                         <div class="sm:col-span-3">
-                          <label class="rox-label">CAP</label>
-                          <input type="text" id="ef-residenza-cap" readonly value="23900" class="rox-input font-bold text-center bg-slate-50 text-blue-700">
+                          <label class="rox-label"><i class="pi pi-envelope text-[10px]"></i> CAP</label>
+                          <input type="text" id="ef-residenza-cap" readonly value="23900" class="rox-input font-bold text-center bg-slate-100 text-blue-700">
                         </div>
                       </div>
 
-                      <div>
-                        <label class="rox-label">Indirizzo Residenza (Via, Piazza, N. Civico)</label>
-                        <input type="text" id="ef-indirizzo" placeholder="es. Via Manzoni 12" class="rox-input">
+                      <div class="mt-2.5">
+                        <label class="rox-label"><i class="pi pi-map-marker text-[10px]"></i> Indirizzo Residenza (Via, Piazza, N. Civico)</label>
+                        <div class="p-input-icon-wrapper">
+                          <i class="pi pi-map-marker"></i>
+                          <input type="text" id="ef-indirizzo" placeholder="es. Via Manzoni 12" class="rox-input">
+                        </div>
                       </div>
                     </div>
 
-                    <!-- Gruppo Domicilio Operativo -->
-                    <div class="space-y-2.5">
+                    <!-- Sottosezione 2: Domicilio Operativo -->
+                    <div class="mantine-form-section">
+                      <div class="mantine-section-header">
+                        <i class="pi pi-briefcase text-indigo-600"></i>
+                        <span>Domicilio Operativo (se differente)</span>
+                      </div>
                       <div class="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
                         <div class="sm:col-span-6">
-                          <label class="rox-label">Comune Domicilio</label>
+                          <label class="rox-label"><i class="pi pi-building text-[10px]"></i> Comune Domicilio</label>
                           <select id="ef-domicilio-comune" class="rox-select w-full">
                             <option value="Lecco">Lecco (LC)</option>
                             <option value="Abbadia Lariana">Abbadia Lariana (LC)</option>
@@ -913,20 +951,24 @@
                           </select>
                         </div>
                         <div class="sm:col-span-3">
-                          <label class="rox-label">Prov (PR)</label>
-                          <input type="text" id="ef-domicilio-prov" readonly value="LC" class="rox-input font-bold text-center bg-slate-50 text-slate-700">
+                          <label class="rox-label"><i class="pi pi-map text-[10px]"></i> Prov (PR)</label>
+                          <input type="text" id="ef-domicilio-prov" readonly value="LC" class="rox-input font-bold text-center bg-slate-100 text-slate-700">
                         </div>
                         <div class="sm:col-span-3">
-                          <label class="rox-label">CAP</label>
-                          <input type="text" id="ef-domicilio-cap" readonly value="23900" class="rox-input font-bold text-center bg-slate-50 text-blue-700">
+                          <label class="rox-label"><i class="pi pi-envelope text-[10px]"></i> CAP</label>
+                          <input type="text" id="ef-domicilio-cap" readonly value="23900" class="rox-input font-bold text-center bg-slate-100 text-blue-700">
                         </div>
                       </div>
 
-                      <div>
-                        <label class="rox-label">Indirizzo Domicilio (Via, Piazza, N. Civico)</label>
-                        <input type="text" id="ef-domicilio-indirizzo" placeholder="es. Corso Martiri 45" class="rox-input">
+                      <div class="mt-2.5">
+                        <label class="rox-label"><i class="pi pi-map-marker text-[10px]"></i> Indirizzo Domicilio (Via, Piazza, N. Civico)</label>
+                        <div class="p-input-icon-wrapper">
+                          <i class="pi pi-map-marker"></i>
+                          <input type="text" id="ef-domicilio-indirizzo" placeholder="es. Corso Martiri 45" class="rox-input">
+                        </div>
                       </div>
                     </div>
+
                   </div>
                 </div>
               </div>

@@ -188,6 +188,67 @@ body {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Input con Icone integrate (Stile Mantine TextInput with Icon / PrimeTek IconField) */
+.p-input-icon-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.p-input-icon-wrapper > i {
+  position: absolute;
+  left: 0.85rem;
+  color: #868e96;
+  font-size: 0.8125rem;
+  pointer-events: none;
+  z-index: 10;
+  transition: color 0.15s ease;
+}
+
+.p-input-icon-wrapper:focus-within > i {
+  color: #228be6;
+}
+
+.p-input-icon-wrapper .rox-input,
+.p-input-icon-wrapper .rox-select {
+  padding-left: 2.25rem !important;
+}
+
+/* Suddivisioni grafiche in sezioni Mantine Fieldset */
+.mantine-form-section {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 10px;
+  padding: 0.875rem 1rem;
+  margin-bottom: 0.875rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.mantine-form-section:hover {
+  background: #ffffff;
+  border-color: #dee2e6;
+}
+
+.mantine-section-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #495057;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px dashed #dee2e6;
+}
+
+.mantine-section-header i {
+  font-size: 0.75rem;
+  color: #228be6;
+}
+
 .rox-label {
   font-size: 0.6875rem; /* 11px */
   font-weight: 700;
@@ -195,7 +256,14 @@ body {
   letter-spacing: 0.05em;
   color: #475569;
   margin-bottom: 0.25rem;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.rox-label i {
+  font-size: 0.6875rem;
+  color: #94a3b8;
 }
 
 /* TAILWIND CUSTOM AD-HOC SEARCHABLE SELECT COMPONENT */
