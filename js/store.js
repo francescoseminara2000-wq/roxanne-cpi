@@ -64,9 +64,23 @@ class StoreManager {
 
   saveData() {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(this.data));
+      // Create a light copy for LocalStorage cache without massive Base64 payloads
+      const lightData = {
+        ...this.data,
+        persone: (this.data.persone || []).map(p => {
+          if (!p.wallet || !Array.isArray(p.wallet)) return p;
+          return {
+            ...p,
+            wallet: p.wallet.map(doc => {
+              const { fileContent, ...lightDoc } = doc;
+              return lightDoc;
+            })
+          };
+        })
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(lightData));
     } catch (e) {
-      console.error("Errore salvataggio LocalStorage:", e);
+      console.warn("Avviso LocalStorage Quota: salvataggio cache locale saltato, i dati persistono su MySQL:", e.message);
     }
   }
 
