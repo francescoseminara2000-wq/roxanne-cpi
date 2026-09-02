@@ -371,46 +371,133 @@
     });
   }
 
-  // --- RENDER FUNZIONALE TAB ---
+  // --- RENDER FUNZIONALE TAB (POTENZIATO CON TUTTE LE CAPACITÀ E MANSIONI PER CATEGORIA) ---
   function renderFunzionaleTab(p) {
     const funzContainer = document.getElementById("hub-funzionale-list");
-    const flags = [
-      { key: "stazioneEretta", label: "Stazione Eretta Prolungata", ok: p.stazioneEretta },
-      { key: "movimentazioneManuale", label: "Movimentazione Carichi", ok: p.movimentazioneManuale },
-      { key: "manualitaFine", label: "Manualità Fine Bilanciata", ok: p.manualitaFine },
-      { key: "colonna", label: "Idoneità Colonna Vertebrale", ok: p.colonna },
-      { key: "lavoriInAltezza", label: "Lavori in Altezza / Scale", ok: p.lavoriInAltezza },
-      { key: "contattoPubblico", label: "Contatto Diretto col Pubblico", ok: p.contattoPubblico }
+    
+    // Gruppi di Capacità Funzionali
+    const macroCapacita = [
+      {
+        gruppo: "Mobilità & Postura",
+        icon: "pi-user",
+        color: "text-purple-600",
+        items: [
+          { key: "stazioneEretta", label: "Stazione Eretta Prolungata", desc: "Idoneo a mansioni in piedi continue", icon: "pi-arrows-v", ok: p.stazioneEretta },
+          { key: "movimentazioneManuale", label: "Movimentazione Carichi", desc: "Sollevamento e trasporto pesi >3kg", icon: "pi-box", ok: p.movimentazioneManuale },
+          { key: "colonna", label: "Idoneità Colonna Vertebrale", desc: "Assenza controindicazioni dorso-lombari", icon: "pi-shield", ok: p.colonna },
+          { key: "lavoriInAltezza", label: "Lavori in Altezza / Scale", desc: "Uso scale a pioli o ponteggi", icon: "pi-sort-alt", ok: p.lavoriInAltezza }
+        ]
+      },
+      {
+        gruppo: "Apparato Sensoriale & Motorio Fine",
+        icon: "pi-eye",
+        color: "text-blue-600",
+        items: [
+          { key: "manualitaFine", label: "Manualità Fine Bilanciata", desc: "Assemblaggio fine, precisione, tastiera", icon: "pi-pencil", ok: p.manualitaFine },
+          { key: "artiSuperiori", label: "Uso Bilaterale Arti Superiori", desc: "Movimento coordinato braccia/spalle", icon: "pi-sync", ok: p.artiSuperiori !== false },
+          { key: "vista", label: "Idoneità Apparato Visivo (VDT)", desc: "Lavoro con terminali video standard", icon: "pi-desktop", ok: p.vista !== false },
+          { key: "udito", label: "Idoneità Apparato Uditivo", desc: "Comunicazione verbale e allarmi sonori", icon: "pi-volume-up", ok: p.udito !== false }
+        ]
+      },
+      {
+        gruppo: "Relazionale & Organizzativo",
+        icon: "pi-users",
+        color: "text-teal-600",
+        items: [
+          { key: "contattoPubblico", label: "Contatto Diretto col Pubblico", desc: "Front-office, sportello, accoglienza", icon: "pi-comments", ok: p.contattoPubblico },
+          { key: "supervisione", label: "Lavoro in Autonomia / Senza Affiancamento", desc: "Non richiede tutoraggio continuo", icon: "pi-check-circle", ok: p.supervisione }
+        ]
+      }
     ];
 
     if (funzContainer) {
-      funzContainer.innerHTML = flags.map(f => `
-        <label class="flex items-center justify-between p-2.5 rounded-xl border transition cursor-pointer ${f.ok ? 'bg-purple-50/70 text-purple-900 border-purple-200 shadow-2xs' : 'bg-slate-50 text-slate-600 border-slate-200'}">
-          <span class="font-semibold text-xs">${f.label}</span>
-          <input type="checkbox" data-flag="${f.key}" ${f.ok ? 'checked' : ''} class="cb-flag-func rounded border-slate-300 text-purple-600 focus:ring-0">
-        </label>
+      funzContainer.innerHTML = macroCapacita.map(gruppo => `
+        <div class="space-y-2">
+          <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 pb-1 border-b border-slate-100">
+            <i class="pi ${gruppo.icon} ${gruppo.color} text-xs"></i>
+            <span>${gruppo.gruppo}</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            ${gruppo.items.map(f => `
+              <label class="flex items-start justify-between p-3 rounded-xl border transition-all cursor-pointer select-none ${f.ok ? 'bg-purple-50/80 border-purple-300 text-purple-950 shadow-xs ring-1 ring-purple-200' : 'bg-slate-50/90 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300'}">
+                <div class="flex items-start gap-2.5 pr-2">
+                  <div class="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${f.ok ? 'bg-purple-600 text-white shadow-2xs' : 'bg-slate-200 text-slate-500'}">
+                    <i class="pi ${f.icon} text-xs"></i>
+                  </div>
+                  <div>
+                    <div class="font-bold text-xs leading-tight">${f.label}</div>
+                    <div class="text-[10px] text-slate-500 mt-0.5 leading-snug">${f.desc}</div>
+                  </div>
+                </div>
+                <input type="checkbox" data-flag="${f.key}" ${f.ok ? 'checked' : ''} class="cb-flag-func mt-1 w-4 h-4 rounded border-slate-300 text-purple-600 focus:ring-0 cursor-pointer">
+              </label>
+            `).join("")}
+          </div>
+        </div>
       `).join("");
     }
 
-    const mansContainer = document.getElementById("hub-mansioni-list");
-    const mansioni = [
-      { key: "impiegato", name: "Impiegato / Amministrativo", active: p.impiegato },
-      { key: "cassa", name: "Addetto Cassa", active: p.cassa },
-      { key: "commesso", name: "Commesso / Vendita", active: p.commesso },
-      { key: "magazzino", name: "Magazziniere", active: p.magazzino },
-      { key: "verde", name: "Manutenzione Verde", active: p.verde },
-      { key: "socialeScuola", name: "Servizi Scolastici", active: p.socialeScuola },
-      { key: "pulizie", name: "Addetto Pulizie", active: p.pulizie },
-      { key: "impTecnico", name: "Impiegato Tecnico", active: p.impTecnico },
-      { key: "receptionSegreteria", name: "Reception / Front Office", active: p.receptionSegreteria }
+    // Macro-Gruppi Mansioni & Attitudini
+    const macroMansioni = [
+      {
+        categoria: "Area Impiegatizia, ICT & Amministrazione",
+        icon: "pi-briefcase",
+        color: "text-blue-600",
+        items: [
+          { key: "impiegato", name: "Impiegato Amministrativo", active: p.impiegato, icon: "pi-file" },
+          { key: "impTecnico", name: "Impiegato Tecnico / Disegnatore", active: p.impTecnico, icon: "pi-cog" },
+          { key: "impCommerciale", name: "Impiegato Commerciale / Back Office", active: p.impCommerciale, icon: "pi-chart-line" },
+          { key: "receptionSegreteria", name: "Reception / Centralino / Segreteria", active: p.receptionSegreteria, icon: "pi-phone" },
+          { key: "informatica", name: "Operatore EDP / Informatica", active: p.informatica, icon: "pi-desktop" },
+          { key: "grafica", name: "Grafica / Comunicazione Digitale", active: p.grafica, icon: "pi-palette" }
+        ]
+      },
+      {
+        categoria: "Area Commercio, Servizi & GDO",
+        icon: "pi-shopping-cart",
+        color: "text-emerald-600",
+        items: [
+          { key: "cassa", name: "Addetto Cassa", active: p.cassa, icon: "pi-credit-card" },
+          { key: "commesso", name: "Commesso / Addetto Vendita", active: p.commesso, icon: "pi-tag" },
+          { key: "socialeScuola", name: "Servizi Scolastici / Assistenza", active: p.socialeScuola, icon: "pi-heart" },
+          { key: "pulizie", name: "Addetto Pulizie / Sanificazione", active: p.pulizie, icon: "pi-sparkles" }
+        ]
+      },
+      {
+        categoria: "Area Logistica, Produzione & Operativa",
+        icon: "pi-truck",
+        color: "text-amber-600",
+        items: [
+          { key: "magazzino", name: "Magazziniere / Carrello Elevatore", active: p.magazzino, icon: "pi-box" },
+          { key: "verde", name: "Manutenzione Verde & Giardinaggio", active: p.verde, icon: "pi-sun" },
+          { key: "artigiano", name: "Operaio / Produzione Artigianale", active: p.artigiano, icon: "pi-wrench" },
+          { key: "tutteMansioni", name: "Disponibile a Qualsiasi Mansione Idonea", active: p.tutteMansioni, icon: "pi-check-square" }
+        ]
+      }
     ];
 
+    const mansContainer = document.getElementById("hub-mansioni-list");
     if (mansContainer) {
-      mansContainer.innerHTML = mansioni.map(m => `
-        <label class="px-3 py-1.5 rounded-xl text-xs font-semibold border transition cursor-pointer ${m.active ? 'bg-blue-50 text-blue-800 border-blue-300 shadow-2xs' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'} flex items-center space-x-2">
-          <input type="checkbox" data-mansione="${m.key}" ${m.active ? 'checked' : ''} class="cb-mansione-chip rounded border-slate-300 text-blue-600 focus:ring-0">
-          <span>${m.name}</span>
-        </label>
+      mansContainer.innerHTML = macroMansioni.map(macro => `
+        <div class="space-y-2">
+          <div class="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-700 pb-1 border-b border-slate-100">
+            <i class="pi ${macro.icon} ${macro.color} text-xs"></i>
+            <span>${macro.categoria}</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${macro.items.map(m => `
+              <label class="p-2.5 rounded-xl border transition-all cursor-pointer select-none flex items-center justify-between ${m.active ? 'bg-blue-50/80 border-blue-300 text-blue-950 shadow-xs ring-1 ring-blue-200' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-slate-300'}">
+                <div class="flex items-center gap-2 pr-2">
+                  <div class="w-6 h-6 rounded-md flex items-center justify-center shrink-0 ${m.active ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}">
+                    <i class="pi ${m.icon} text-[10px]"></i>
+                  </div>
+                  <span class="text-xs font-semibold leading-tight">${m.name}</span>
+                </div>
+                <input type="checkbox" data-mansione="${m.key}" ${m.active ? 'checked' : ''} class="cb-mansione-chip w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-0 cursor-pointer">
+              </label>
+            `).join("")}
+          </div>
+        </div>
       `).join("");
     }
   }

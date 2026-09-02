@@ -1493,29 +1493,43 @@
             </div>
           </div>
 
-          <!-- TAB 4: CAPACITÀ FUNZIONALI & MANSIONI (CHRONO STELLAR INTERACTIVE CHIPS) -->
+          <!-- TAB 4: CAPACITÀ FUNZIONALI & MANSIONI (MANTINE 2-COLUMN BALANCED GRID & CATEGORIZED INTERACTIVE CARDS) -->
           <div id="hub-tab-funzionale" class="hub-tab-content space-y-6 hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
               
-              <!-- Capacità fisiche residue (6/12 cols) -->
-              <div class="form-group-card lg:col-span-6 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <h4 class="form-group-title mb-0 pb-0 border-0"><i class="fa-solid fa-child text-purple-600"></i> Scheda Capacità Residue L.68/99</h4>
-                  <span class="text-[10px] uppercase font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">Autonomia</span>
-                </div>
-                <div id="hub-funzionale-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
-                  <!-- Rendered via JS as modern interactive check-cards -->
+              <!-- Capacità fisiche residue (Simmetrica 1/2 col) -->
+              <div class="form-group-card flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <h4 class="form-group-title mb-0 pb-0 border-0">
+                      <i class="pi pi-heart text-purple-600 text-sm"></i>
+                      <span>Scheda Capacità Residue L.68/99</span>
+                    </h4>
+                    <span class="mantine-badge mantine-badge-light-blue text-[10px]">
+                      <i class="pi pi-check text-[9px] mr-1"></i> Idoneità Funzionale
+                    </span>
+                  </div>
+                  <div id="hub-funzionale-list" class="space-y-4 text-xs">
+                    <!-- Rendered via JS raggruppate per macro-categoria -->
+                  </div>
                 </div>
               </div>
 
-              <!-- Mansioni idonee (6/12 cols) -->
-              <div class="form-group-card lg:col-span-6 space-y-4">
-                <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-                  <h4 class="form-group-title mb-0 pb-0 border-0"><i class="fa-solid fa-list-check text-blue-600"></i> Mansioni & Attitudini Lavorative</h4>
-                  <span class="text-[10px] uppercase font-bold text-blue-500 bg-blue-50 px-2 py-0.5 rounded-md">Matching</span>
-                </div>
-                <div id="hub-mansioni-list" class="flex flex-wrap gap-2 text-xs">
-                  <!-- Rendered via JS as interactive chips -->
+              <!-- Mansioni idonee (Simmetrica 1/2 col) -->
+              <div class="form-group-card flex flex-col justify-between">
+                <div>
+                  <div class="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
+                    <h4 class="form-group-title mb-0 pb-0 border-0">
+                      <i class="pi pi-briefcase text-blue-600 text-sm"></i>
+                      <span>Mansioni & Attitudini Lavorative</span>
+                    </h4>
+                    <span class="mantine-badge mantine-badge-light-teal text-[10px]">
+                      <i class="pi pi-sync text-[9px] mr-1"></i> Matching L.68/99
+                    </span>
+                  </div>
+                  <div id="hub-mansioni-list" class="space-y-4 text-xs">
+                    <!-- Rendered via JS raggruppate per macro-categoria -->
+                  </div>
                 </div>
               </div>
 
