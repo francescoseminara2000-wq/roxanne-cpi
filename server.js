@@ -54,42 +54,58 @@ app.get('/api/persone/:id', async (req, res) => {
   }
 });
 
-// Helper Sanitizer per Persona Prisma MySQL
+// Helper Sanitizer per Persona Prisma MySQL: Whitelist rigorosa sui soli campi esistenti in schema.prisma
 function sanitizePersonaInput(raw) {
-  const data = { ...raw };
+  const allowedScalars = [
+    'numeroIscrizione', 'codice', 'nome', 'cognome', 'codiceFiscale', 'dataNascita', 'natoA', 'sesso', 'statoCivile',
+    'comuneResidenza', 'residenzaProvincia', 'indirizzo', 'domicilioComune', 'domicilioProvincia', 'domicilioIndirizzo',
+    'telefono', 'telefono1', 'telefono2', 'cellulare', 'email', 'patente',
+    'categoria', 'categoriaLg6869', 'dataIscrizioneCO', 'dataIscrizioneFD', 'dataIscrizioneLista', 'tipologiaIscrizioneLista', 'dataAnzianita',
+    'attivoNonAttivo', 'stato', 'disponibile', 'cancellato', 'lavoraSn', 'operatore', 'segnalatoDa', 'referente',
+    'icPercentuale', 'diagnosi', 'diagnosiLastDescTipoSupporto', 'dataVerbale', 'dataRevisione', 'asl', 'patologia', 'handicapL104', 'allegatiLg68',
+    'titoloStudioLast', 'titoloStudioAnnoInizio', 'titoloStudioPresso', 'votazione', 'anno', 'qualifica', 'patenteMuletto', 'ecdl',
+    'inglese', 'spagnolo', 'francese', 'tedesco', 'altreLingue',
+    'stazioneEretta', 'movimentazioneManuale', 'manualitaFine', 'artiSuperiori', 'vista', 'udito', 'colonna', 'lavoriInAltezza', 'contattoPubblico', 'supervisione',
+    'impiegato', 'impiegatoMansione', 'cassa', 'commesso', 'magazzino', 'verde', 'socialeScuola', 'pulizie', 'impTecnico', 'impCommerciale',
+    'receptionSegreteria', 'artigiano', 'artigianoMansione', 'grafica', 'informatica', 'tutteMansioni'
+  ];
 
-  // Remove transient UI and relational fields that are handled separately or do not belong to Persona model
-  delete data.id;
-  delete data.disponibilita;
-  delete data.wallet;
-  delete data.comitatoTecnico;
-  delete data.progettiPIL;
-  delete data.noteDiario;
-  delete data.avviamenti;
-  delete data.first_name;
-  delete data.turni;
-  delete data.festivi;
-  delete data.diario;
+  const data = {};
+  for (const key of allowedScalars) {
+    if (raw[key] !== undefined) {
+      data[key] = raw[key];
+    }
+  }
+
+  // Mappatura compatibilità campi con nomi alternativi dal form UI
+  if (raw.cognome === undefined && raw.last_name !== undefined) data.cognome = raw.last_name;
+  if (raw.nome === undefined && raw.first_name !== undefined) data.nome = raw.first_name;
+  if (!data.dataRevisione && raw.diagnosiLastDataRevisione) data.dataRevisione = raw.diagnosiLastDataRevisione;
+  if (!data.dataVerbale && raw.diagnosiLastDataDiagnosi) data.dataVerbale = raw.diagnosiLastDataDiagnosi;
 
   // Numeric fields
   if (data.numeroIscrizione !== undefined) data.numeroIscrizione = parseInt(data.numeroIscrizione) || 10001;
   if (data.icPercentuale !== undefined) data.icPercentuale = parseInt(data.icPercentuale) || 0;
-  if (data.anno !== undefined && data.anno !== null) data.anno = parseInt(data.anno) || null;
-  if (data.nIscrizManuale !== undefined && data.nIscrizManuale !== null) data.nIscrizManuale = parseInt(data.nIscrizManuale) || null;
+  if (data.anno !== undefined && data.anno !== null && data.anno !== "") data.anno = parseInt(data.anno) || null;
+  else if (data.anno === "") data.anno = null;
 
   // Boolean fields
-  ['handicapL104', 'allegatiLg68', 'patenteMuletto', 'inglese', 'francese', 'spagnolo', 'tedesco',
-   'stazioneEretta', 'movimentazioneManuale', 'manualitaFine', 'artiSuperiori', 'vista', 'udito', 'colonna', 'contattoPubblico',
-   'impiegato', 'receptionSegreteria', 'magazzino', 'cassa', 'pulizie', 'verde', 'artigiano', 'informatica'].forEach(k => {
+  const booleanFields = [
+    'handicapL104', 'allegatiLg68', 'patenteMuletto', 'inglese', 'francese', 'spagnolo', 'tedesco',
+    'stazioneEretta', 'movimentazioneManuale', 'manualitaFine', 'artiSuperiori', 'vista', 'udito', 'colonna', 'lavoriInAltezza', 'contattoPubblico', 'supervisione',
+    'impiegato', 'cassa', 'commesso', 'magazzino', 'verde', 'socialeScuola', 'pulizie', 'impTecnico', 'impCommerciale', 'receptionSegreteria', 'artigiano', 'grafica', 'informatica', 'tutteMansioni'
+  ];
+  booleanFields.forEach(k => {
     if (data[k] !== undefined) data[k] = !!data[k];
   });
 
-  // Date fields
-  const dateKeys = ['dataNascita', 'dataIscrizioneCO', 'dataIscrizioneFD', 'dataIscrizioneLista', 'dataAnzianita', 'dataVerbale', 'dataRevisione', 'diagnosiLastDataDiagnosi', 'diagnosiLastDataRevisione'];
-  dateKeys.forEach(k => {
+  // Date fields ISO or null
+  const dateFields = ['dataNascita', 'dataIscrizioneCO', 'dataIscrizioneFD', 'dataIscrizioneLista', 'dataAnzianita', 'dataVerbale', 'dataRevisione'];
+  dateFields.forEach(k => {
     if (data[k]) {
       try {
-        data[k] = new Date(data[k]).toISOString();
+        const d = new Date(data[k]);
+        data[k] = isNaN(d.getTime()) ? null : d.toISOString();
       } catch (e) {
         data[k] = null;
       }
