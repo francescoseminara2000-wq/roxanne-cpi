@@ -82,18 +82,20 @@ class StoreManager {
       const res = await fetch('/api/persone');
       if (res.ok) {
         const personeDb = await res.json();
-        if (personeDb && personeDb.length > 0) {
+        if (Array.isArray(personeDb)) {
           this.data.persone = personeDb;
           if (!this.selectedPersonaId && this.data.persone.length > 0) {
             this.selectedPersonaId = this.data.persone[0].id;
           }
           this.saveData();
+          console.log(`[MySQL Sync] Sincronizzati ${personeDb.length} iscritti dal Database.`);
           if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
           if (typeof window.renderCitizenHub === "function") window.renderCitizenHub();
+          if (typeof window.renderDashboardAnalytics === "function") window.renderDashboardAnalytics();
         }
       }
     } catch (e) {
-      console.log("Modalità standalone locale o API offline:", e.message);
+      console.warn("Modalità standalone locale o API offline:", e.message);
     }
   }
 
