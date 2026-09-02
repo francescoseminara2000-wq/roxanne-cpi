@@ -5,7 +5,7 @@
 
 window.currentResultsViewMode = "table"; // table | cards | compact
 
-export function initCustomDatePickers() {
+function initCustomDatePickers() {
   if (typeof flatpickr !== "undefined") {
     flatpickr.localize(flatpickr.l10ns.it);
     flatpickr("input[type='date'], .datepicker-input", {
@@ -23,7 +23,7 @@ export function initCustomDatePickers() {
   }
 }
 
-export function initCustomSearchableSelects() {
+function initCustomSearchableSelects() {
   document.querySelectorAll("select").forEach(selectEl => {
     if (selectEl.dataset.customized === "true") return;
     selectEl.dataset.customized = "true";
@@ -148,7 +148,7 @@ export function initCustomSearchableSelects() {
   });
 }
 
-export function initViewModeSwitcher() {
+function initViewModeSwitcher() {
   const btnTable = document.getElementById("vm-table");
   const btnCards = document.getElementById("vm-cards");
   const btnCompact = document.getElementById("vm-compact");
@@ -185,7 +185,7 @@ export function initViewModeSwitcher() {
   btnCompact.addEventListener("click", () => setViewMode("compact", btnCompact));
 }
 
-export function initAutoExpandTextareas() {
+function initAutoExpandTextareas() {
   function autoResize(el) {
     el.style.height = "auto";
     el.style.height = (el.scrollHeight + 4) + "px";

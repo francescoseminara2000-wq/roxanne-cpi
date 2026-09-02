@@ -223,11 +223,8 @@
       if (currentPdfLogo3Data) localStorage.setItem("ROXANNE_PDF_LOGO_3", currentPdfLogo3Data);
 
       loadBrandingConfig();
-      RoxToast.success("Identità Visiva & PDF Aggiornati", "Logo header, scritte e loghi del verbale PDF memorizzati su MySQL.");
+      if (window.RoxToast) RoxToast.success("Identità Visiva & PDF Aggiornati", "Logo header, scritte e loghi del verbale PDF memorizzati.");
     });
   }
-
-  // Load Initial Branding
-  loadBrandingConfig();
 
 window.loadBrandingConfig = loadBrandingConfig;

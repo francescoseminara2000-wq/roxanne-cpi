@@ -3,7 +3,7 @@
  * Motore di matching domanda-offerta per il Collocamento Mirato L.68/99
  */
 
-export function runMatcher() {
+function runMatcher() {
   const mansioneInput = document.getElementById("m-mansione");
   const minIcInput = document.getElementById("m-min-ic");
   const noErettaInput = document.getElementById("m-noeretta");
@@ -59,7 +59,7 @@ export function runMatcher() {
   });
 }
 
-export function initMatcherModule() {
+function initMatcherModule() {
   const form = document.getElementById("form-full-matcher");
   if (form) {
     form.addEventListener("submit", (e) => {

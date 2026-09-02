@@ -1083,4 +1083,5 @@
 
 window.initHubSubTabs = initHubSubTabs;
 window.renderCitizenHub = renderCitizenHub;
-window.exportStampaScheda = exportStampaScheda;
+window.generateDossierReportPDF = generateDossierReportPDF;
+window.exportStampaScheda = generateDossierReportPDF;

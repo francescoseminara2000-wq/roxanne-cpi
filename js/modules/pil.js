@@ -166,4 +166,5 @@
     });
   }
 
-window.renderProgettoInserimentoTab = renderProgettoInserimentoTab;
+window.renderPilTab = renderPilTab;
+window.renderProgettoInserimentoTab = renderPilTab;

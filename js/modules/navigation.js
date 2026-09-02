@@ -3,7 +3,7 @@
  * Switcher sezioni di primo livello (Dashboard, Ricerca, Scheda 360°, Matcher, Utenze, Audit)
  */
 
-export function initMobileDrawer() {
+function initMobileDrawer() {
   const btnToggle = document.getElementById("btn-mobile-menu-toggle");
   const drawer = document.getElementById("mobile-drawer");
   const btnClose = document.getElementById("btn-close-mobile-drawer");
@@ -35,7 +35,7 @@ export function initMobileDrawer() {
   }
 }
 
-export function initTopNavigation() {
+function initTopNavigation() {
   const btnDash = document.getElementById("nav-mode-dashboard");
   const btnSearch = document.getElementById("nav-mode-search");
   const btnHub = document.getElementById("nav-mode-hub");

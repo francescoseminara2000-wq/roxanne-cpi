@@ -3,7 +3,7 @@
  * Gestione sessione, login form, logout, switch operatore e preloader
  */
 
-export function initAuthSession() {
+function initAuthSession() {
   const modalLogin = document.getElementById("modal-login");
   const formLogin = document.getElementById("form-login");
   const currentUserDisplay = document.getElementById("current-user-display");

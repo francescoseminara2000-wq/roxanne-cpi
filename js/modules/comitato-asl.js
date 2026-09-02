@@ -608,5 +608,6 @@
     });
   }
 
-window.renderComitatoTecnicoTab = renderComitatoTecnicoTab;
+window.renderComitatoTab = renderComitatoTab;
+window.renderComitatoTecnicoTab = renderComitatoTab;
 window.stampaVerbaleComitatoUfficiale = stampaVerbaleComitatoUfficiale;

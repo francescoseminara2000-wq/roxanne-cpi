@@ -2,14 +2,14 @@
  * Roxanne CPI Light - Utilities Module
  */
 
-export function formatDate(dateStr) {
+function formatDate(dateStr) {
   if (!dateStr) return "-";
   const parts = dateStr.split("-");
   if (parts.length === 3) return `${parts[2]}/${parts[1]}/${parts[0]}`;
   return dateStr;
 }
 
-export function escapeHtml(str) {
+function escapeHtml(str) {
   if (!str) return "";
   return String(str)
     .replace(/&/g, "&amp;")
