@@ -16,8 +16,20 @@ body {
     font-family: 'Inter', system-ui, sans-serif !important;
   }
 
-  /* RIPRISTINO FONTAWESOME ICON FONT */
-  i, .fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands, [class*="fa-"] {
+  /* RIPRISTINO ICON FONTS (FONTAWESOME & PRIMEKIT PRIMEICONS) */
+  .pi, [class*="pi-"] {
+    font-family: 'primeicons' !important;
+    font-style: normal !important;
+    font-weight: normal !important;
+    font-variant: normal !important;
+    text-transform: none !important;
+    line-height: 1 !important;
+    display: inline-block !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  i.fa, i.fas, i.far, i.fab, i.fa-solid, i.fa-regular, i.fa-brands, [class*="fa-"] {
     font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif !important;
   }
 
