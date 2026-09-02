@@ -459,8 +459,40 @@
     <section id="section-citizen-hub" class="space-y-6 hidden">
 
         <!-- CITIZEN MASTER HEADER CARD (REDESIGNED ULTRA-CLEAN EXECUTIVE LAYOUT) -->
-        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6 space-y-5">
+        <div class="bg-white rounded-3xl border border-slate-200/90 shadow-sm p-6 space-y-5 relative overflow-hidden">
           
+          <!-- Top Bar: Navigazione Rapida Iscritto Prec/Succ + Banner Revisione Sanitaria -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3.5">
+            <!-- Navigatore Rapido Frecce -->
+            <div class="flex items-center space-x-2">
+              <button id="btn-hub-prev-persona" class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 font-heading shadow-2xs" title="Iscritto Precedente">
+                <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                <span class="hidden sm:inline">Precedente</span>
+              </button>
+              <span id="hub-indexer-badge" class="text-xs font-mono font-bold text-slate-600 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200">
+                1 / 15
+              </span>
+              <button id="btn-hub-next-persona" class="cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 font-heading shadow-2xs" title="Iscritto Successivo">
+                <span class="hidden sm:inline">Successivo</span>
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </button>
+            </div>
+
+            <!-- Alert Revisione Verbale Sanitario Dinamico -->
+            <div id="hub-revisione-alert" class="hidden items-center gap-2 px-3 py-1 rounded-xl text-xs font-bold font-heading">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <span id="hub-revisione-text">Revisione Sanitaria: 15/06/2026</span>
+            </div>
+
+            <!-- Pulsante Esporta Dossier PDF -->
+            <div class="flex items-center space-x-2">
+              <button id="btn-export-dossier-pdf" class="cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-xs font-bold px-3.5 py-1.5 rounded-xl transition shadow-xs flex items-center gap-1.5 font-heading">
+                <i class="fa-solid fa-file-pdf"></i>
+                <span>Esporta Dossier PDF</span>
+              </button>
+            </div>
+          </div>
+
           <!-- MAIN ROW: Grid 12 Colonne con perfetta distribuzione degli spazi -->
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             
@@ -471,7 +503,7 @@
                 <div id="hub-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-blue-700 to-indigo-700 text-white flex items-center justify-center font-extrabold text-xl shadow-md shadow-blue-500/25 font-heading">
                   MR
                 </div>
-                <div class="absolute -bottom-1.5 -right-1.5 bg-emerald-500 w-4.5 h-4.5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white" title="Iscritto Attivo">
+                <div id="hub-active-dot" class="absolute -bottom-1.5 -right-1.5 bg-emerald-500 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white shadow-2xs" title="Iscritto Attivo">
                   <i class="fa-solid fa-check"></i>
                 </div>
               </div>
@@ -480,7 +512,7 @@
               <div class="space-y-2 flex-1 min-w-0">
                 <!-- Riga 1: Nome + Categoria + Stato Occupazionale -->
                 <div class="flex items-center space-x-2 flex-wrap gap-y-1.5">
-                  <h1 id="hub-nome" class="text-xl font-extrabold text-slate-900 font-heading tracking-tight">Mario Rossi</h1>
+                  <h1 id="hub-nome" class="text-xl font-extrabold text-slate-900 font-heading tracking-tight truncate">Mario Rossi</h1>
                   <span id="hub-cat-badge" class="px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs">
                     C.O. Disabili
                   </span>
@@ -525,18 +557,23 @@
 
             <!-- Metriche & Indicatori Chiave (4/12 cols) -->
             <div class="lg:col-span-4 flex items-center space-x-3 flex-wrap sm:flex-nowrap gap-y-2">
-              <div class="bg-slate-50 border border-slate-200/80 rounded-xl px-3 py-2 flex items-center space-x-2.5 shrink-0">
-                <div class="w-7 h-7 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-xs font-bold">
-                  <i class="fa-solid fa-percent"></i>
+              <!-- Radial Gauge Invalidità Grafico -->
+              <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2.5 flex items-center space-x-3 shrink-0 shadow-2xs">
+                <div class="relative w-11 h-11 flex items-center justify-center">
+                  <svg class="w-11 h-11 transform -rotate-90" viewBox="0 0 36 36">
+                    <path class="text-slate-200" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    <path id="hub-radial-circle" class="text-rose-500" stroke-dasharray="67, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  </svg>
+                  <span id="hub-ic-perc" class="absolute text-[11px] font-extrabold text-slate-900 font-heading">67%</span>
                 </div>
                 <div>
-                  <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block font-heading">Invalidità</span>
-                  <span id="hub-ic-perc" class="text-xs font-extrabold text-rose-600 font-heading">67% IC</span>
+                  <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block font-heading">Grado Invalidità</span>
+                  <span id="hub-ic-label" class="text-xs font-extrabold text-rose-600 font-heading">Invalido Civile</span>
                 </div>
               </div>
 
               <!-- Widget Ultima Nota Diario -->
-              <div id="hub-last-note-box" class="flex-1 bg-amber-50/70 border border-amber-200/80 rounded-xl px-3 py-2 space-y-0.5 overflow-hidden">
+              <div id="hub-last-note-box" class="flex-1 bg-amber-50/70 border border-amber-200/80 rounded-2xl px-3.5 py-2.5 space-y-0.5 overflow-hidden shadow-2xs">
                 <div class="flex items-center justify-between text-[10px] font-heading">
                   <span class="font-bold text-amber-900 flex items-center gap-1 truncate">
                     <i class="fa-solid fa-note-sticky text-amber-600"></i>
@@ -616,6 +653,11 @@
             <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-pil">
               <i class="fa-solid fa-file-signature text-teal-600"></i>
               <span>Progetto Inserimento (PIL)</span>
+            </button>
+
+            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-timeline">
+              <i class="fa-solid fa-timeline text-indigo-600"></i>
+              <span>Timeline Percorso L.68</span>
             </button>
 
             <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-diario">
@@ -1344,7 +1386,29 @@
             </div>
           </div>
 
-          <!-- TAB 9: DIARIO OPERATORE -->
+          <!-- TAB 9: TIMELINE INTEGRATA PERCORSO DI VITA & PRESA IN CARICO L.68 -->
+          <div id="hub-tab-timeline" class="hub-tab-content space-y-6 hidden">
+            <div class="card-white p-6 space-y-6">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div>
+                  <h3 class="font-bold text-slate-900 text-base font-heading flex items-center gap-2">
+                    <i class="fa-solid fa-timeline text-indigo-600"></i> Timeline Cronologica & Percorso di Inserimento
+                  </h3>
+                  <p class="text-xs text-slate-500">Visione unificata temporale di iscrizione, verbali sanitari ASL, colloqui, progetti PIL e tirocini.</p>
+                </div>
+                <span class="text-xs font-semibold px-3 py-1 rounded-xl bg-indigo-50 text-indigo-700 border border-indigo-200" id="hub-timeline-badge">
+                  Fascicolo Completo
+                </span>
+              </div>
+
+              <!-- Flusso Timeline Elettronica Dinamica -->
+              <div id="hub-integrated-timeline" class="relative pl-6 sm:pl-8 space-y-6 before:absolute before:left-3 sm:before:left-4 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 10: DIARIO OPERATORE -->
           <div id="hub-tab-diario" class="hub-tab-content space-y-6 hidden">
             <div class="card-white p-6 space-y-4">
               <div class="flex items-center justify-between border-b border-slate-100 pb-3">
@@ -1360,6 +1424,18 @@
             </div>
           </div>
 
+        </div>
+
+        <!-- STICKY FLOATING ACTION BAR FOR PENDING EDITS -->
+        <div id="hub-sticky-save-bar" class="fixed bottom-6 right-8 z-40 bg-slate-950/90 backdrop-blur-md text-white px-5 py-3 rounded-2xl border border-slate-800 shadow-2xl flex items-center space-x-4 animate-scale-up hidden">
+          <div class="flex items-center space-x-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
+            <span class="text-xs font-bold font-heading">Modifiche non salvate nella scheda</span>
+          </div>
+          <button id="btn-sticky-save" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-extrabold px-4 py-2 rounded-xl transition shadow-sm font-heading flex items-center gap-1.5">
+            <i class="fa-solid fa-floppy-disk"></i>
+            <span>Salva su MySQL</span>
+          </button>
         </div>
 
       </section>
