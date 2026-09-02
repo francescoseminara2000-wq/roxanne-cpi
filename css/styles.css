@@ -546,19 +546,26 @@ body {
   border: 1px solid #c7d2fe;
 }
 
-/* CITIZEN HUB SUB-TABS DYNAMIC THEMES & VIBRANT PALETTES */
+/* CITIZEN HUB SUB-TABS DYNAMIC THEMES & VIBRANT PALETTES (VERTICAL SIDEBAR & HORIZONTAL) */
 .hub-tab-link {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: 'Outfit', sans-serif;
-  color: #64748b;
+  color: #475569;
   border: 1px solid transparent;
   user-select: none;
   background-color: transparent;
+  text-align: left;
 }
 
 .hub-tab-link:hover {
   color: #0f172a;
   background-color: #f1f5f9;
+  transform: translateX(3px);
+}
+
+.hub-sidebar-nav {
+  position: sticky;
+  top: 1.5rem;
 }
 
 /* 1. Anagrafica & CPI (Blue Ocean Theme) */

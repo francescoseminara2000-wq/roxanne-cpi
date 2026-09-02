@@ -645,70 +645,170 @@
             </div>
 
           </div>
-
-          <!-- SUB-TABS NAVIGATION: Mantine Segmented Style + PrimeIcons -->
-          <div class="border-t border-slate-100 pt-3 flex items-center space-x-1 overflow-x-auto scrollbar-none text-xs">
-            <button class="hub-tab-link active px-3.5 py-2 rounded-xl font-bold flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-panoramica">
-              <i class="pi pi-id-card text-blue-600"></i>
-              <span>Anagrafica & CPI</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-sanitario">
-              <i class="pi pi-heart text-rose-600"></i>
-              <span>Sanitario & Diagnosi</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-istruzione">
-              <i class="pi pi-book text-indigo-600"></i>
-              <span>Istruzione & Formazione</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-funzionale">
-              <i class="pi pi-compass text-purple-600"></i>
-              <span>Capacità & Mansioni L.68</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-disponibilita">
-              <i class="pi pi-clock text-emerald-600"></i>
-              <span>Disponibilità</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-wallet">
-              <i class="pi pi-folder text-amber-500"></i>
-              <span>Wallet Allegati</span>
-              <span id="badge-wallet-count" class="ml-1 text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200">0</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-comitato">
-              <i class="pi pi-building text-cyan-600"></i>
-              <span>Comitato ASL</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-pil">
-              <i class="pi pi-file-edit text-teal-600"></i>
-              <span>Progetto Inserimento (PIL)</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-timeline">
-              <i class="pi pi-history text-indigo-600"></i>
-              <span>Timeline Percorso L.68</span>
-            </button>
-
-            <button class="hub-tab-link px-3.5 py-2 rounded-xl font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-50 flex items-center gap-2 whitespace-nowrap shrink-0 transition" data-tab="hub-tab-diario">
-              <i class="pi pi-comment text-slate-600"></i>
-              <span>Diario Operatore</span>
-            </button>
-          </div>
         </div>
 
-        <!-- CITIZEN HUB TAB CONTENTS (GROUPED CARDS LAYOUT) -->
-        <div class="space-y-6">
+        <!-- CITIZEN HUB 2-COLUMN LAYOUT: VERTICAL SIDEBAR ON THE LEFT + TAB CONTENTS ON THE RIGHT -->
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
 
-          <!-- TAB 1: ANAGRAFICA & CPI (ASIMMETRIC DYNAMIC CARD LAYOUT) -->
-          <div id="hub-tab-panoramica" class="hub-tab-content space-y-6">
-            
-            <!-- Row 1: Dati Anagrafici Identificativi & Residenza (MANTINE FIELDSET + PRIMETEK ICONFIELD) -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          <!-- LEFT SIDEBAR: VERTICAL NAVIGATION TABS (XL: 3 COLS) -->
+          <div class="xl:col-span-3 hub-sidebar-nav space-y-3">
+            <div class="form-group-card p-3 space-y-1.5 shadow-sm bg-white">
+              <div class="px-3 py-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center justify-between">
+                <span>Sezioni Fascicolo</span>
+                <i class="pi pi-bars text-slate-400"></i>
+              </div>
+
+              <!-- 1. Anagrafica & CPI -->
+              <button class="hub-tab-link active w-full px-3.5 py-2.5 rounded-xl font-bold flex items-center justify-between transition group" data-tab="hub-tab-panoramica">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-id-card"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Anagrafica & CPI</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Dati anagrafici e recapiti</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-blue-600 transition"></i>
+              </button>
+
+              <!-- 2. Sanitario & Diagnosi -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-sanitario">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-rose-50 text-rose-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-heart"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Sanitario & Diagnosi</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Invalidità, verbali e ASL</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-rose-600 transition"></i>
+              </button>
+
+              <!-- 3. Istruzione & Formazione -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-istruzione">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-book"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Istruzione & Competenze</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Titoli studio, ECDL, lingue</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-indigo-600 transition"></i>
+              </button>
+
+              <!-- 4. Capacità & Mansioni L.68 -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-funzionale">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-compass"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Capacità & Mansioni L.68</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Idoneità fisica e attitudini</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-purple-600 transition"></i>
+              </button>
+
+              <!-- 5. Disponibilità -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-disponibilita">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-clock"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Disponibilità & Mobilità</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Orari, turni e territorio</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-emerald-600 transition"></i>
+              </button>
+
+              <!-- 6. Wallet Allegati -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-wallet">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-folder"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Wallet Documentale</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Fascicolo verbali e allegati</div>
+                  </div>
+                </div>
+                <span id="badge-wallet-count" class="text-[10px] px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-200">0</span>
+              </button>
+
+              <!-- 7. Comitato ASL -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-comitato">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-cyan-50 text-cyan-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-building"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Comitato ASL</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Relazioni collegiali</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-cyan-600 transition"></i>
+              </button>
+
+              <!-- 8. Progetto Inserimento (PIL) -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-pil">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-teal-50 text-teal-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-file-edit"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Progetto Inserimento (PIL)</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Patto servizio e tirocinio</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-teal-600 transition"></i>
+              </button>
+
+              <!-- 9. Timeline Percorso L.68 -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-timeline">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-history"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Timeline Percorso L.68</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Storico presa in carico</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-indigo-600 transition"></i>
+              </button>
+
+              <!-- 10. Diario Operatore -->
+              <button class="hub-tab-link w-full px-3.5 py-2.5 rounded-xl font-semibold flex items-center justify-between transition group" data-tab="hub-tab-diario">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center text-sm shrink-0 group-hover:scale-105 transition">
+                    <i class="pi pi-comment"></i>
+                  </div>
+                  <div>
+                    <div class="text-xs font-bold leading-tight">Diario Operatore</div>
+                    <div class="text-[10px] text-slate-400 font-normal leading-tight">Note colloqui e verifiche</div>
+                  </div>
+                </div>
+                <i class="pi pi-chevron-right text-[10px] text-slate-300 group-hover:text-slate-700 transition"></i>
+              </button>
+
+            </div>
+          </div>
+
+          <!-- RIGHT AREA: CITIZEN HUB TAB CONTENTS (XL: 9 COLS) -->
+          <div class="xl:col-span-9 space-y-6">
+
+            <!-- TAB 1: ANAGRAFICA & CPI (ASIMMETRIC DYNAMIC CARD LAYOUT) -->
+            <div id="hub-tab-panoramica" class="hub-tab-content space-y-6">
+              
+              <!-- Row 1: Dati Anagrafici Identificativi & Residenza (MANTINE FIELDSET + PRIMETEK ICONFIELD) -->
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
               
               <!-- Card 1: Dati Identificativi (Simmetrica 1/2 col con Sottosezioni Grafiche) -->
               <div class="form-group-card flex flex-col justify-between">
@@ -1796,7 +1896,8 @@
             </div>
           </div>
 
-        </div>
+          </div> <!-- fine xl:col-span-9 -->
+        </div> <!-- fine 2-column layout -->
 
         <!-- STICKY FLOATING ACTION BAR FOR PENDING EDITS -->
         <div id="hub-sticky-save-bar" class="fixed bottom-6 right-8 z-40 bg-slate-950/90 backdrop-blur-md text-white px-5 py-3 rounded-2xl border border-slate-800 shadow-2xl flex items-center space-x-4 animate-scale-up hidden">
