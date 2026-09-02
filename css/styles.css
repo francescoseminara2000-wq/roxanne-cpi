@@ -115,61 +115,68 @@ body {
   transform: translateY(-2px);
 }
 
-/* Grouped Form Cards */
+/* Grouped Form Cards (Mantine Paper + PrimeTek Panel Hybrid) */
 .form-group-card {
   background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 1.25rem;
-  padding: 1.25rem;
-  box-shadow: 0 2px 8px -1px rgba(15, 23, 42, 0.03);
-  transition: border-color 0.2s ease;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .form-group-card:hover {
-  border-color: #cbd5e1;
+  border-color: #ced4da;
+  box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.06);
 }
 
 .form-group-card:focus-within {
-  border-color: #93c5fd;
-  box-shadow: 0 4px 14px -2px rgba(37, 99, 235, 0.08);
+  border-color: #228be6;
+  box-shadow: 0 0 0 3px rgba(34, 139, 230, 0.12), 0 6px 16px -2px rgba(34, 139, 230, 0.08);
 }
 
 .form-group-title {
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: #1e293b;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding-bottom: 0.625rem;
-  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #f1f3f5;
 }
 
-/* Customized In-Place Form Inputs */
-.rox-input {
+/* Customized In-Place Form Inputs (Mantine TextInput + PrimeTek InputText Style) */
+.rox-input, .rox-select {
   width: 100%;
-  background-color: #f8fafc;
-  border: 1px solid #cbd5e1;
-  border-radius: 0.625rem;
+  background-color: #ffffff;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
   padding: 0.5rem 0.75rem;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 500;
-  color: #0f172a;
-  transition: all 0.2s ease;
+  color: #212529;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out, background-color 0.15s ease;
 }
 
-.rox-input:focus {
+.rox-input:hover, .rox-select:hover {
+  border-color: #adb5bd;
+}
+
+.rox-input:focus, .rox-select:focus {
   outline: none;
   background-color: #ffffff;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+  border-color: #228be6;
+  box-shadow: 0 0 0 3px rgba(34, 139, 230, 0.15);
 }
 
-.rox-input:read-only {
-  background-color: #f1f5f9;
-  color: #64748b;
-  border-color: #e2e8f0;
-  cursor: not-allowed;
+.rox-input:read-only, .rox-select:disabled {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  border-color: #e9ecef;
 }
 
 /* Auto-expanding dynamic textareas for rich multi-line fields */
