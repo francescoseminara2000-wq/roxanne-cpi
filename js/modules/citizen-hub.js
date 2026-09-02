@@ -80,33 +80,33 @@
     if (elTel) elTel.textContent = p.cellulare || p.telefono1 || p.telefono || "-";
     if (elEmail) elEmail.textContent = p.email || "-";
 
-    // Dynamic Category Badge
+    // Dynamic Category Badge (Mantine Badge Style)
     const catBadge = document.getElementById("hub-cat-badge");
     if (catBadge) {
       const cat = p.categoria || "C.O.";
       catBadge.textContent = cat === "C.O." ? "C.O. Disabili" : (cat === "Art. 18" ? "Art. 18 Categorie Protette" : cat);
       if (cat === "C.O.") {
-        catBadge.className = "px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs";
+        catBadge.className = "mantine-badge mantine-badge-blue-light";
       } else if (cat === "Art. 18") {
-        catBadge.className = "px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-800 border border-amber-200 shadow-2xs";
+        catBadge.className = "mantine-badge mantine-badge-amber-light";
       } else {
-        catBadge.className = "px-2.5 py-0.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-purple-50 text-purple-700 border border-purple-200 shadow-2xs";
+        catBadge.className = "mantine-badge mantine-badge-teal-light";
       }
     }
 
-    // Dynamic Employment Status Badge
+    // Dynamic Employment Status Badge (Mantine Badge Style)
     const elStatoBadge = document.getElementById("hub-stato-badge");
     if (elStatoBadge) {
       const st = p.stato || "Disoccupato";
       elStatoBadge.textContent = st;
       if (st.toLowerCase().includes("occupato")) {
-        elStatoBadge.className = "px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 shadow-2xs";
+        elStatoBadge.className = "mantine-badge mantine-badge-blue-light";
       } else if (st.toLowerCase().includes("tirocinio")) {
-        elStatoBadge.className = "px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-indigo-50 text-indigo-700 border border-indigo-200 shadow-2xs";
+        elStatoBadge.className = "mantine-badge mantine-badge-indigo-light";
       } else if (st.toLowerCase().includes("disoccupato")) {
-        elStatoBadge.className = "px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-2xs";
+        elStatoBadge.className = "mantine-badge mantine-badge-green-light";
       } else {
-        elStatoBadge.className = "px-2.5 py-0.5 rounded-lg text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200 shadow-2xs";
+        elStatoBadge.className = "mantine-badge mantine-badge-rose-light";
       }
     }
 

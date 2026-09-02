@@ -20,7 +20,6 @@ body {
   i, .fa, .fas, .far, .fab, .fa-solid, .fa-regular, .fa-brands, [class*="fa-"] {
     font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands", sans-serif !important;
   }
-}
 
 /* CHRONO STELLAR DESIGN SYSTEM TOKENS */
 .stellar-glass-card {
@@ -748,4 +747,184 @@ body {
 .rox-toast-error .rox-toast-progress-bar { background: linear-gradient(90deg, #f43f5e, #e11d48); }
 .rox-toast-info .rox-toast-progress-bar { background: linear-gradient(90deg, #3b82f6, #2563eb); }
 .rox-toast-warning .rox-toast-progress-bar { background: linear-gradient(90deg, #f59e0b, #d97706); }
+
+/* ==========================================================================
+   MANTINE UI DESIGN SYSTEM + TAILWIND HARMONY
+   Ispirato ai componenti ufficiali di Mantine (Paper, Badge, Card, Stat, Timeline)
+   ========================================================================== */
+
+/* Mantine Paper (Sostituto ad alta rifinitura per cards e pannelli) */
+.mantine-paper {
+  background-color: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+}
+
+.mantine-paper-hover:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+  border-color: #ced4da;
+  transform: translateY(-1px);
+}
+
+/* Mantine StatCard (KPI con icona in risalto soft) */
+.mantine-stat-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  transition: all 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mantine-stat-card:hover {
+  box-shadow: 0 8px 16px -4px rgba(37, 99, 235, 0.08);
+  border-color: #bfdbfe;
+  transform: translateY(-2px);
+}
+
+.mantine-stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* Mantine Badges (Stili Filled, Light, Outline con radius pill) */
+.mantine-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.65rem;
+  border-radius: 9999px;
+  line-height: 1.25;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* Mantine Badge Variants */
+.mantine-badge-blue-light { background-color: #e7f5ff; color: #1c7ed6; border-color: #d0ebff; }
+.mantine-badge-indigo-light { background-color: #edf2ff; color: #4263eb; border-color: #dbe4ff; }
+.mantine-badge-teal-light { background-color: #e6fcf5; color: #0ca678; border-color: #c3fae8; }
+.mantine-badge-green-light { background-color: #ebfbee; color: #2f9e44; border-color: #d3f9d8; }
+.mantine-badge-rose-light { background-color: #fff5f5; color: #e03131; border-color: #ffe3e3; }
+.mantine-badge-amber-light { background-color: #fff9db; color: #f08c00; border-color: #fff3bf; }
+.mantine-badge-gray-light { background-color: #f8f9fa; color: #495057; border-color: #e9ecef; }
+
+.mantine-badge-blue-filled { background-color: #228be6; color: #ffffff; }
+.mantine-badge-indigo-filled { background-color: #4c6ef5; color: #ffffff; }
+.mantine-badge-teal-filled { background-color: #12b886; color: #ffffff; }
+.mantine-badge-rose-filled { background-color: #fa5252; color: #ffffff; }
+
+/* Mantine ActionIcon (Pulsanti compatti quadrati con hover soft) */
+.mantine-action-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+  border: 1px solid #dee2e6;
+  background-color: #ffffff;
+  color: #495057;
+  cursor: pointer;
+  transition: all 120ms ease;
+}
+
+.mantine-action-icon:hover {
+  background-color: #f8f9fa;
+  color: #1c7ed6;
+  border-color: #1c7ed6;
+}
+
+.mantine-action-icon-primary {
+  background-color: #228be6;
+  color: #ffffff;
+  border-color: #228be6;
+}
+
+.mantine-action-icon-primary:hover {
+  background-color: #1c7ed6;
+  color: #ffffff;
+}
+
+/* Mantine SegmentedControl (Navigazione stile pillola scorrevole) */
+.mantine-segmented-control {
+  background-color: #f1f3f5;
+  padding: 4px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid #e9ecef;
+}
+
+.mantine-segment-item {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #495057;
+  cursor: pointer;
+  transition: all 150ms ease;
+  user-select: none;
+}
+
+.mantine-segment-item.active {
+  background-color: #ffffff;
+  color: #1c7ed6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+/* Mantine Timeline Component */
+.mantine-timeline-item {
+  position: relative;
+  padding-left: 2rem;
+  padding-bottom: 1.5rem;
+}
+
+.mantine-timeline-bullet {
+  position: absolute;
+  left: 0;
+  top: 0.15rem;
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  border: 2px solid #228be6;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.625rem;
+  color: #228be6;
+  z-index: 2;
+}
+
+.mantine-timeline-line {
+  position: absolute;
+  left: 10px;
+  top: 22px;
+  bottom: 0;
+  width: 2px;
+  background-color: #e9ecef;
+  z-index: 1;
+}
+
+.mantine-timeline-item:last-child .mantine-timeline-line {
+  display: none;
+}
 

@@ -37,27 +37,30 @@
       tbody.innerHTML = `<tr><td colspan="7" class="text-center py-10 text-slate-400 italic">Nessun iscritto corrisponde ai criteri.</td></tr>`;
     } else {
       tbody.innerHTML = filtered.map(p => {
-        const badgeClass = p.categoria === "C.O." ? "badge-co" : p.categoria === "Art. 18" ? "badge-art18" : "badge-fd";
+        const mantineBadgeClass = p.categoria === "C.O." ? "mantine-badge-blue-light" : p.categoria === "Art. 18" ? "mantine-badge-amber-light" : "mantine-badge-teal-light";
+        const statoBadgeClass = (p.stato || '').toLowerCase().includes("disoccupato") ? "mantine-badge-teal-light" : (p.stato || '').toLowerCase().includes("occupato") ? "mantine-badge-blue-light" : "mantine-badge-indigo-light";
         return `
-          <tr class="hover:bg-slate-50 transition">
+          <tr class="hover:bg-slate-50/80 transition">
             <td class="px-5 py-4 font-bold text-slate-800">
-              #${p.numeroIscrizione}
+              <span class="font-mono">#${p.numeroIscrizione}</span>
               <div class="text-[10px] text-slate-400 font-normal">${p.codice}</div>
             </td>
             <td class="px-5 py-4">
               <div class="font-bold text-slate-900 font-heading text-sm">${escapeHtml(p.nome)}</div>
-              <div class="text-[11px] font-bold text-blue-700">${p.codiceFiscale}</div>
+              <div class="text-[11px] font-mono font-semibold text-blue-700">${p.codiceFiscale}</div>
             </td>
             <td class="px-5 py-4">
-              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${badgeClass}">${p.categoria}</span>
+              <span class="mantine-badge ${mantineBadgeClass}">${p.categoria}</span>
             </td>
-            <td class="px-5 py-4 font-bold ${p.icPercentuale >= 67 ? 'text-rose-600' : 'text-slate-800'}">
-              ${p.icPercentuale > 0 ? `${p.icPercentuale}% IC` : 'Art.18'}
+            <td class="px-5 py-4">
+              <span class="mantine-badge ${p.icPercentuale >= 67 ? 'mantine-badge-rose-light' : 'mantine-badge-gray-light'} font-mono">
+                ${p.icPercentuale > 0 ? `${p.icPercentuale}% IC` : 'Art.18'}
+              </span>
             </td>
             <td class="px-5 py-4 text-slate-700 font-medium">${escapeHtml(p.comuneResidenza)}</td>
-            <td class="px-5 py-4 text-slate-600">
-              <div class="font-semibold text-slate-800">${p.stato || 'Disoccupato'}</div>
-              <div class="text-[11px] text-slate-400">${escapeHtml(p.operatore || 'CPI Lecco')}</div>
+            <td class="px-5 py-4">
+              <span class="mantine-badge ${statoBadgeClass}">${p.stato || 'Disoccupato'}</span>
+              <div class="text-[11px] text-slate-400 mt-0.5">${escapeHtml(p.operatore || 'CPI Lecco')}</div>
             </td>
             <td class="px-5 py-4 text-right">
               <button data-id="${p.id}" class="btn-open-citizen-hub cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition shadow-xs font-heading">
@@ -75,19 +78,19 @@
       cardsContainer.innerHTML = `<p class="text-xs text-slate-400 py-10 col-span-3 text-center italic">Nessun iscritto corrisponde ai criteri.</p>`;
     } else {
       cardsContainer.innerHTML = filtered.map(p => {
-        const badgeClass = p.categoria === "C.O." ? "badge-co" : p.categoria === "Art. 18" ? "badge-art18" : "badge-fd";
+        const mantineBadgeClass = p.categoria === "C.O." ? "mantine-badge-blue-light" : p.categoria === "Art. 18" ? "mantine-badge-amber-light" : "mantine-badge-teal-light";
         return `
-          <div class="card-white p-5 space-y-3 card-white-interactive flex flex-col justify-between">
+          <div class="mantine-paper mantine-paper-hover p-5 space-y-3 flex flex-col justify-between">
             <div class="space-y-2">
               <div class="flex justify-between items-start">
                 <div>
                   <h3 class="font-bold text-slate-900 text-base font-heading">${escapeHtml(p.nome)}</h3>
                   <p class="text-xs font-mono text-blue-700 font-semibold">${p.codiceFiscale}</p>
                 </div>
-                <span class="px-2.5 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${badgeClass}">${p.categoria}</span>
+                <span class="mantine-badge ${mantineBadgeClass}">${p.categoria}</span>
               </div>
 
-              <div class="grid grid-cols-2 gap-2 text-xs pt-1 border-t border-slate-100">
+              <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
                 <div><span class="text-slate-400 text-[10px] block uppercase font-semibold">N. Iscrizione</span><strong class="text-slate-800 font-mono">#${p.numeroIscrizione}</strong></div>
                 <div><span class="text-slate-400 text-[10px] block uppercase font-semibold">Invalidità Civile</span><strong class="${p.icPercentuale >= 67 ? 'text-rose-600 font-bold' : 'text-slate-800'}">${p.icPercentuale > 0 ? `${p.icPercentuale}%` : 'Art.18'}</strong></div>
                 <div><span class="text-slate-400 text-[10px] block uppercase font-semibold">Residenza</span><strong class="text-slate-800">${escapeHtml(p.comuneResidenza)}</strong></div>
@@ -97,7 +100,7 @@
 
             <div class="pt-3 border-t border-slate-100 flex justify-between items-center">
               <span class="text-[11px] text-slate-400"><i class="fa-solid fa-user-gear mr-1"></i> ${escapeHtml(p.operatore || 'CPI Lecco')}</span>
-              <button data-id="${p.id}" class="btn-open-citizen-hub cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition font-heading">
+              <button data-id="${p.id}" class="btn-open-citizen-hub cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3.5 py-1.5 rounded-lg transition font-heading shadow-xs">
                 Apri Scheda 360°
               </button>
             </div>
