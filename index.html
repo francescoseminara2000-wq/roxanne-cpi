@@ -1647,26 +1647,62 @@
             </div>
           </div>
 
-          <!-- TAB 6: WALLET DOCUMENTALE -->
+          <!-- TAB 6: WALLET DOCUMENTALE (MANTINE FILE VAULT & DRAG-AND-DROP UPLOAD) -->
           <div id="hub-tab-wallet" class="hub-tab-content space-y-6 hidden">
-            <div class="card-white p-6 space-y-6">
+            <div class="form-group-card space-y-6">
               
-              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+              <!-- Header Wallet con KPI Cards -->
+              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-100 pb-5">
                 <div>
-                  <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading">
-                    <i class="fa-solid fa-wallet text-amber-500"></i> Wallet Documentazione & Allegati L.68
-                  </h3>
-                  <p class="text-xs text-slate-500">Tutti i verbali INPS/ASL, DID, certificati ed allegati dell'iscritto in un unico archivio.</p>
+                  <div class="flex items-center gap-2">
+                    <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center font-bold text-base">
+                      <i class="pi pi-folder-open"></i>
+                    </div>
+                    <div>
+                      <h3 class="font-bold text-slate-900 text-base font-heading">Fascicolo Elettronico & Wallet Documentale L.68/99</h3>
+                      <p class="text-xs text-slate-500">Archivio digitale criptato: verbali INPS/ASL, DID, certificati di idoneità e curriculum.</p>
+                    </div>
+                  </div>
                 </div>
 
-                <button id="btn-upload-file-wallet-tab" class="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-2 rounded-xl transition shadow-xs flex items-center space-x-2 font-heading">
-                  <i class="fa-solid fa-plus"></i>
-                  <span>Aggiungi Documento File</span>
-                </button>
+                <div class="flex items-center gap-2.5">
+                  <button id="btn-upload-file-wallet-tab" class="cursor-pointer p-button p-button-primary p-button-sm flex items-center gap-2">
+                    <i class="pi pi-cloud-upload"></i>
+                    <span>Carica Documento</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Quick File Upload Dropzone Banner -->
+              <div id="wallet-dropzone-banner" class="border-2 border-dashed border-slate-200 hover:border-amber-400 bg-slate-50/60 hover:bg-amber-50/20 rounded-2xl p-6 text-center transition-all cursor-pointer group">
+                <input type="file" id="wallet-quick-file-input" class="hidden" multiple>
+                <div class="flex flex-col items-center justify-center space-y-2">
+                  <div class="w-12 h-12 rounded-2xl bg-white group-hover:bg-amber-500 group-hover:text-white text-slate-500 flex items-center justify-center text-xl shadow-xs transition-all border border-slate-200">
+                    <i class="pi pi-upload"></i>
+                  </div>
+                  <div class="text-xs font-bold text-slate-800">
+                    Trascina qui i tuoi documenti oppure <span class="text-blue-600 group-hover:underline">sfoglia i file dal computer</span>
+                  </div>
+                  <p class="text-[11px] text-slate-400">Supportati verbali PDF, scansioni JPEG/PNG, Word e certificati firmati (fino a 15MB)</p>
+                </div>
+              </div>
+
+              <!-- Filter Bar & Counter -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Documenti Archiviati:</span>
+                  <span id="wallet-total-badge" class="mantine-badge mantine-badge-light-blue text-xs font-bold">0 file</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="p-input-icon-wrapper" style="width: 220px;">
+                    <i class="pi pi-search"></i>
+                    <input type="text" id="wallet-search-filter" placeholder="Cerca nel fascicolo..." class="rox-input text-xs py-1.5">
+                  </div>
+                </div>
               </div>
 
               <!-- Wallet File Grid -->
-              <div id="wallet-files-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div id="wallet-files-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
                 <!-- Rendered via JS -->
               </div>
             </div>
