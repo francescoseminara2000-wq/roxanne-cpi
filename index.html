@@ -19,6 +19,9 @@
   <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   
+  <!-- PrimeTek PrimeIcons CDN (Enterprise Icon Suite) -->
+  <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css">
+  
   <!-- Flatpickr Custom DatePicker CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -305,19 +308,20 @@
         </div>
       </div>
 
-      <!-- Advanced Multi-Field Search Panel -->
-      <div class="card-white p-6 space-y-4">
-        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2 font-heading">
-            <i class="fa-solid fa-sliders text-blue-600"></i> Filtri di Ricerca Avanzata per Campo
-          </h3>
+      <!-- Advanced Multi-Field Search Panel (PrimeTek Panel Style) -->
+      <div class="p-panel shadow-xs">
+        <div class="p-panel-header">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-2 font-heading">
+            <i class="pi pi-sliders-h text-blue-600"></i> Filtri di Ricerca Avanzata per Campo
+          </div>
           
-          <button id="btn-reset-advanced-search" class="cursor-pointer text-xs font-semibold text-slate-500 hover:text-slate-800 flex items-center gap-1 font-heading">
-            <i class="fa-solid fa-filter-circle-xmark"></i> Azzera Filtri Ricerca
+          <button id="btn-reset-advanced-search" class="p-button p-button-outlined p-button-sm cursor-pointer">
+            <i class="pi pi-filter-slash text-xs"></i> <span>Azzera Filtri</span>
           </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
+        <div class="p-panel-content">
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
           <div>
             <label class="rox-label">Nome / Cognome</label>
             <input type="text" id="af-nome" placeholder="es. Mario o Rossi" class="rox-input">
@@ -425,6 +429,7 @@
           </div>
         </div>
       </div>
+    </div>
 
       <!-- Results Container Header & View Mode Switcher -->
       <div class="flex items-center justify-between">
@@ -451,22 +456,22 @@
         </div>
       </div>
 
-      <!-- Results View 1: Table -->
-      <div id="view-results-table" class="card-white overflow-hidden">
+      <!-- Results View 1: PrimeTek DataTable -->
+      <div id="view-results-table" class="p-datatable overflow-hidden">
         <div class="overflow-x-auto">
           <table class="w-full text-left text-xs text-slate-700">
-            <thead class="bg-slate-100/80 text-slate-500 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 font-heading">
+            <thead class="p-datatable-thead font-heading">
               <tr>
-                <th class="px-5 py-3.5">N. Iscriz / Codice</th>
-                <th class="px-5 py-3.5">Cittadino & Codice Fiscale</th>
-                <th class="px-5 py-3.5">Categoria L.68</th>
-                <th class="px-5 py-3.5">% Invalidità Civile</th>
-                <th class="px-5 py-3.5">Comune Residenza</th>
-                <th class="px-5 py-3.5">Stato & Operatore</th>
-                <th class="px-5 py-3.5 text-right">Azioni Scheda</th>
+                <th class="px-5 py-3.5"><i class="pi pi-id-card mr-1 text-slate-400"></i> N. Iscriz / Codice</th>
+                <th class="px-5 py-3.5"><i class="pi pi-user mr-1 text-slate-400"></i> Cittadino & Codice Fiscale</th>
+                <th class="px-5 py-3.5"><i class="pi pi-tag mr-1 text-slate-400"></i> Categoria L.68</th>
+                <th class="px-5 py-3.5"><i class="pi pi-heart mr-1 text-slate-400"></i> % Invalidità Civile</th>
+                <th class="px-5 py-3.5"><i class="pi pi-map-marker mr-1 text-slate-400"></i> Comune Residenza</th>
+                <th class="px-5 py-3.5"><i class="pi pi-briefcase mr-1 text-slate-400"></i> Stato & Operatore</th>
+                <th class="px-5 py-3.5 text-right"><i class="pi pi-cog mr-1 text-slate-400"></i> Azioni Scheda</th>
               </tr>
             </thead>
-            <tbody id="tbody-main-search" class="divide-y divide-slate-100">
+            <tbody id="tbody-main-search" class="p-datatable-tbody divide-y divide-slate-100">
               <!-- Rendered via JS -->
             </tbody>
           </table>

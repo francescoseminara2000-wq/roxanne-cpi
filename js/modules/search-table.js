@@ -63,8 +63,8 @@
               <div class="text-[11px] text-slate-400 mt-0.5">${escapeHtml(p.operatore || 'CPI Lecco')}</div>
             </td>
             <td class="px-5 py-4 text-right">
-              <button data-id="${p.id}" class="btn-open-citizen-hub cursor-pointer bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition shadow-xs font-heading">
-                Apri Scheda 360° <i class="fa-solid fa-arrow-right ml-1 text-[10px]"></i>
+              <button data-id="${p.id}" class="btn-open-citizen-hub p-button p-button-primary p-button-sm cursor-pointer shadow-xs">
+                <span>Apri Scheda</span> <i class="pi pi-arrow-right text-[10px]"></i>
               </button>
             </td>
           </tr>
