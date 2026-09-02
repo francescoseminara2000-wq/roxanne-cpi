@@ -124,31 +124,24 @@ class StoreManager {
       codice: personaData.codice || `PERS-${personaData.numeroIscrizione || newNumIscrizione}`
     };
 
-    try {
-      const res = await fetch('/api/persone', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
+    const res = await fetch('/api/persone', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
 
-      if (res.ok) {
-        const createdPersona = await res.json();
-        this.data.persone.unshift(createdPersona);
-        this.selectedPersonaId = createdPersona.id;
-        this.saveData();
-        return createdPersona;
-      }
-    } catch (err) {
-      console.error("Errore salvataggio MySQL:", err);
+    if (!res.ok) {
+      const errJson = await res.json().catch(() => ({}));
+      const errorMsg = errJson.error || `Errore HTTP ${res.status}: Impossibile scrivere su MySQL.`;
+      console.error("Errore salvataggio MySQL:", errorMsg);
+      throw new Error(errorMsg);
     }
 
-    // Fallback locale di emergenza
-    const fallbackId = Date.now();
-    const newPersona = { ...payload, id: fallbackId, wallet: [] };
-    this.data.persone.unshift(newPersona);
-    this.selectedPersonaId = fallbackId;
+    const createdPersona = await res.json();
+    this.data.persone.unshift(createdPersona);
+    this.selectedPersonaId = createdPersona.id;
     this.saveData();
-    return newPersona;
+    return createdPersona;
   }
 
   async updatePersona(id, updatedFields) {

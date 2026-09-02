@@ -2838,20 +2838,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       };
 
-      if (isEdit) {
-        await window.store.updatePersona(idVal, personaPayload);
-      } else {
-        await window.store.addPersona(personaPayload);
+      try {
+        if (isEdit) {
+          await window.store.updatePersona(idVal, personaPayload);
+        } else {
+          await window.store.addPersona(personaPayload);
+        }
+
+        document.getElementById("modal-persona").classList.add("hidden");
+        renderMainSearchTable();
+        renderCitizenHub();
+
+        RoxToast.success(
+          isEdit ? "Scheda Aggiornata" : "Nuovo Iscritto Registrato",
+          `La pratica per ${personaPayload.nome} ${personaPayload.cognome} è stata memorizzata permanentemente nel Database MySQL!`
+        );
+      } catch (err) {
+        console.error("Errore salvataggio scheda:", err);
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            icon: 'error',
+            title: 'Errore Salvataggio su Database',
+            html: `Non è stato possibile registrare l'iscritto su MySQL:<br><br><code class="text-rose-600 bg-rose-50 px-2 py-1 rounded">${err.message}</code>`,
+            confirmButtonColor: '#ef4444'
+          });
+        } else {
+          alert(`Errore Salvataggio su MySQL: ${err.message}`);
+        }
       }
-
-      document.getElementById("modal-persona").classList.add("hidden");
-      renderMainSearchTable();
-      renderCitizenHub();
-
-      RoxToast.success(
-        isEdit ? "Scheda Aggiornata" : "Nuovo Iscritto Registrato",
-        `La pratica per ${personaPayload.nome} ${personaPayload.cognome} è stata salvata su MySQL!`
-      );
     });
   }
 

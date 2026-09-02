@@ -58,13 +58,18 @@ app.get('/api/persone/:id', async (req, res) => {
 function sanitizePersonaInput(raw) {
   const data = { ...raw };
 
-  // Remove transient UI fields
+  // Remove transient UI and relational fields that are handled separately or do not belong to Persona model
   delete data.id;
+  delete data.disponibilita;
   delete data.wallet;
   delete data.comitatoTecnico;
   delete data.progettiPIL;
   delete data.noteDiario;
   delete data.avviamenti;
+  delete data.first_name;
+  delete data.turni;
+  delete data.festivi;
+  delete data.diario;
 
   // Numeric fields
   if (data.numeroIscrizione !== undefined) data.numeroIscrizione = parseInt(data.numeroIscrizione) || 10001;
