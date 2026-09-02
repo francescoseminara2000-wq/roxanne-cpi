@@ -2079,7 +2079,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // --- SAVE INLINE IN-PLACE EDITING FROM CITIZEN HUB ---
   const btnSaveInline = document.getElementById("btn-save-inline-hub");
   if (btnSaveInline) {
-    btnSaveInline.addEventListener("click", () => {
+    btnSaveInline.addEventListener("click", async () => {
       const p = window.store.getSelectedPersona();
       if (!p) return;
 
@@ -2176,14 +2176,28 @@ document.addEventListener("DOMContentLoaded", () => {
         ...mansPayload
       };
 
-      window.store.updatePersona(p.id, updatedPayload);
+      try {
+        await window.store.updatePersona(p.id, updatedPayload);
 
-      // Hide Sticky Save Bar
-      const stickyBar = document.getElementById("hub-sticky-save-bar");
-      if (stickyBar) stickyBar.classList.add("hidden");
+        // Hide Sticky Save Bar
+        const stickyBar = document.getElementById("hub-sticky-save-bar");
+        if (stickyBar) stickyBar.classList.add("hidden");
 
-      RoxToast.success("Scheda Salvata", "Tutte le modifiche anagrafiche e sanitarie sono state memorizzate su MySQL.");
-      renderCitizenHub();
+        RoxToast.success("Scheda Salvata", "Tutte le modifiche sono state memorizzate sul database MySQL.");
+        renderCitizenHub();
+      } catch (err) {
+        console.error("Errore salvataggio scheda:", err);
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            icon: 'error',
+            title: 'Errore Aggiornamento MySQL',
+            text: err.message || 'Impossibile aggiornare la scheda su MySQL.',
+            confirmButtonColor: '#ef4444'
+          });
+        } else {
+          alert(`Errore salvataggio MySQL: ${err.message}`);
+        }
+      }
     });
   }
 
