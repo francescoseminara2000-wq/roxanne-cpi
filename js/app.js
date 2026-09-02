@@ -3694,7 +3694,15 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Check saved session
+  // Check saved session & manage preloader
+  const preloader = document.getElementById("app-preloader");
+  const dismissPreloader = () => {
+    if (preloader) {
+      preloader.classList.add("opacity-0", "pointer-events-none");
+      setTimeout(() => preloader.remove(), 350);
+    }
+  };
+
   const savedUserJson = localStorage.getItem("ROXANNE_CURRENT_USER");
   if (savedUserJson) {
     try {
@@ -3707,8 +3715,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (modalLogin) modalLogin.classList.remove("hidden");
     }
   } else {
+    // Nessuna sessione attiva: mostra la schermata di login
     if (modalLogin) modalLogin.classList.remove("hidden");
   }
+
+  // Rimuovi il preloader non appena la sessione è verificata e l'interfaccia è pronta
+  setTimeout(dismissPreloader, 200);
 
   if (formLogin) {
     formLogin.addEventListener("submit", async (e) => {
