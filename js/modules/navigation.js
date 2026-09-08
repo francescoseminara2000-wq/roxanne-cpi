@@ -261,7 +261,7 @@ function initTopNavigation() {
 }
 
 // ==========================================
-// LIQUID GLASS ASYMMETRIC SPRING ENGINE (JS VIA requestAnimationFrame)
+// LIQUID GLASS SLIDING PILL SPRING ENGINE (JS VIA requestAnimationFrame)
 // ==========================================
 class LiquidGlassNavbar {
   constructor(wrapperSelector = "#desktop-nav-container") {
@@ -269,17 +269,15 @@ class LiquidGlassNavbar {
     if (!this.wrapper) return;
 
     this.baseNav = this.wrapper.querySelector("#desktop-nav-base");
-    this.activeLayer = this.wrapper.querySelector("#desktop-nav-active-layer");
-    if (!this.baseNav || !this.activeLayer) return;
+    this.pill = this.wrapper.querySelector("#liquid-glass-pill");
+    if (!this.baseNav || !this.pill) return;
 
     this.buttons = Array.from(this.baseNav.querySelectorAll(".nav-mode-btn"));
 
-    // Coordinate animate correnti
-    this.current = { left: 0, right: 0, top: 0, bottom: 0 };
-    // Coordinate target
-    this.target = { left: 0, right: 0, top: 0, bottom: 0 };
-    // Velocità fisiche oscillatori
-    this.velocity = { left: 0, right: 0 };
+    // Posizioni animate: x (translate), w (width)
+    this.current = { x: 0, w: 0 };
+    this.target = { x: 0, w: 0 };
+    this.velocity = { x: 0, w: 0 };
 
     this.animId = null;
     this.lastTime = null;
@@ -288,13 +286,14 @@ class LiquidGlassNavbar {
   }
 
   init() {
-    // Snap iniziale sul bottone attivo corrente
+    // Snap immediato al primo rendering
     setTimeout(() => {
       const activeBtn = this.buttons.find(b => b.classList.contains("active")) || this.buttons[1] || this.buttons[0];
       if (activeBtn) {
         this.updateTarget(activeBtn, false);
+        this.pill.classList.add("visible");
       }
-    }, 50);
+    }, 60);
 
     // Gestione ridimensionamento finestra o zoom
     window.addEventListener("resize", () => {
@@ -306,37 +305,30 @@ class LiquidGlassNavbar {
   }
 
   updateTarget(targetBtn, animate = true) {
-    if (!targetBtn || !this.activeLayer || !this.baseNav) return;
+    if (!targetBtn || !this.pill || !this.baseNav) return;
 
     const navRect = this.baseNav.getBoundingClientRect();
     const btnRect = targetBtn.getBoundingClientRect();
 
     if (navRect.width === 0 || btnRect.width === 0) return;
 
-    // Calcolo esatto degli inset (distanza dai 4 bordi del contenitore di base)
-    const targetLeft = Math.max(0, btnRect.left - navRect.left);
-    const targetRight = Math.max(0, navRect.right - btnRect.right);
-    const targetTop = Math.max(0, btnRect.top - navRect.top);
-    const targetBottom = Math.max(0, navRect.bottom - btnRect.bottom);
+    // Calcolo coordinate relative rispetto a #desktop-nav-base
+    const targetX = btnRect.left - navRect.left;
+    const targetW = btnRect.width;
 
-    this.target = {
-      left: targetLeft,
-      right: targetRight,
-      top: targetTop,
-      bottom: targetBottom
-    };
+    this.target = { x: targetX, w: targetW };
 
     if (!animate) {
-      // Snap istantaneo (es. primo rendering o resize)
-      this.current.left = targetLeft;
-      this.current.right = targetRight;
-      this.current.top = targetTop;
-      this.current.bottom = targetBottom;
-      this.velocity.left = 0;
-      this.velocity.right = 0;
-      this.applyClipPath();
+      this.current.x = targetX;
+      this.current.w = targetW;
+      this.velocity.x = 0;
+      this.velocity.w = 0;
+      this.applyPillStyle();
+      this.pill.classList.add("visible");
       return;
     }
+
+    this.pill.classList.add("visible");
 
     if (!this.animId) {
       this.lastTime = performance.now();
@@ -348,69 +340,44 @@ class LiquidGlassNavbar {
     const dt = Math.min((time - (this.lastTime || time)) / 1000, 0.032);
     this.lastTime = time;
 
-    // Direzione: se target.left > current.left ci stiamo muovendo verso destra
-    const movingRight = this.target.left > this.current.left;
+    // PARAMETRI FISICI A MOLLA (Spring Dynamics con allungamento fluido e overshoot viscoso)
+    const springStiffness = 320;
+    const springDamping = 24;
 
-    // PARAMETRI FISICI A MOLLA DIFFERENZIATI (Asymmetric Springs)
-    // Molla rigida e veloce per il bordo d'attacco frontale (Leading edge)
-    const leadingStiffness = 340;
-    const leadingDamping = 24;
+    // Molla per la posizione X
+    const forceX = -springStiffness * (this.current.x - this.target.x) - springDamping * this.velocity.x;
+    this.velocity.x += forceX * dt;
+    this.current.x += this.velocity.x * dt;
 
-    // Molla più morbida con ritardo elastico per il bordo posteriore (Trailing edge) -> genera l'allungamento viscoso
-    const trailingStiffness = 160;
-    const trailingDamping = 18;
+    // Molla per la larghezza W (allungamento / stretching reattivo)
+    const forceW = -springStiffness * (this.current.w - this.target.w) - (springDamping * 0.9) * this.velocity.w;
+    this.velocity.w += forceW * dt;
+    this.current.w += this.velocity.w * dt;
 
-    const springLeft = movingRight 
-      ? { k: trailingStiffness, c: trailingDamping } 
-      : { k: leadingStiffness, c: leadingDamping };
-
-    const springRight = movingRight 
-      ? { k: leadingStiffness, c: leadingDamping } 
-      : { k: trailingStiffness, c: trailingDamping };
-
-    // Risoluzione moto armonico smorzato: F = -k*(x - target) - c*v
-    // Bordo Sinistro
-    const forceLeft = -springLeft.k * (this.current.left - this.target.left) - springLeft.c * this.velocity.left;
-    this.velocity.left += forceLeft * dt;
-    this.current.left += this.velocity.left * dt;
-
-    // Bordo Destro
-    const forceRight = -springRight.k * (this.current.right - this.target.right) - springRight.c * this.velocity.right;
-    this.velocity.right += forceRight * dt;
-    this.current.right += this.velocity.right * dt;
-
-    // Top e Bottom (interpolazione morbida)
-    this.current.top += (this.target.top - this.current.top) * 0.3;
-    this.current.bottom += (this.target.bottom - this.current.bottom) * 0.3;
-
-    this.applyClipPath();
+    this.applyPillStyle();
 
     // Condizione di arresto quando le oscillazioni convergono
     const isSettled =
-      Math.abs(this.current.left - this.target.left) < 0.08 &&
-      Math.abs(this.velocity.left) < 0.08 &&
-      Math.abs(this.current.right - this.target.right) < 0.08 &&
-      Math.abs(this.velocity.right) < 0.08;
+      Math.abs(this.current.x - this.target.x) < 0.1 &&
+      Math.abs(this.velocity.x) < 0.1 &&
+      Math.abs(this.current.w - this.target.w) < 0.1 &&
+      Math.abs(this.velocity.w) < 0.1;
 
     if (isSettled) {
-      this.current.left = this.target.left;
-      this.current.right = this.target.right;
-      this.current.top = this.target.top;
-      this.current.bottom = this.target.bottom;
-      this.velocity.left = 0;
-      this.velocity.right = 0;
-      this.applyClipPath();
+      this.current.x = this.target.x;
+      this.current.w = this.target.w;
+      this.velocity.x = 0;
+      this.velocity.w = 0;
+      this.applyPillStyle();
       this.animId = null;
     } else {
       this.animId = requestAnimationFrame((t) => this.tick(t));
     }
   }
 
-  applyClipPath() {
-    this.activeLayer.style.setProperty("--clip-top", `${this.current.top.toFixed(2)}px`);
-    this.activeLayer.style.setProperty("--clip-right", `${this.current.right.toFixed(2)}px`);
-    this.activeLayer.style.setProperty("--clip-bottom", `${this.current.bottom.toFixed(2)}px`);
-    this.activeLayer.style.setProperty("--clip-left", `${this.current.left.toFixed(2)}px`);
+  applyPillStyle() {
+    this.pill.style.transform = `translate3d(${this.current.x.toFixed(2)}px, 0, 0)`;
+    this.pill.style.width = `${this.current.w.toFixed(2)}px`;
   }
 }
 

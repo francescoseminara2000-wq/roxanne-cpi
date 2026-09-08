@@ -122,75 +122,43 @@
       </div>
     </div>
 
-    <!-- Navigation View Mode Switcher (Desktop) with Two-Layer Liquid Glass Masking -->
+    <!-- Navigation View Mode Switcher (Desktop) with Sliding Liquid Glass Pill Indicator -->
     <div id="desktop-nav-container" class="relative hidden lg:block liquid-nav-wrapper">
-      
-      <!-- 1. LIVELLO BASE (INATTIVO / CLICCABILE) -->
-      <div id="desktop-nav-base" class="flex items-center space-x-1 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80">
-        <button id="nav-mode-dashboard" class="nav-mode-btn cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+      <div id="desktop-nav-base" class="relative flex items-center space-x-1 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80">
+        
+        <!-- LIQUID GLASS SLIDING PILL INDICATOR (SOTTO AI PULSANTI) -->
+        <div id="liquid-glass-pill" class="liquid-glass-pill" aria-hidden="true"></div>
+
+        <button id="nav-mode-dashboard" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-chart-pie text-slate-400"></i>
           <span>Dashboard KPI</span>
         </button>
 
-        <button id="nav-mode-search" class="nav-mode-btn active cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-search" class="nav-mode-btn active relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
           <span>Ricerca Iscritti</span>
         </button>
 
-        <button id="nav-mode-hub" class="nav-mode-btn cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-hub" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-address-card text-slate-400"></i>
           <span>Scheda 360°</span>
         </button>
 
-        <button id="nav-mode-matcher" class="nav-mode-btn cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-matcher" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-wand-magic-sparkles text-slate-400"></i>
           <span>Matcher L.68</span>
         </button>
 
-        <button id="nav-mode-audit" class="nav-mode-btn cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-audit" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-clock-rotate-left text-slate-400"></i>
           <span>Audit Logs</span>
         </button>
 
-        <button id="nav-mode-users" class="nav-mode-btn cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-users" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-users-gear text-slate-400"></i>
           <span>Gestione Utenze</span>
         </button>
       </div>
-
-      <!-- 2. LIVELLO ATTIVO (LIQUID GLASS MASK LAYER - NON INTERATTIVO) -->
-      <div id="desktop-nav-active-layer" class="liquid-glass-layer flex items-center space-x-1 bg-white p-1 rounded-2xl border border-slate-200/90 shadow-md" aria-hidden="true">
-        <div class="nav-active-item px-3.5 py-1.5 rounded-xl font-heading flex items-center space-x-2 text-xs font-semibold text-emerald-600">
-          <i class="fa-solid fa-chart-pie text-emerald-600"></i>
-          <span>Dashboard KPI</span>
-        </div>
-
-        <div class="nav-active-item px-3.5 py-1.5 rounded-xl font-heading flex items-center space-x-2 text-xs font-semibold text-blue-600">
-          <i class="fa-solid fa-magnifying-glass text-blue-600"></i>
-          <span>Ricerca Iscritti</span>
-        </div>
-
-        <div class="nav-active-item px-3.5 py-1.5 rounded-xl font-heading flex items-center space-x-2 text-xs font-semibold text-blue-600">
-          <i class="fa-solid fa-address-card text-blue-600"></i>
-          <span>Scheda 360°</span>
-        </div>
-
-        <div class="nav-active-item px-3.5 py-1.5 rounded-xl font-heading flex items-center space-x-2 text-xs font-semibold text-purple-600">
-          <i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i>
-          <span>Matcher L.68</span>
-        </div>
-
-        <div class="nav-active-item px-3.5 py-1.5 rounded-xl font-heading flex items-center space-x-2 text-xs font-semibold text-amber-600">
-          <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
-          <span>Audit Logs</span>
-        </div>
-
-        <div class="nav-active-item px-3.5 py-1.5 rounded-xl font-heading flex items-center space-x-2 text-xs font-semibold text-indigo-600">
-          <i class="fa-solid fa-users-gear text-indigo-600"></i>
-          <span>Gestione Utenze</span>
-        </div>
-      </div>
-
     </div>
 
     <!-- Right Header Actions -->

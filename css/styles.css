@@ -1339,54 +1339,53 @@ body {
 }
 
 /* ==========================================
-   LIQUID GLASS MASKING NAVIGATION
+   LIQUID GLASS SLIDING PILL NAVIGATION
    ========================================== */
 .liquid-nav-wrapper {
   position: relative;
   user-select: none;
 }
 
-/* Livello attivo ritagliato dinamicamente con clip-path: inset() */
-.liquid-glass-layer {
+/* Indicatore a Pillola Scorrevole di Vetro Liquido (Single-Layer) */
+.liquid-glass-pill {
   position: absolute;
-  inset: 0;
+  top: 4px;
+  left: 0;
+  height: calc(100% - 8px);
+  width: 0px;
   pointer-events: none;
-  z-index: 2;
+  z-index: 0;
 
-  /* Look & Feel Liquid Glass (sfondo translucido, riflessi e glassmorphism) */
+  /* Look & Feel Autentico Liquid Glass */
   background: linear-gradient(
     135deg,
-    rgba(255, 255, 255, 0.96) 0%,
-    rgba(241, 248, 255, 0.88) 100%
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(240, 247, 255, 0.88) 100%
   );
-  backdrop-filter: blur(14px) saturate(190%);
-  -webkit-backdrop-filter: blur(14px) saturate(190%);
+  backdrop-filter: blur(16px) saturate(190%);
+  -webkit-backdrop-filter: blur(16px) saturate(190%);
+  border-radius: 0.75rem; /* 12px */
   border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: 
-    0 4px 16px -2px rgba(37, 99, 235, 0.18),
-    0 2px 6px -1px rgba(15, 23, 42, 0.08),
+    0 4px 14px -2px rgba(37, 99, 235, 0.16),
+    0 2px 6px -1px rgba(15, 23, 42, 0.07),
     inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
 
-  border-radius: 1rem; /* 16px */
-
-  /* Inizializzazione variabili CSS per i bordi */
-  --clip-top: 0px;
-  --clip-right: 0px;
-  --clip-bottom: 0px;
-  --clip-left: 0px;
-
-  /* Ritaglio millimetrico sui bordi calcolati dalle molle JS */
-  clip-path: inset(
-    var(--clip-top)
-    var(--clip-right)
-    var(--clip-bottom)
-    var(--clip-left)
-    round 12px
-  );
-  will-change: clip-path;
+  will-change: transform, width;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
 }
 
-.liquid-glass-layer .nav-active-item {
-  white-space: nowrap;
+.liquid-glass-pill.visible {
+  opacity: 1;
+}
+
+/* Colore e stile per il testo e icona del bottone attivo */
+.nav-mode-btn.active {
+  color: #1d4ed8 !important; /* blue-700 */
+}
+
+.nav-mode-btn.active i {
+  color: #2563eb !important; /* blue-600 */
 }
 
