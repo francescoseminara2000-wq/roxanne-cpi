@@ -95,9 +95,15 @@
               </div>
             </div>
 
-            <button data-doc-id="${doc.id}" class="btn-delete-doc cursor-pointer text-slate-300 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition shrink-0" title="Elimina documento">
-              <i class="pi pi-trash text-xs"></i>
-            </button>
+            <!-- Action buttons: Edit & Delete -->
+            <div class="flex items-center gap-1 shrink-0">
+              <button data-doc-id="${doc.id}" class="btn-edit-doc cursor-pointer text-slate-400 hover:text-amber-600 p-1.5 rounded-lg hover:bg-amber-50 transition" title="Modifica dettagli documento">
+                <i class="pi pi-pencil text-xs"></i>
+              </button>
+              <button data-doc-id="${doc.id}" class="btn-delete-doc cursor-pointer text-slate-300 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition" title="Elimina documento">
+                <i class="pi pi-trash text-xs"></i>
+              </button>
+            </div>
           </div>
 
           <!-- Description if present -->
@@ -156,46 +162,146 @@
       });
     });
 
-    // Delete doc handler
-    document.querySelectorAll(".btn-delete-doc").forEach(btn => {
+    // Edit doc metadata handler
+    document.querySelectorAll(".btn-edit-doc").forEach(btn => {
       btn.addEventListener("click", () => {
         const docId = btn.getAttribute("data-doc-id");
+        const doc = (persona.wallet || []).find(d => String(d.id) === String(docId));
+        if (doc) {
+          document.getElementById("edit-doc-id").value = doc.id;
+          document.getElementById("edit-doc-nome").value = doc.nome || "";
+          document.getElementById("edit-doc-tipo").value = doc.tipo || "Altro Documento";
+          document.getElementById("edit-doc-descrizione").value = doc.descrizione || "";
+          modalEditDoc.classList.remove("hidden");
+        }
+      });
+    });
+
+    // Delete doc handler
+    document.querySelectorAll(".btn-delete-doc").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const docId = btn.getAttribute("data-doc-id");
         if (confirm("Eliminare questo documento dal fascicolo elettronico?")) {
-          window.store.deleteDocumentFromWallet(persona.id, docId);
-          renderCitizenHub();
+          if (window.RoxLoading) window.RoxLoading.show("Eliminazione documento...");
+          try {
+            await window.store.deleteDocumentFromWallet(persona.id, docId);
+            renderCitizenHub();
+            RoxToast.success("Documento Rimosso", "Il file è stato eliminato dal fascicolo.");
+          } catch (err) {
+            alert(`Errore eliminazione: ${err.message}`);
+          } finally {
+            if (window.RoxLoading) window.RoxLoading.hide();
+          }
         }
       });
     });
   }
 
-  // Quick Direct Upload Helper
+  // File memorizzato temporaneamente da Drag & Drop in attesa di completamento form
+  let pendingDroppedFile = null;
+
+  // Drag & Drop Guided Upload: apre la modale precompilata per definire tipo e descrizione
   function handleWalletDirectUpload(file, persona) {
     if (!file || !persona) return;
-    RoxToast.info("Caricamento in corso...", `Salvataggio ${file.name}...`, 2000);
+    pendingDroppedFile = file;
 
-    const reader = new FileReader();
-    reader.onload = async function(evt) {
-      await window.store.addDocumentToWallet(persona.id, {
-        nome: file.name,
-        tipo: file.type.includes("pdf") ? "Verbale PDF" : file.type.includes("image") ? "Scansione / Immagine" : "Allegato Documentale",
-        descrizione: "Documento caricato nel fascicolo elettronico",
-        dimensione: (file.size / 1024).toFixed(1) + " KB",
-        fileContent: evt.target.result,
-        fileType: file.type
-      });
+    // Precompila form modale
+    document.getElementById("doc-nome").value = file.name;
+    const isPdf = file.name.toLowerCase().endsWith('.pdf') || file.type.includes('pdf');
+    if (isPdf) {
+      document.getElementById("doc-tipo").value = "Verbale INPS";
+    } else if (file.name.toLowerCase().includes("cv") || file.name.toLowerCase().includes("curriculum")) {
+      document.getElementById("doc-tipo").value = "Curriculum";
+    } else if (file.name.toLowerCase().includes("l68") || file.name.toLowerCase().includes("legge68")) {
+      document.getElementById("doc-tipo").value = "Verbale Legge 68";
+    }
+    document.getElementById("doc-descrizione").value = "";
 
-      renderCitizenHub();
-      RoxToast.success("Documento Archiviato", `${file.name} salvato con successo nel Wallet.`);
-    };
-    reader.readAsDataURL(file);
+    // Mostra badge file selezionato
+    const dropBadge = document.getElementById("doc-drop-file-badge");
+    const dropName = document.getElementById("doc-drop-file-name");
+    const dropSize = document.getElementById("doc-drop-file-size");
+    const fileContainer = document.getElementById("doc-file-input-container");
+    const fileInput = document.getElementById("doc-file-input");
+
+    if (dropBadge && dropName && dropSize) {
+      dropName.textContent = file.name;
+      dropSize.textContent = (file.size / 1024).toFixed(1) + " KB";
+      dropBadge.classList.remove("hidden");
+      if (fileContainer) fileContainer.classList.add("hidden");
+      if (fileInput) fileInput.removeAttribute("required");
+    }
+
+    modalDoc.classList.remove("hidden");
+    RoxToast.info("Completa Informazioni", "Specifica la tipologia del documento rilasciato prima di salvarlo.");
   }
 
   // --- UPLOAD WALLET FILE MODAL ---
   const modalDoc = document.getElementById("modal-upload-doc");
-  document.getElementById("btn-hub-upload-doc").addEventListener("click", () => modalDoc.classList.remove("hidden"));
-  document.getElementById("btn-upload-file-wallet-tab").addEventListener("click", () => modalDoc.classList.remove("hidden"));
+  const modalEditDoc = document.getElementById("modal-edit-doc");
+
+  document.getElementById("btn-hub-upload-doc").addEventListener("click", () => {
+    pendingDroppedFile = null;
+    const dropBadge = document.getElementById("doc-drop-file-badge");
+    const fileContainer = document.getElementById("doc-file-input-container");
+    const fileInput = document.getElementById("doc-file-input");
+    if (dropBadge) dropBadge.classList.add("hidden");
+    if (fileContainer) fileContainer.classList.remove("hidden");
+    if (fileInput) fileInput.setAttribute("required", "required");
+    document.getElementById("form-upload-doc").reset();
+    modalDoc.classList.remove("hidden");
+  });
+
+  const btnUploadTab = document.getElementById("btn-upload-file-wallet-tab");
+  if (btnUploadTab) {
+    btnUploadTab.addEventListener("click", () => {
+      pendingDroppedFile = null;
+      const dropBadge = document.getElementById("doc-drop-file-badge");
+      const fileContainer = document.getElementById("doc-file-input-container");
+      const fileInput = document.getElementById("doc-file-input");
+      if (dropBadge) dropBadge.classList.add("hidden");
+      if (fileContainer) fileContainer.classList.remove("hidden");
+      if (fileInput) fileInput.setAttribute("required", "required");
+      document.getElementById("form-upload-doc").reset();
+      modalDoc.classList.remove("hidden");
+    });
+  }
+
   document.getElementById("btn-close-modal-doc").addEventListener("click", () => modalDoc.classList.add("hidden"));
   document.getElementById("btn-cancel-doc").addEventListener("click", () => modalDoc.classList.add("hidden"));
+
+  const btnCloseEdit = document.getElementById("btn-close-modal-edit-doc");
+  const btnCancelEdit = document.getElementById("btn-cancel-edit-doc");
+  if (btnCloseEdit) btnCloseEdit.addEventListener("click", () => modalEditDoc.classList.add("hidden"));
+  if (btnCancelEdit) btnCancelEdit.addEventListener("click", () => modalEditDoc.classList.add("hidden"));
+
+  // Form Edit Document Details
+  const formEditDoc = document.getElementById("form-edit-doc");
+  if (formEditDoc) {
+    formEditDoc.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const p = window.store.getSelectedPersona();
+      if (!p) return;
+
+      const docId = document.getElementById("edit-doc-id").value;
+      const nome = document.getElementById("edit-doc-nome").value.trim();
+      const tipo = document.getElementById("edit-doc-tipo").value;
+      const descrizione = document.getElementById("edit-doc-descrizione").value.trim();
+
+      if (window.RoxLoading) window.RoxLoading.show("Aggiornamento dettagli file...");
+      try {
+        await window.store.updateDocumentInWallet(p.id, docId, { nome, tipo, descrizione });
+        modalEditDoc.classList.add("hidden");
+        renderCitizenHub();
+        RoxToast.success("Documento Aggiornato", "I dettagli del file sono stati salvati su MySQL.");
+      } catch (err) {
+        console.error("Errore modifica documento:", err);
+        alert(`Impossibile modificare il documento: ${err.message}`);
+      } finally {
+        if (window.RoxLoading) window.RoxLoading.hide();
+      }
+    });
+  }
 
   // Quick Direct Upload for Verbale Legge 68
   const btnUploadL68 = document.getElementById("btn-upload-verbale-l68");
@@ -206,21 +312,26 @@
       const file = e.target.files[0];
       const p = window.store.getSelectedPersona();
       if (file && p) {
-        RoxToast.info("Caricamento in corso...", `Salvataggio ${file.name} su MySQL...`, 2000);
-
+        if (window.RoxLoading) window.RoxLoading.show(`Salvataggio verbale L.68 ${file.name}...`);
         const reader = new FileReader();
         reader.onload = async function(evt) {
-          await window.store.addDocumentToWallet(p.id, {
-            nome: file.name,
-            tipo: "Verbale Legge 68",
-            descrizione: "Verbale collegiale L.68/99 allegato direttamente dalla sezione sanitaria",
-            dimensione: (file.size / 1024).toFixed(1) + " KB",
-            fileContent: evt.target.result,
-            fileType: file.type
-          });
+          try {
+            await window.store.addDocumentToWallet(p.id, {
+              nome: file.name,
+              tipo: "Verbale Legge 68",
+              descrizione: "Verbale collegiale L.68/99 allegato direttamente dalla sezione sanitaria",
+              dimensione: (file.size / 1024).toFixed(1) + " KB",
+              fileContent: evt.target.result,
+              fileType: file.type
+            });
 
-          renderCitizenHub();
-          RoxToast.success("Verbale L.68 Allegato", `File ${file.name} memorizzato nel fascicolo.`);
+            renderCitizenHub();
+            RoxToast.success("Verbale L.68 Allegato", `File ${file.name} memorizzato nel fascicolo.`);
+          } catch (err) {
+            alert(`Errore upload: ${err.message}`);
+          } finally {
+            if (window.RoxLoading) window.RoxLoading.hide();
+          }
         };
         reader.readAsDataURL(file);
       }
@@ -236,21 +347,26 @@
       const file = e.target.files[0];
       const p = window.store.getSelectedPersona();
       if (file && p) {
-        RoxToast.info("Caricamento in corso...", `Salvataggio ${file.name} su MySQL...`, 2000);
-
+        if (window.RoxLoading) window.RoxLoading.show(`Salvataggio verbale IC ${file.name}...`);
         const reader = new FileReader();
         reader.onload = async function(evt) {
-          await window.store.addDocumentToWallet(p.id, {
-            nome: file.name,
-            tipo: "Verbale INPS / Invalidità Civile",
-            descrizione: "Verbale di invalidità civile allegato direttamente dalla sezione sanitaria",
-            dimensione: (file.size / 1024).toFixed(1) + " KB",
-            fileContent: evt.target.result,
-            fileType: file.type
-          });
+          try {
+            await window.store.addDocumentToWallet(p.id, {
+              nome: file.name,
+              tipo: "Verbale INPS / Invalidità Civile",
+              descrizione: "Verbale di invalidità civile allegato direttamente dalla sezione sanitaria",
+              dimensione: (file.size / 1024).toFixed(1) + " KB",
+              fileContent: evt.target.result,
+              fileType: file.type
+            });
 
-          renderCitizenHub();
-          RoxToast.success("Verbale IC Allegato", `File ${file.name} memorizzato nel fascicolo.`);
+            renderCitizenHub();
+            RoxToast.success("Verbale IC Allegato", `File ${file.name} memorizzato nel fascicolo.`);
+          } catch (err) {
+            alert(`Errore upload: ${err.message}`);
+          } finally {
+            if (window.RoxLoading) window.RoxLoading.hide();
+          }
         };
         reader.readAsDataURL(file);
       }
@@ -263,7 +379,7 @@
     if (!p) return;
 
     const fileInput = document.getElementById("doc-file-input");
-    const file = fileInput.files ? fileInput.files[0] : null;
+    const file = pendingDroppedFile || (fileInput.files ? fileInput.files[0] : null);
     const nomeCustom = document.getElementById("doc-nome").value.trim();
     const tipo = document.getElementById("doc-tipo").value;
     const descrizione = document.getElementById("doc-descrizione").value.trim();
@@ -272,23 +388,31 @@
       const fileName = nomeCustom || file.name;
       const fileSize = (file.size / 1024).toFixed(1) + " KB";
 
-      RoxToast.info("Caricamento Wallet...", `Invio ${fileName} su MySQL...`, 2000);
+      if (window.RoxLoading) window.RoxLoading.show(`Invio ${fileName} su MySQL...`);
 
       const reader = new FileReader();
       reader.onload = async function(evt) {
-        await window.store.addDocumentToWallet(p.id, {
-          nome: fileName,
-          tipo: tipo,
-          descrizione: descrizione,
-          dimensione: fileSize,
-          fileContent: evt.target.result,
-          fileType: file.type
-        });
+        try {
+          await window.store.addDocumentToWallet(p.id, {
+            nome: fileName,
+            tipo: tipo,
+            descrizione: descrizione,
+            dimensione: fileSize,
+            fileContent: evt.target.result,
+            fileType: file.type || "application/octet-stream"
+          });
 
-        modalDoc.classList.add("hidden");
-        document.getElementById("form-upload-doc").reset();
-        renderCitizenHub();
-        RoxToast.success("Documento Salvato", `File ${fileName} aggiunto al Wallet.`);
+          pendingDroppedFile = null;
+          modalDoc.classList.add("hidden");
+          document.getElementById("form-upload-doc").reset();
+          renderCitizenHub();
+          RoxToast.success("Documento Salvato", `File ${fileName} aggiunto al Wallet.`);
+        } catch (err) {
+          console.error("Errore salvataggio file:", err);
+          alert(`Impossibile salvare il documento: ${err.message}`);
+        } finally {
+          if (window.RoxLoading) window.RoxLoading.hide();
+        }
       };
 
       reader.readAsDataURL(file);

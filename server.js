@@ -323,6 +323,24 @@ app.delete('/api/wallet/:id', async (req, res) => {
   }
 });
 
+app.put('/api/wallet/:id', async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { nome, tipo, descrizione } = req.body;
+    const updated = await prisma.documentoWallet.update({
+      where: { id },
+      data: {
+        ...(nome !== undefined && { nome }),
+        ...(tipo !== undefined && { tipo }),
+        ...(descrizione !== undefined && { descrizione })
+      }
+    });
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // --- API: AUDIT LOGS ---
 app.get('/api/audit', async (req, res) => {
   try {

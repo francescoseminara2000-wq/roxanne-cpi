@@ -234,6 +234,32 @@ class StoreManager {
     return null;
   }
 
+  async updateDocumentInWallet(personaId, docId, fields) {
+    const persona = this.data.persone.find(p => p.id === parseInt(personaId));
+    if (persona && persona.wallet) {
+      const doc = persona.wallet.find(d => d.id === parseInt(docId));
+      if (doc) {
+        Object.assign(doc, fields);
+      }
+
+      const res = await fetch(`/api/wallet/${docId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(fields)
+      });
+
+      if (!res.ok) {
+        const errJson = await res.json().catch(() => ({}));
+        throw new Error(errJson.error || `Errore HTTP ${res.status}: Impossibile aggiornare dettagli allegato.`);
+      }
+
+      const updated = await res.json();
+      if (doc) Object.assign(doc, updated);
+      this.addAuditLog("MODIFICA_WALLET", "Wallet Documentale", `${persona.nome}`, `Modificato allegato #${docId} (${fields.nome || doc.nome})`);
+      return updated;
+    }
+  }
+
   async deleteDocumentFromWallet(personaId, docId) {
     const persona = this.data.persone.find(p => p.id === parseInt(personaId));
     if (persona && persona.wallet) {
@@ -273,6 +299,11 @@ class StoreManager {
 
     const saved = await res.json();
     this.data.comitatoTecnico.unshift(saved);
+    const persona = this.data.persone.find(p => parseInt(p.numeroIscrizione) === parseInt(comitatoData.numeroIscrizione));
+    if (persona) {
+      if (!Array.isArray(persona.comitatoTecnico)) persona.comitatoTecnico = [];
+      persona.comitatoTecnico.unshift(saved);
+    }
     this.addAuditLog("AGGIUNTA_VERBALE_COMITATO", "Comitato Tecnico ASL", `Iscritto #${comitatoData.numeroIscrizione}`, `Verbale ASL n. ${comitatoData.numPratica || saved.id}`);
     return saved;
   }
@@ -285,8 +316,13 @@ class StoreManager {
     }
     if (this.data.comitatoTecnico) {
       this.data.comitatoTecnico = this.data.comitatoTecnico.filter(c => c.id !== parseInt(verbaleId));
-      this.addAuditLog("ELIMINAZIONE_VERBALE_COMITATO", "Comitato Tecnico ASL", `Verbale #${verbaleId}`, "Eliminazione record verbale ASL");
     }
+    this.data.persone.forEach(p => {
+      if (Array.isArray(p.comitatoTecnico)) {
+        p.comitatoTecnico = p.comitatoTecnico.filter(c => c.id !== parseInt(verbaleId));
+      }
+    });
+    this.addAuditLog("ELIMINAZIONE_VERBALE_COMITATO", "Comitato Tecnico ASL", `Verbale #${verbaleId}`, "Eliminazione record verbale ASL");
   }
 
   // --- PROGETTO INSERIMENTO LAVORATIVO (PIL L.68/99) ---
@@ -316,6 +352,11 @@ class StoreManager {
 
     const saved = await res.json();
     this.data.progettiInserimentoLav.unshift(saved);
+    const persona = this.data.persone.find(p => parseInt(p.numeroIscrizione) === parseInt(pilData.numeroIscrizione));
+    if (persona) {
+      if (!Array.isArray(persona.progettiPIL)) persona.progettiPIL = [];
+      persona.progettiPIL.unshift(saved);
+    }
     this.addAuditLog("AGGIUNTA_PIL", "Progetto Inserimento (PIL)", `${pilData.nome || 'Iscritto'} (#${pilData.numeroIscrizione})`, `Nuovo PIL registrato`);
     return saved;
   }
@@ -328,8 +369,13 @@ class StoreManager {
     }
     if (this.data.progettiInserimentoLav) {
       this.data.progettiInserimentoLav = this.data.progettiInserimentoLav.filter(p => p.id !== parseInt(pilId));
-      this.addAuditLog("ELIMINAZIONE_PIL", "Progetto Inserimento (PIL)", `PIL #${pilId}`, "Eliminazione scheda PIL");
     }
+    this.data.persone.forEach(p => {
+      if (Array.isArray(p.progettiPIL)) {
+        p.progettiPIL = p.progettiPIL.filter(pil => pil.id !== parseInt(pilId));
+      }
+    });
+    this.addAuditLog("ELIMINAZIONE_PIL", "Progetto Inserimento (PIL)", `PIL #${pilId}`, "Eliminazione scheda PIL");
   }
 
   // --- DIARIO OPERATORI (COLLOQUI & MONITORAGGIO TIROCINI) ---
@@ -355,6 +401,11 @@ class StoreManager {
 
     const saved = await res.json();
     this.data.noteDiario.unshift(saved);
+    const persona = this.data.persone.find(p => parseInt(p.numeroIscrizione) === parseInt(notaData.numeroIscrizione));
+    if (persona) {
+      if (!Array.isArray(persona.noteDiario)) persona.noteDiario = [];
+      persona.noteDiario.unshift(saved);
+    }
     this.addAuditLog("AGGIUNTA_NOTA", "Diario Operatore", `${notaData.nome || 'Iscritto'} (#${notaData.numeroIscrizione})`, `Nota ${notaData.tipoNota || 'Diario'}`);
     return saved;
   }
@@ -367,8 +418,13 @@ class StoreManager {
     }
     if (this.data.noteDiario) {
       this.data.noteDiario = this.data.noteDiario.filter(n => n.id !== parseInt(notaId));
-      this.addAuditLog("ELIMINAZIONE_NOTA", "Diario Operatore", `Nota #${notaId}`, "Eliminazione annotazione diario");
     }
+    this.data.persone.forEach(p => {
+      if (Array.isArray(p.noteDiario)) {
+        p.noteDiario = p.noteDiario.filter(n => n.id !== parseInt(notaId));
+      }
+    });
+    this.addAuditLog("ELIMINAZIONE_NOTA", "Diario Operatore", `Nota #${notaId}`, "Eliminazione annotazione diario");
   }
 
   // --- METRICHE CPI ---

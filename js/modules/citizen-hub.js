@@ -343,6 +343,19 @@
 
     // --- TAB 9: DIARIO OPERATORE ---
     renderDiarioTab(p);
+
+    // --- PRESERVAZIONE TAB CORRENTEMENTE ATTIVO ---
+    const currentActiveLink = document.querySelector(".hub-tab-link.active");
+    if (currentActiveLink) {
+      const activeTabId = currentActiveLink.getAttribute("data-tab");
+      document.querySelectorAll(".hub-tab-content").forEach(content => {
+        if (content.id === activeTabId) {
+          content.classList.remove("hidden");
+        } else {
+          content.classList.add("hidden");
+        }
+      });
+    }
   }
 
   // --- RENDER DISPONIBILITA TAB ---

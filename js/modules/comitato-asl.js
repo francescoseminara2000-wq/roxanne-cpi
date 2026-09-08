@@ -572,7 +572,7 @@
   }
 
   if (formVerbaleComitato) {
-    formVerbaleComitato.addEventListener("submit", (e) => {
+    formVerbaleComitato.addEventListener("submit", async (e) => {
       e.preventDefault();
       const p = window.store.getSelectedPersona();
       if (!p) return;
@@ -600,11 +600,19 @@
         adozione: !!(document.getElementById("com-adozione") || {}).checked
       };
 
-      window.store.addVerbaleComitato(verbaleData);
-      modalComitato.classList.add("hidden");
-      formVerbaleComitato.reset();
-      renderCitizenHub();
-      RoxToast.success("Verbale ASL Registrato", "Pratica Comitato Tecnico archiviata con successo.");
+      if (window.RoxLoading) window.RoxLoading.show("Salvataggio verbale Comitato Tecnico...");
+      try {
+        await window.store.addVerbaleComitato(verbaleData);
+        modalComitato.classList.add("hidden");
+        formVerbaleComitato.reset();
+        renderCitizenHub();
+        RoxToast.success("Verbale ASL Registrato", "Pratica Comitato Tecnico archiviata con successo.");
+      } catch (err) {
+        console.error("Errore salvataggio verbale comitato:", err);
+        alert(`Impossibile salvare il verbale: ${err.message}`);
+      } finally {
+        if (window.RoxLoading) window.RoxLoading.hide();
+      }
     });
   }
 

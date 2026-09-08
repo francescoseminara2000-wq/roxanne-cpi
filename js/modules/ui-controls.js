@@ -198,6 +198,42 @@ function initAutoExpandTextareas() {
   });
 }
 
+// --- GESTORE PROGRESS BAR ANIMATA & LOADER GLOBALE (MANTINE / PRIMETEK) ---
+const RoxLoading = {
+  activeCount: 0,
+  timer: null,
+
+  show(message = "Elaborazione in corso...") {
+    this.activeCount++;
+    const container = document.getElementById("global-progress-container");
+    const chip = document.getElementById("global-loading-chip");
+    const text = document.getElementById("global-loading-text");
+
+    if (container) container.classList.add("active");
+    if (chip && text) {
+      text.textContent = message;
+      chip.classList.add("active");
+    }
+  },
+
+  hide() {
+    this.activeCount = Math.max(0, this.activeCount - 1);
+    if (this.activeCount === 0) {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        if (this.activeCount === 0) {
+          const container = document.getElementById("global-progress-container");
+          const chip = document.getElementById("global-loading-chip");
+          if (container) container.classList.remove("active");
+          if (chip) chip.classList.remove("active");
+        }
+      }, 250);
+    }
+  }
+};
+
+window.RoxLoading = RoxLoading;
+
 // Window globals for backwards compatibility
 window.initCustomDatePickers = initCustomDatePickers;
 window.initCustomSearchableSelects = initCustomSearchableSelects;

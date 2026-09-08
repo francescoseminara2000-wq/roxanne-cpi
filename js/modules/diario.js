@@ -60,7 +60,7 @@
   document.getElementById("btn-close-modal-nota").addEventListener("click", () => modalNota.classList.add("hidden"));
   document.getElementById("btn-cancel-nota").addEventListener("click", () => modalNota.classList.add("hidden"));
 
-  document.getElementById("form-nota-diario").addEventListener("submit", (e) => {
+  document.getElementById("form-nota-diario").addEventListener("submit", async (e) => {
     e.preventDefault();
     const p = window.store.getSelectedPersona();
     if (!p) return;
@@ -70,20 +70,28 @@
     const firma = document.getElementById("nota-firma").value.trim();
 
     if (testo) {
-      window.store.addNotaDiario({
-        numeroIscrizione: p.numeroIscrizione,
-        nome: p.nome,
-        tipoNota: tipoNota,
-        data: new Date().toISOString().split('T')[0],
-        noteDiDiario: testo,
-        firma: firma || "Operatore CPI Lecco",
-        operatore: "CPI Lecco"
-      });
+      if (window.RoxLoading) window.RoxLoading.show("Salvataggio nota nel diario...");
+      try {
+        await window.store.addNotaDiario({
+          numeroIscrizione: p.numeroIscrizione,
+          nome: p.nome,
+          tipoNota: tipoNota,
+          data: new Date().toISOString().split('T')[0],
+          noteDiDiario: testo,
+          firma: firma || "Operatore CPI Lecco",
+          operatore: "CPI Lecco"
+        });
 
-      modalNota.classList.add("hidden");
-      document.getElementById("nota-testo").value = "";
-      renderCitizenHub();
-      RoxToast.success("Nota Aggiunta", "La nuova annotazione è stata registrata nel diario.");
+        modalNota.classList.add("hidden");
+        document.getElementById("nota-testo").value = "";
+        renderCitizenHub();
+        RoxToast.success("Nota Aggiunta", "La nuova annotazione è stata registrata nel diario.");
+      } catch (err) {
+        console.error("Errore salvataggio nota:", err);
+        alert(`Impossibile salvare la nota: ${err.message}`);
+      } finally {
+        if (window.RoxLoading) window.RoxLoading.hide();
+      }
     }
   });
 

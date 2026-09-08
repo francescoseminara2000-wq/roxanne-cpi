@@ -135,7 +135,7 @@
   }
 
   if (formProgettoPil) {
-    formProgettoPil.addEventListener("submit", (e) => {
+    formProgettoPil.addEventListener("submit", async (e) => {
       e.preventDefault();
       const p = window.store.getSelectedPersona();
       if (!p) return;
@@ -158,11 +158,19 @@
         aspettiPositivita: document.getElementById("pil-positivita").value.trim()
       };
 
-      window.store.addProgettoInserimentoLav(pilData);
-      modalPil.classList.add("hidden");
-      formProgettoPil.reset();
-      renderCitizenHub();
-      RoxToast.success("Progetto PIL Salvato", "Progetto individuale registrato su MySQL.");
+      if (window.RoxLoading) window.RoxLoading.show("Salvataggio progetto inserimento (PIL)...");
+      try {
+        await window.store.addProgettoInserimentoLav(pilData);
+        modalPil.classList.add("hidden");
+        formProgettoPil.reset();
+        renderCitizenHub();
+        RoxToast.success("Progetto PIL Salvato", "Progetto individuale registrato su MySQL.");
+      } catch (err) {
+        console.error("Errore salvataggio progetto PIL:", err);
+        alert(`Impossibile salvare il progetto PIL: ${err.message}`);
+      } finally {
+        if (window.RoxLoading) window.RoxLoading.hide();
+      }
     });
   }
 
