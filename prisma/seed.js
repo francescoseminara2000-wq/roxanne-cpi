@@ -1147,7 +1147,7 @@ async function main() {
     });
   }
 
-  console.log(`✅ Database popolato con successo! ID Persona creata: ${persona.id} e ${defaultUsers.length} utenti attivi.`);
+  console.log(`✅ Database popolato con successo con ${ventiPersone.length} persone e ${defaultUsers.length} utenti attivi.`);
 }
 
 main()
