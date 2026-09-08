@@ -164,6 +164,39 @@ function initTopNavigation() {
       if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
     });
   }
+
+  // --- CONTROLLER INGRANDIMENTO & SCALABILITÀ SCHERMATE (100% / 115% / 130%) ---
+  const btnZoomNormal = document.getElementById("btn-zoom-normal");
+  const btnZoomLarge = document.getElementById("btn-zoom-large");
+  const btnZoomXLarge = document.getElementById("btn-zoom-xlarge");
+  const zoomBtns = [btnZoomNormal, btnZoomLarge, btnZoomXLarge];
+
+  function applyZoom(zoomLevel) {
+    document.documentElement.classList.remove("zoom-100", "zoom-115", "zoom-130");
+    document.documentElement.classList.add(`zoom-${zoomLevel}`);
+    localStorage.setItem("ROXANNE_ZOOM_LEVEL", String(zoomLevel));
+
+    zoomBtns.forEach(btn => {
+      if (btn) {
+        btn.classList.remove("active", "bg-white", "text-blue-600", "shadow-2xs");
+        btn.classList.add("text-slate-600");
+      }
+    });
+
+    const activeBtn = zoomLevel === 100 ? btnZoomNormal : zoomLevel === 130 ? btnZoomXLarge : btnZoomLarge;
+    if (activeBtn) {
+      activeBtn.classList.add("active", "bg-white", "text-blue-600", "shadow-2xs");
+      activeBtn.classList.remove("text-slate-600");
+    }
+  }
+
+  if (btnZoomNormal) btnZoomNormal.addEventListener("click", () => applyZoom(100));
+  if (btnZoomLarge) btnZoomLarge.addEventListener("click", () => applyZoom(115));
+  if (btnZoomXLarge) btnZoomXLarge.addEventListener("click", () => applyZoom(130));
+
+  // Inizializza con livello 115% (Ampio & Leggibile di default)
+  const savedZoom = parseInt(localStorage.getItem("ROXANNE_ZOOM_LEVEL")) || 115;
+  applyZoom(savedZoom);
 }
 
 window.initMobileDrawer = initMobileDrawer;
