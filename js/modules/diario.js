@@ -41,9 +41,14 @@
 
                 <p class="text-xs text-slate-700 leading-relaxed pt-1">${escapeHtml(n.noteDiDiario)}</p>
 
-                <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-100 flex justify-between">
-                  <span>Operatore CPI: <strong>${escapeHtml(n.operatore || 'CPI Lecco')}</strong></span>
-                  <span class="font-mono text-slate-400">#${n.id}</span>
+                <div class="text-[11px] text-slate-400 pt-2 border-t border-slate-100 flex items-center justify-between">
+                  <span>Operatore CPI: <strong>${escapeHtml(n.operatore || n.firma || 'CPI Lecco')}</strong></span>
+                  <div class="flex items-center gap-3">
+                    <span class="font-mono text-slate-400">#${n.id}</span>
+                    <button data-id="${n.id}" class="btn-delete-nota-diario text-slate-400 hover:text-rose-600 transition p-1" title="Elimina annotazione">
+                      <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -51,6 +56,30 @@
         }).join("")}
       </div>
     `;
+
+    // Event listener eliminazione nota
+    container.querySelectorAll(".btn-delete-nota-diario").forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const notaId = btn.getAttribute("data-id");
+        if (!notaId) return;
+
+        if (!confirm("Sei sicuro di voler eliminare questa annotazione dal diario?")) return;
+
+        if (window.RoxLoading) window.RoxLoading.show("Eliminazione nota dal diario...");
+        try {
+          await window.store.deleteNotaDiario(notaId);
+          renderDiarioTab(p);
+          if (typeof window.renderCitizenHub === "function") window.renderCitizenHub();
+          RoxToast.success("Nota Eliminata", "L'annotazione è stata rimossa con successo.");
+        } catch (err) {
+          console.error("Errore eliminazione nota:", err);
+          alert(`Impossibile eliminare la nota: ${err.message}`);
+        } finally {
+          if (window.RoxLoading) window.RoxLoading.hide();
+        }
+      });
+    });
   }
 
   // --- ADD NOTA DIARIO MODAL ---
@@ -72,20 +101,27 @@
     if (testo) {
       if (window.RoxLoading) window.RoxLoading.show("Salvataggio nota nel diario...");
       try {
+        const fullPersonaName = window.formatFullName ? window.formatFullName(p) : (p.nome || "");
         await window.store.addNotaDiario({
-          numeroIscrizione: p.numeroIscrizione,
-          nome: p.nome,
+          personaId: p.id,
+          numeroIscrizione: parseInt(p.numeroIscrizione) || p.id,
+          nome: fullPersonaName,
           tipoNota: tipoNota,
           data: new Date().toISOString(),
           noteDiDiario: testo,
           firma: firma || "Operatore CPI Lecco",
-          operatore: "CPI Lecco"
+          operatore: firma || "CPI Lecco"
         });
 
         modalNota.classList.add("hidden");
         document.getElementById("nota-testo").value = "";
-        renderCitizenHub();
-        RoxToast.success("Nota Aggiunta", "La nuova annotazione è stata registrata nel diario.");
+        
+        // Re-render immediato del tab diario e dell'hub 360°
+        renderDiarioTab(p);
+        if (typeof window.renderCitizenHub === "function") {
+          window.renderCitizenHub();
+        }
+        RoxToast.success("Nota Aggiunta", "La nuova annotazione è stata registrata nel diario e salvata sul database.");
       } catch (err) {
         console.error("Errore salvataggio nota:", err);
         alert(`Impossibile salvare la nota: ${err.message}`);

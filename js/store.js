@@ -422,7 +422,12 @@ class StoreManager {
 
   async addNotaDiario(notaData) {
     if (!this.data.noteDiario) this.data.noteDiario = [];
-    const newNota = { ...notaData, operatore: this.getActiveUser(), firma: this.getActiveUser() };
+    const activeOp = this.getActiveUser();
+    const newNota = { 
+      ...notaData, 
+      operatore: notaData.operatore || activeOp, 
+      firma: notaData.firma || activeOp 
+    };
 
     const res = await fetch('/api/diario', {
       method: 'POST',
@@ -437,7 +442,10 @@ class StoreManager {
 
     const saved = await res.json();
     this.data.noteDiario.unshift(saved);
-    const persona = this.data.persone.find(p => parseInt(p.numeroIscrizione) === parseInt(notaData.numeroIscrizione));
+    const persona = this.data.persone.find(p => 
+      (notaData.personaId && p.id === parseInt(notaData.personaId)) || 
+      (p.numeroIscrizione && parseInt(p.numeroIscrizione) === parseInt(notaData.numeroIscrizione))
+    );
     if (persona) {
       if (!Array.isArray(persona.noteDiario)) persona.noteDiario = [];
       persona.noteDiario.unshift(saved);

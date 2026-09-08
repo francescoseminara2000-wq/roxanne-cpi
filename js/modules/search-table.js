@@ -72,7 +72,8 @@ function renderMainSearchTable() {
           : "bg-slate-100 text-slate-700 border-slate-200";
 
         // Iniziali avatar
-        const initials = ((p.nome ? p.nome[0] : "") + (p.cognome ? p.cognome[0] : "")).toUpperCase() || "LC";
+        const initials = window.getPersonaInitials ? window.getPersonaInitials(p) : ((p.nome ? p.nome[0] : "") + (p.cognome ? p.cognome[0] : "")).toUpperCase() || "LC";
+        const displayName = window.formatFullName ? window.formatFullName(p) : `${p.nome || ''} ${p.cognome || ''}`.trim();
 
         return `
           <tr class="hover:bg-blue-50/40 transition-colors group cursor-pointer border-b border-slate-100">
@@ -92,7 +93,7 @@ function renderMainSearchTable() {
             <!-- Cittadino & CF -->
             <td class="px-5 py-3.5">
               <div class="font-bold text-slate-900 font-heading text-sm group-hover:text-blue-600 transition flex items-center gap-1.5">
-                ${escapeHtml(p.nome)} ${escapeHtml(p.cognome || '')}
+                ${escapeHtml(displayName)}
               </div>
               <div class="text-[11px] font-mono font-semibold text-slate-500 tracking-wider">${p.codiceFiscale || 'C.F. N.D.'}</div>
             </td>
@@ -158,7 +159,8 @@ function renderMainSearchTable() {
           : "bg-emerald-50 text-emerald-700 border-emerald-200";
 
         const icPerc = p.icPercentuale || 0;
-        const initials = ((p.nome ? p.nome[0] : "") + (p.cognome ? p.cognome[0] : "")).toUpperCase() || "LC";
+        const initials = window.getPersonaInitials ? window.getPersonaInitials(p) : ((p.nome ? p.nome[0] : "") + (p.cognome ? p.cognome[0] : "")).toUpperCase() || "LC";
+        const displayName = window.formatFullName ? window.formatFullName(p) : `${p.nome || ''} ${p.cognome || ''}`.trim();
 
         return `
           <div class="card-white p-5 space-y-4 flex flex-col justify-between hover:border-blue-300 hover:shadow-lg hover:shadow-blue-500/8 transition-all group relative overflow-hidden">
@@ -171,7 +173,7 @@ function renderMainSearchTable() {
                   </div>
                   <div>
                     <h3 class="font-bold text-slate-900 text-sm font-heading group-hover:text-blue-600 transition">
-                      ${escapeHtml(p.nome)} ${escapeHtml(p.cognome || '')}
+                      ${escapeHtml(displayName)}
                     </h3>
                     <p class="text-[11px] font-mono font-semibold text-slate-500 tracking-wider">${p.codiceFiscale || 'C.F. N.D.'}</p>
                   </div>
@@ -246,6 +248,7 @@ function renderMainSearchTable() {
           : "bg-emerald-50 text-emerald-700";
 
         const icPerc = p.icPercentuale || 0;
+        const displayName = window.formatFullName ? window.formatFullName(p) : `${p.nome || ''} ${p.cognome || ''}`.trim();
 
         return `
           <div class="p-3.5 hover:bg-blue-50/40 transition flex items-center justify-between border-b border-slate-100 group">
@@ -253,7 +256,7 @@ function renderMainSearchTable() {
               <span class="font-mono font-bold text-xs text-blue-700 w-16">#${p.numeroIscrizione || p.id}</span>
               <div>
                 <span class="font-bold text-slate-900 text-xs font-heading mr-2 group-hover:text-blue-600 transition">
-                  ${escapeHtml(p.nome)} ${escapeHtml(p.cognome || '')}
+                  ${escapeHtml(displayName)}
                 </span>
                 <span class="font-mono text-[11px] text-slate-400 mr-2">${p.codiceFiscale || 'C.F. N.D.'}</span>
                 <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase ${catBadge}">${escapeHtml(p.categoria || 'C.O.')}</span>

@@ -60,7 +60,7 @@
     if (detailsContainer) detailsContainer.classList.remove("hidden");
 
     // 2. Dynamic Avatar with colorful gradient based on gender/category
-    const initials = (p.nome || "NN").split(" ").map(n => n.charAt(0)).join("").substring(0, 2).toUpperCase();
+    const initials = window.getPersonaInitials ? window.getPersonaInitials(p) : (p.nome || "NN").substring(0, 2).toUpperCase();
     const elAvatar = document.getElementById("hub-avatar");
     if (elAvatar) {
       elAvatar.textContent = initials;
@@ -88,7 +88,8 @@
     const elTel = document.getElementById("hub-tel");
     const elEmail = document.getElementById("hub-email");
 
-    if (elNome) elNome.textContent = p.nome || "-";
+    const fullDisplayName = window.formatFullName ? window.formatFullName(p) : (p.nome || "-");
+    if (elNome) elNome.textContent = fullDisplayName || "-";
     if (elCf) elCf.textContent = p.codiceFiscale || "-";
     if (elNumIscriz) elNumIscriz.textContent = `#${p.numeroIscrizione || '0'}`;
     if (elResidenza) elResidenza.textContent = p.comuneResidenza || "Lecco";
@@ -204,19 +205,28 @@
     const lastNoteText = document.getElementById("hub-last-note-text");
 
     if (lastNoteAuthor && lastNoteDate && lastNoteText) {
-      if (p.diario && p.diario.length > 0) {
-        const latestNote = p.diario[0];
+      const allNotes = window.store.getNoteDiarioByNumIscriz 
+        ? window.store.getNoteDiarioByNumIscriz(p.numeroIscrizione) 
+        : (p.noteDiario || p.diario || []);
+      
+      const sortedNotes = [...allNotes].sort((a, b) => new Date(b.data) - new Date(a.data));
+
+      if (sortedNotes.length > 0) {
+        const latestNote = sortedNotes[0];
         const d = new Date(latestNote.data);
         const formattedDate = !isNaN(d) ? `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth()+1).padStart(2, '0')}/${d.getFullYear()}` : latestNote.data;
+        const author = latestNote.firma || latestNote.operatore || latestNote.autore || "Operatore CPI";
+        const text = latestNote.noteDiDiario || latestNote.testo || latestNote.tipoNota || latestNote.tipo || "Nessun dettaglio testo";
         
-        lastNoteAuthor.textContent = latestNote.autore || "Operatore";
+        lastNoteAuthor.textContent = author;
         lastNoteDate.textContent = formattedDate;
-        lastNoteText.textContent = latestNote.testo || latestNote.tipo || "Nessun dettaglio testo";
-        if (lastNoteBox) lastNoteBox.title = `Autore: ${latestNote.autore} - Clicca per andare al diario`;
+        lastNoteText.textContent = text;
+        if (lastNoteBox) lastNoteBox.title = `Autore: ${author} - Clicca per andare al diario`;
       } else {
         lastNoteAuthor.textContent = "Nessuna nota";
         lastNoteDate.textContent = "--/--/----";
         lastNoteText.textContent = "Nessuna annotazione presente nel diario";
+        if (lastNoteBox) lastNoteBox.title = "Clicca per inserire la prima annotazione";
       }
     }
 
@@ -891,13 +901,20 @@
     });
 
     // 4. Note Diario Operatore
-    if (p.diario && Array.isArray(p.diario)) {
-      p.diario.forEach(d => {
+    const timelineDiarioNotes = window.store.getNoteDiarioByNumIscriz
+      ? window.store.getNoteDiarioByNumIscriz(p.numeroIscrizione)
+      : (p.noteDiario || p.diario || []);
+
+    if (Array.isArray(timelineDiarioNotes)) {
+      timelineDiarioNotes.forEach(d => {
+        const text = d.noteDiDiario || d.testo || "";
+        const author = d.firma || d.operatore || d.autore || "Operatore";
+        const tipoLabel = d.tipoNota || d.tipo || "Colloquio DID";
         events.push({
           date: d.data,
           tipo: "DIARIO",
-          title: `Colloquio & Diario: ${escapeHtml(d.tipo || 'Colloquio DID')}`,
-          subtitle: `${escapeHtml(d.testo || '')} (Autore: ${escapeHtml(d.autore || 'Operatore')})`,
+          title: `Colloquio & Diario: ${escapeHtml(tipoLabel)}`,
+          subtitle: `${escapeHtml(text)} (Autore: ${escapeHtml(author)})`,
           icon: "fa-solid fa-book-bookmark",
           color: "bg-amber-600",
           badge: "Colloquio CPI"
@@ -1063,7 +1080,7 @@
           <table class="table-data">
             <tr>
               <td class="lbl">Nominativo</td>
-              <td class="val highlight">${escapeHtml(p.nome || '-')}</td>
+              <td class="val highlight">${escapeHtml(window.formatFullName ? window.formatFullName(p) : (p.nome || '-'))}</td>
               <td class="lbl">Codice Fiscale</td>
               <td class="val font-mono highlight">${escapeHtml(p.codiceFiscale || '-')}</td>
             </tr>

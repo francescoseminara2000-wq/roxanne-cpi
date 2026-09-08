@@ -92,7 +92,8 @@ function runMatcher() {
       : "bg-gradient-to-r from-rose-500 to-red-600 text-white shadow-rose-500/25";
 
     const badgeLabel = isHigh ? "ALTA COMPATIBILITÀ" : isMedium ? "CON ADATTAMENTI" : "COMPATIBILITÀ BASSA";
-    const initials = ((p.nome ? p.nome[0] : "") + (p.cognome ? p.cognome[0] : "")).toUpperCase() || "LC";
+    const initials = window.getPersonaInitials ? window.getPersonaInitials(p) : ((p.nome ? p.nome[0] : "") + (p.cognome ? p.cognome[0] : "")).toUpperCase() || "LC";
+    const displayName = window.formatFullName ? window.formatFullName(p) : `${p.nome || ''} ${p.cognome || ''}`.trim();
 
     return `
       <div class="card-white p-5 space-y-4 transition-all hover:shadow-xl hover:shadow-blue-500/8 border border-slate-200/90 relative overflow-hidden group">
@@ -105,7 +106,7 @@ function runMatcher() {
             <div>
               <div class="flex items-center gap-2">
                 <h3 class="font-black text-slate-900 text-base font-heading group-hover:text-blue-600 transition">
-                  ${escapeHtml(p.nome)} ${escapeHtml(p.cognome || '')}
+                  ${escapeHtml(displayName)}
                 </h3>
                 <span class="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200/60">
                   #${p.numeroIscrizione || p.id}
