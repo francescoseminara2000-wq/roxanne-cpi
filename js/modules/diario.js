@@ -76,7 +76,7 @@
           numeroIscrizione: p.numeroIscrizione,
           nome: p.nome,
           tipoNota: tipoNota,
-          data: new Date().toISOString().split('T')[0],
+          data: new Date().toISOString(),
           noteDiDiario: testo,
           firma: firma || "Operatore CPI Lecco",
           operatore: "CPI Lecco"

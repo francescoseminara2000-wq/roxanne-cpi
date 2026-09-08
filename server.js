@@ -210,11 +210,26 @@ app.get('/api/comitato/:numIscriz', async (req, res) => {
 
 app.post('/api/comitato', async (req, res) => {
   try {
+    const payload = { ...req.body };
+    if (payload.numeroIscrizione) payload.numeroIscrizione = parseInt(payload.numeroIscrizione);
+    if (payload.personaId) payload.personaId = parseInt(payload.personaId);
+    if (payload.dataSeduta) {
+      const d = new Date(payload.dataSeduta);
+      payload.dataSeduta = isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+    }
+    if (payload.dataVerbale) {
+      const d = new Date(payload.dataVerbale);
+      payload.dataVerbale = isNaN(d.getTime()) ? null : d.toISOString();
+    } else {
+      payload.dataVerbale = null;
+    }
+
     const newVerbale = await prisma.comitatoTecnico.create({
-      data: req.body
+      data: payload
     });
     res.status(201).json(newVerbale);
   } catch (error) {
+    console.error("Errore post /api/comitato:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -245,11 +260,20 @@ app.get('/api/pil/:numIscriz', async (req, res) => {
 
 app.post('/api/pil', async (req, res) => {
   try {
+    const payload = { ...req.body };
+    if (payload.numeroIscrizione) payload.numeroIscrizione = parseInt(payload.numeroIscrizione);
+    if (payload.personaId) payload.personaId = parseInt(payload.personaId);
+    if (payload.data) {
+      const d = new Date(payload.data);
+      payload.data = isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+    }
+
     const newPil = await prisma.progettoInserimentoLav.create({
-      data: req.body
+      data: payload
     });
     res.status(201).json(newPil);
   } catch (error) {
+    console.error("Errore post /api/pil:", error);
     res.status(500).json({ error: error.message });
   }
 });
@@ -280,11 +304,22 @@ app.get('/api/diario/:numIscriz', async (req, res) => {
 
 app.post('/api/diario', async (req, res) => {
   try {
+    const payload = { ...req.body };
+    if (payload.numeroIscrizione) payload.numeroIscrizione = parseInt(payload.numeroIscrizione);
+    if (payload.personaId) payload.personaId = parseInt(payload.personaId);
+    if (payload.data) {
+      const d = new Date(payload.data);
+      payload.data = isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+    } else {
+      payload.data = new Date().toISOString();
+    }
+
     const newNota = await prisma.notaDiario.create({
-      data: req.body
+      data: payload
     });
     res.status(201).json(newNota);
   } catch (error) {
+    console.error("Errore post /api/diario:", error);
     res.status(500).json({ error: error.message });
   }
 });
