@@ -58,16 +58,22 @@ function initTopNavigation() {
     });
   }
 
+  let liquidNavInstance = null;
+
   function setActiveBtn(activeBtn) {
     [btnDash, btnSearch, btnHub, btnMatcher, btnAudit, btnUsers].forEach(btn => {
       if (btn) {
-        btn.classList.remove("active", "bg-white", "text-blue-600", "shadow-xs", "font-semibold");
-        btn.classList.add("text-slate-600", "font-medium");
+        btn.classList.remove("active");
+        btn.classList.add("text-slate-500");
       }
     });
     if (activeBtn) {
-      activeBtn.classList.add("active", "bg-white", "text-blue-600", "shadow-xs", "font-semibold");
-      activeBtn.classList.remove("text-slate-600", "font-medium");
+      activeBtn.classList.add("active");
+      activeBtn.classList.remove("text-slate-500");
+
+      if (liquidNavInstance) {
+        liquidNavInstance.updateTarget(activeBtn, true);
+      }
     }
   }
 
@@ -249,7 +255,165 @@ function initTopNavigation() {
   // Inizializza con livello 115% (Ampio & Leggibile di default)
   const savedZoom = parseInt(localStorage.getItem("ROXANNE_ZOOM_LEVEL")) || 115;
   applyZoom(savedZoom);
+
+  // Inizializza indicatore dinamico Liquid Glass sulla barra desktop
+  liquidNavInstance = new LiquidGlassNavbar("#desktop-nav-container");
 }
 
+// ==========================================
+// LIQUID GLASS ASYMMETRIC SPRING ENGINE (JS VIA requestAnimationFrame)
+// ==========================================
+class LiquidGlassNavbar {
+  constructor(wrapperSelector = "#desktop-nav-container") {
+    this.wrapper = document.querySelector(wrapperSelector);
+    if (!this.wrapper) return;
+
+    this.baseNav = this.wrapper.querySelector("#desktop-nav-base");
+    this.activeLayer = this.wrapper.querySelector("#desktop-nav-active-layer");
+    if (!this.baseNav || !this.activeLayer) return;
+
+    this.buttons = Array.from(this.baseNav.querySelectorAll(".nav-mode-btn"));
+
+    // Coordinate animate correnti
+    this.current = { left: 0, right: 0, top: 0, bottom: 0 };
+    // Coordinate target
+    this.target = { left: 0, right: 0, top: 0, bottom: 0 };
+    // Velocità fisiche oscillatori
+    this.velocity = { left: 0, right: 0 };
+
+    this.animId = null;
+    this.lastTime = null;
+
+    this.init();
+  }
+
+  init() {
+    // Snap iniziale sul bottone attivo corrente
+    setTimeout(() => {
+      const activeBtn = this.buttons.find(b => b.classList.contains("active")) || this.buttons[1] || this.buttons[0];
+      if (activeBtn) {
+        this.updateTarget(activeBtn, false);
+      }
+    }, 50);
+
+    // Gestione ridimensionamento finestra o zoom
+    window.addEventListener("resize", () => {
+      const activeBtn = this.buttons.find(b => b.classList.contains("active")) || this.buttons[0];
+      if (activeBtn) {
+        this.updateTarget(activeBtn, false);
+      }
+    });
+  }
+
+  updateTarget(targetBtn, animate = true) {
+    if (!targetBtn || !this.activeLayer || !this.baseNav) return;
+
+    const navRect = this.baseNav.getBoundingClientRect();
+    const btnRect = targetBtn.getBoundingClientRect();
+
+    if (navRect.width === 0 || btnRect.width === 0) return;
+
+    // Calcolo esatto degli inset (distanza dai 4 bordi del contenitore di base)
+    const targetLeft = Math.max(0, btnRect.left - navRect.left);
+    const targetRight = Math.max(0, navRect.right - btnRect.right);
+    const targetTop = Math.max(0, btnRect.top - navRect.top);
+    const targetBottom = Math.max(0, navRect.bottom - btnRect.bottom);
+
+    this.target = {
+      left: targetLeft,
+      right: targetRight,
+      top: targetTop,
+      bottom: targetBottom
+    };
+
+    if (!animate) {
+      // Snap istantaneo (es. primo rendering o resize)
+      this.current.left = targetLeft;
+      this.current.right = targetRight;
+      this.current.top = targetTop;
+      this.current.bottom = targetBottom;
+      this.velocity.left = 0;
+      this.velocity.right = 0;
+      this.applyClipPath();
+      return;
+    }
+
+    if (!this.animId) {
+      this.lastTime = performance.now();
+      this.animId = requestAnimationFrame((t) => this.tick(t));
+    }
+  }
+
+  tick(time) {
+    const dt = Math.min((time - (this.lastTime || time)) / 1000, 0.032);
+    this.lastTime = time;
+
+    // Direzione: se target.left > current.left ci stiamo muovendo verso destra
+    const movingRight = this.target.left > this.current.left;
+
+    // PARAMETRI FISICI A MOLLA DIFFERENZIATI (Asymmetric Springs)
+    // Molla rigida e veloce per il bordo d'attacco frontale (Leading edge)
+    const leadingStiffness = 340;
+    const leadingDamping = 24;
+
+    // Molla più morbida con ritardo elastico per il bordo posteriore (Trailing edge) -> genera l'allungamento viscoso
+    const trailingStiffness = 160;
+    const trailingDamping = 18;
+
+    const springLeft = movingRight 
+      ? { k: trailingStiffness, c: trailingDamping } 
+      : { k: leadingStiffness, c: leadingDamping };
+
+    const springRight = movingRight 
+      ? { k: leadingStiffness, c: leadingDamping } 
+      : { k: trailingStiffness, c: trailingDamping };
+
+    // Risoluzione moto armonico smorzato: F = -k*(x - target) - c*v
+    // Bordo Sinistro
+    const forceLeft = -springLeft.k * (this.current.left - this.target.left) - springLeft.c * this.velocity.left;
+    this.velocity.left += forceLeft * dt;
+    this.current.left += this.velocity.left * dt;
+
+    // Bordo Destro
+    const forceRight = -springRight.k * (this.current.right - this.target.right) - springRight.c * this.velocity.right;
+    this.velocity.right += forceRight * dt;
+    this.current.right += this.velocity.right * dt;
+
+    // Top e Bottom (interpolazione morbida)
+    this.current.top += (this.target.top - this.current.top) * 0.3;
+    this.current.bottom += (this.target.bottom - this.current.bottom) * 0.3;
+
+    this.applyClipPath();
+
+    // Condizione di arresto quando le oscillazioni convergono
+    const isSettled =
+      Math.abs(this.current.left - this.target.left) < 0.08 &&
+      Math.abs(this.velocity.left) < 0.08 &&
+      Math.abs(this.current.right - this.target.right) < 0.08 &&
+      Math.abs(this.velocity.right) < 0.08;
+
+    if (isSettled) {
+      this.current.left = this.target.left;
+      this.current.right = this.target.right;
+      this.current.top = this.target.top;
+      this.current.bottom = this.target.bottom;
+      this.velocity.left = 0;
+      this.velocity.right = 0;
+      this.applyClipPath();
+      this.animId = null;
+    } else {
+      this.animId = requestAnimationFrame((t) => this.tick(t));
+    }
+  }
+
+  applyClipPath() {
+    this.activeLayer.style.setProperty("--clip-top", `${this.current.top.toFixed(2)}px`);
+    this.activeLayer.style.setProperty("--clip-right", `${this.current.right.toFixed(2)}px`);
+    this.activeLayer.style.setProperty("--clip-bottom", `${this.current.bottom.toFixed(2)}px`);
+    this.activeLayer.style.setProperty("--clip-left", `${this.current.left.toFixed(2)}px`);
+  }
+}
+
+window.LiquidGlassNavbar = LiquidGlassNavbar;
 window.initMobileDrawer = initMobileDrawer;
 window.initTopNavigation = initTopNavigation;
