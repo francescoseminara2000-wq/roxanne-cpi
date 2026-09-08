@@ -781,10 +781,10 @@
               <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
                 
                 <!-- Colonna 1: Profilo Anagrafico & Recapiti (7/12 cols su desktop per massima leggibilità) -->
-                <div class="lg:col-span-7 flex flex-col sm:flex-row sm:items-center gap-5 min-w-0">
+                <div class="lg:col-span-7 flex items-start sm:items-center gap-6 min-w-0">
                   <!-- Avatar Glass con Indicatore di Presenza -->
-                  <div class="relative shrink-0 self-start sm:self-center">
-                    <div id="hub-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-xl shadow-lg shadow-blue-500/25">
+                  <div class="relative shrink-0">
+                    <div id="hub-avatar" class="w-18 h-18 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-2xl shadow-md shadow-blue-500/20 border border-white/50">
                       MR
                     </div>
                     <div id="hub-active-dot" class="absolute -bottom-1 -right-1 bg-emerald-500 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white shadow-xs" title="Iscritto Attivo">
@@ -792,12 +792,12 @@
                     </div>
                   </div>
 
-                  <!-- Dati Anagrafici Strutturati in Modo Pulito e Ordinato -->
-                  <div class="space-y-2 flex-1 min-w-0">
-                    <!-- Riga 1: Nome + Categoria + Stato Occupazionale -->
-                    <div class="flex items-center gap-2.5 flex-wrap">
-                      <h1 id="hub-nome" class="text-xl font-bold text-slate-900 tracking-tight truncate">Mario Rossi</h1>
-                      <div class="flex items-center gap-1.5 flex-wrap">
+                  <!-- Dati Anagrafici Strutturati con Gerarchia Chiara e Spaziatura Precisa -->
+                  <div class="flex-1 min-w-0 space-y-2.5">
+                    <!-- Riga 1: Nome Cognome & Badge Categoria / Stato Allineati -->
+                    <div class="flex items-center gap-3 flex-wrap">
+                      <h1 id="hub-nome" class="text-2xl font-extrabold text-slate-900 tracking-tight truncate leading-tight">Mario Rossi</h1>
+                      <div class="flex items-center gap-2">
                         <span id="hub-cat-badge" class="liquid-glass-badge-blue">
                           C.O. Disabili
                         </span>
@@ -807,19 +807,21 @@
                       </div>
                     </div>
 
-                    <!-- Riga 2: Dati Identificativi (CF Uniforme & Chip Box Iscrizione in Risalto) -->
-                    <div class="flex items-center gap-3 text-slate-500 flex-wrap">
-                      <strong id="hub-cf" class="text-slate-800 font-semibold text-[13px] tracking-wide" title="Codice Fiscale">RSSMRA78A01E507X</strong>
-                      <span class="text-slate-300 hidden sm:inline">&bull;</span>
+                    <!-- Riga 2: Dati Identificativi (Codice Fiscale & Chip Iscrizione L.68) -->
+                    <div class="flex items-center gap-3 text-xs text-slate-500 flex-wrap items-center">
+                      <div class="flex items-center gap-2">
+                        <i class="pi pi-id-card text-slate-400 text-xs"></i>
+                        <strong id="hub-cf" class="text-slate-800 font-semibold text-sm tracking-wide" title="Codice Fiscale">RSSMRA78A01E507X</strong>
+                      </div>
+                      <span class="text-slate-300 select-none">&bull;</span>
                       <div class="liquid-enrollment-chip" title="Numero Iscrizione Collocamento Mirato L.68/99">
-                        <i class="pi pi-id-card text-[11px] text-blue-600"></i>
-                        <span class="text-[10px] uppercase font-semibold text-blue-600 tracking-wider">Iscriz.</span>
+                        <span class="text-[10px] uppercase font-semibold text-blue-500 tracking-wider">Iscriz.</span>
                         <strong id="hub-num-iscriz" class="font-bold text-blue-700">#10452</strong>
                       </div>
                     </div>
 
-                    <!-- Riga 3: Recapiti Contatto Puliti e Cliccabili (Telefono & Email Interattivi) -->
-                    <div class="flex items-center gap-x-5 gap-y-1.5 text-xs text-slate-600 flex-wrap pt-1 border-t border-slate-200/50">
+                    <!-- Riga 3: Recapiti Contatto Cliccabili con Allineamento Preciso -->
+                    <div class="flex items-center gap-x-6 gap-y-2 text-xs text-slate-600 flex-wrap pt-2 border-t border-slate-200/60">
                       <div class="flex items-center gap-1.5 text-slate-600">
                         <i class="pi pi-map-marker text-slate-400 text-xs"></i>
                         <span id="hub-residenza" class="font-medium text-slate-700">Lecco</span>
@@ -830,7 +832,7 @@
                         <span id="hub-tel" class="font-medium">3389876543</span>
                       </a>
 
-                      <a id="hub-email-link" href="mailto:mario.rossi@email.it" class="contact-interactive-link truncate max-w-[240px]" title="Invia messaggio email">
+                      <a id="hub-email-link" href="mailto:mario.rossi@email.it" class="contact-interactive-link truncate max-w-[260px]" title="Invia messaggio email">
                         <i class="pi pi-envelope text-slate-400 text-xs"></i>
                         <span id="hub-email" class="font-medium truncate">mario.rossi@email.it</span>
                       </a>
