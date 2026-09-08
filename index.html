@@ -2963,6 +2963,61 @@
     </div>
   </div>
 
+  <!-- VISUALIZZATORE DOCUMENTI INTEGRATO DIRETTO A SCHERMO INTERO / MODALE (PDF, IMMAGINI, TESTO) -->
+  <div id="modal-document-viewer" class="fixed inset-0 z-[9990] bg-slate-950/80 backdrop-blur-md flex flex-col p-2 sm:p-5 hidden">
+    <div class="bg-white w-full h-full rounded-3xl border border-slate-200/90 shadow-2xl flex flex-col overflow-hidden">
+      
+      <!-- Top Header Visualizzatore -->
+      <div class="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between border-b border-slate-800 shrink-0">
+        <div class="flex items-center space-x-3 min-w-0">
+          <div id="viewer-doc-icon-box" class="w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-base shrink-0">
+            <i class="pi pi-file-pdf"></i>
+          </div>
+          <div class="min-w-0">
+            <h3 id="viewer-doc-title" class="font-heading font-extrabold text-white text-sm sm:text-base truncate">NomeDocumento.pdf</h3>
+            <div class="flex items-center space-x-2 text-[11px] text-slate-400 font-mono">
+              <span id="viewer-doc-type" class="text-blue-400 font-semibold uppercase">Verbale INPS</span>
+              <span>&bull;</span>
+              <span id="viewer-doc-size">520 KB</span>
+              <span>&bull;</span>
+              <span id="viewer-doc-person" class="truncate text-slate-300">Fascicolo Iscritto</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action Tools (Download, Stampa, Nuova Tab, Chiudi) -->
+        <div class="flex items-center space-x-2 shrink-0">
+          <a id="viewer-btn-download" href="#" download class="p-button p-button-sm bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold cursor-pointer" title="Scarica Documento">
+            <i class="pi pi-download"></i>
+            <span class="hidden md:inline">Scarica</span>
+          </a>
+
+          <button id="viewer-btn-open-tab" class="p-button p-button-sm bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold cursor-pointer" title="Apri in nuova scheda del browser">
+            <i class="pi pi-external-link"></i>
+            <span class="hidden md:inline">Nuova Scheda</span>
+          </button>
+
+          <button id="viewer-btn-print" class="p-button p-button-sm bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-3 py-1.5 flex items-center gap-1.5 text-xs font-semibold cursor-pointer" title="Stampa Documento">
+            <i class="pi pi-print"></i>
+            <span class="hidden md:inline">Stampa</span>
+          </button>
+
+          <div class="h-6 w-[1px] bg-slate-700 mx-1"></div>
+
+          <button id="viewer-btn-close" class="w-9 h-9 rounded-xl bg-slate-800 hover:bg-rose-600 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer" title="Chiudi Visualizzatore">
+            <i class="pi pi-times text-base"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Content Viewer Frame / Stage -->
+      <div id="viewer-stage" class="flex-1 bg-slate-100/90 relative overflow-hidden flex items-center justify-center">
+        <!-- Rendered dynamically: iframe, img, or placeholder -->
+      </div>
+
+    </div>
+  </div>
+
   <!-- MODAL NUOVA NOTA DIARIO -->
   <div id="modal-nota-diario" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
     <div class="bg-white w-full max-w-lg rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">

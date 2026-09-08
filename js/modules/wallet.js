@@ -138,25 +138,16 @@
       `;
     }).join("");
 
-    // Preview Doc Handler
+    // Preview Doc Handler - Apertura Diretta nel Visualizzatore Integrato del Sito
     document.querySelectorAll(".btn-preview-doc").forEach(btn => {
       btn.addEventListener("click", () => {
         const docId = btn.getAttribute("data-doc-id");
         const doc = (persona.wallet || []).find(d => String(d.id) === String(docId));
-        if (doc && doc.fileContent) {
-          const win = window.open();
-          if (win) {
-            win.document.write(`
-              <html>
-                <head><title>${escapeHtml(doc.nome)} - Anteprima Documentale Roxanne CPI</title></head>
-                <body style="margin:0; background:#0f172a; display:flex; justify-content:center; align-items:center; height:100vh;">
-                  ${doc.fileContent.startsWith('data:image') 
-                    ? `<img src="${doc.fileContent}" style="max-width:95vw; max-height:95vh; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">`
-                    : `<iframe src="${doc.fileContent}" style="width:100vw; height:100vh; border:none;"></iframe>`
-                  }
-                </body>
-              </html>
-            `);
+        if (doc) {
+          if (typeof window.openDocumentViewer === "function") {
+            window.openDocumentViewer(doc, persona);
+          } else {
+            alert(`Visualizzazione documento: ${doc.nome}`);
           }
         }
       });
@@ -422,3 +413,156 @@
   });
 
 window.renderWalletTab = renderWalletTab;
+
+// ==========================================
+// VISUALIZZATORE DOCUMENTALE INTEGRATO NEL SITO (IN-APP VIEWER)
+// ==========================================
+function openDocumentViewer(doc, persona) {
+  if (!doc) return;
+
+  const modalViewer = document.getElementById("modal-document-viewer");
+  const stage = document.getElementById("viewer-stage");
+  const titleEl = document.getElementById("viewer-doc-title");
+  const typeEl = document.getElementById("viewer-doc-type");
+  const sizeEl = document.getElementById("viewer-doc-size");
+  const personEl = document.getElementById("viewer-doc-person");
+  const iconBox = document.getElementById("viewer-doc-icon-box");
+  const btnDownload = document.getElementById("viewer-btn-download");
+  const btnOpenTab = document.getElementById("viewer-btn-open-tab");
+  const btnPrint = document.getElementById("viewer-btn-print");
+  const btnClose = document.getElementById("viewer-btn-close");
+
+  if (!modalViewer || !stage) return;
+
+  // Popolamento Metadati
+  const docName = doc.nome || "Documento";
+  const docType = doc.tipo || "Allegato Fascicolo";
+  const docSize = doc.dimensione || "N/D";
+  const personName = persona ? `${persona.cognome || ''} ${persona.nome || ''}`.trim() : "Fascicolo CPI";
+
+  if (titleEl) titleEl.textContent = docName;
+  if (typeEl) typeEl.textContent = docType;
+  if (sizeEl) sizeEl.textContent = docSize;
+  if (personEl) personEl.textContent = personName;
+
+  const isPdf = (doc.fileType && doc.fileType.includes("pdf")) || docName.toLowerCase().endsWith(".pdf") || (doc.fileContent && doc.fileContent.startsWith("data:application/pdf"));
+  const isImage = (doc.fileType && doc.fileType.includes("image")) || /\.(jpg|jpeg|png|webp|gif)$/i.test(docName) || (doc.fileContent && doc.fileContent.startsWith("data:image"));
+
+  // Aggiorna icona
+  if (iconBox) {
+    if (isPdf) {
+      iconBox.className = "w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-base shrink-0";
+      iconBox.innerHTML = `<i class="pi pi-file-pdf"></i>`;
+    } else if (isImage) {
+      iconBox.className = "w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-base shrink-0";
+      iconBox.innerHTML = `<i class="pi pi-image"></i>`;
+    } else {
+      iconBox.className = "w-9 h-9 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-base shrink-0";
+      iconBox.innerHTML = `<i class="pi pi-file"></i>`;
+    }
+  }
+
+  // Costruisci Stage per visualizzazione diretta nel sito
+  if (!doc.fileContent) {
+    stage.innerHTML = `
+      <div class="text-center p-8 max-w-md bg-white rounded-2xl shadow-sm border border-slate-200">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl">
+          <i class="pi pi-exclamation-triangle"></i>
+        </div>
+        <h4 class="font-bold text-slate-800 text-lg mb-1 font-heading">Contenuto non disponibile in locale</h4>
+        <p class="text-xs text-slate-500 mb-4">Il file ${escapeHtml(docName)} risulta registrato a database ma il flusso binario non è presente in questa sessione.</p>
+      </div>
+    `;
+  } else if (isPdf) {
+    stage.innerHTML = `
+      <iframe id="viewer-active-frame" src="${doc.fileContent}" class="w-full h-full border-0 bg-slate-800" title="${escapeHtml(docName)}"></iframe>
+    `;
+  } else if (isImage) {
+    stage.innerHTML = `
+      <div class="w-full h-full overflow-auto flex items-center justify-center p-4 bg-slate-900/90">
+        <img id="viewer-active-image" src="${doc.fileContent}" alt="${escapeHtml(docName)}" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl transition duration-200">
+      </div>
+    `;
+  } else {
+    // Altro formato (testo, xml, generico)
+    stage.innerHTML = `
+      <iframe id="viewer-active-frame" src="${doc.fileContent}" class="w-full h-full border-0 bg-white" title="${escapeHtml(docName)}"></iframe>
+    `;
+  }
+
+  // Pulsante Download
+  if (btnDownload) {
+    if (doc.fileContent) {
+      btnDownload.href = doc.fileContent;
+      btnDownload.download = docName;
+      btnDownload.classList.remove("opacity-40", "pointer-events-none");
+    } else {
+      btnDownload.removeAttribute("href");
+      btnDownload.classList.add("opacity-40", "pointer-events-none");
+    }
+  }
+
+  // Pulsante Nuova Scheda
+  if (btnOpenTab) {
+    btnOpenTab.onclick = () => {
+      if (!doc.fileContent) return;
+      const newWin = window.open();
+      if (newWin) {
+        if (isImage) {
+          newWin.document.write(`<html><head><title>${escapeHtml(docName)}</title></head><body style="margin:0;background:#0b1120;display:flex;justify-content:center;align-items:center;height:100vh;"><img src="${doc.fileContent}" style="max-width:98vw;max-height:98vh;object-contain:fit;"></body></html>`);
+        } else {
+          newWin.document.write(`<html><head><title>${escapeHtml(docName)}</title></head><body style="margin:0;height:100vh;"><iframe src="${doc.fileContent}" style="width:100%;height:100%;border:none;"></iframe></body></html>`);
+        }
+      }
+    };
+  }
+
+  // Pulsante Stampa Diretta
+  if (btnPrint) {
+    btnPrint.onclick = () => {
+      const activeFrame = document.getElementById("viewer-active-frame");
+      const activeImg = document.getElementById("viewer-active-image");
+
+      if (activeFrame && activeFrame.contentWindow) {
+        try {
+          activeFrame.contentWindow.focus();
+          activeFrame.contentWindow.print();
+        } catch (e) {
+          window.print();
+        }
+      } else if (activeImg) {
+        const printWin = window.open("", "_blank");
+        if (printWin) {
+          printWin.document.write(`<html><head><title>Stampa ${escapeHtml(docName)}</title></head><body style="margin:0;text-align:center;"><img src="${activeImg.src}" style="max-width:100%;"><script>window.onload=function(){window.print();window.close();};<\/script></body></html>`);
+          printWin.document.close();
+        }
+      } else {
+        window.print();
+      }
+    };
+  }
+
+  // Chiusura Modale
+  function closeViewer() {
+    modalViewer.classList.add("hidden");
+    stage.innerHTML = ""; // scarica risorse/frame
+    document.removeEventListener("keydown", onKeyDown);
+  }
+
+  function onKeyDown(e) {
+    if (e.key === "Escape") {
+      closeViewer();
+    }
+  }
+
+  if (btnClose) {
+    btnClose.onclick = closeViewer;
+  }
+
+  document.addEventListener("keydown", onKeyDown);
+
+  // Mostra Modale
+  modalViewer.classList.remove("hidden");
+}
+
+window.openDocumentViewer = openDocumentViewer;

@@ -257,7 +257,9 @@
         if (btnPreviewL68) {
           btnPreviewL68.classList.remove("hidden");
           btnPreviewL68.onclick = () => {
-            if (docL68.fileContent) {
+            if (typeof window.openDocumentViewer === "function") {
+              window.openDocumentViewer(docL68, p);
+            } else if (docL68.fileContent) {
               const win = window.open();
               if (win) win.document.write(`<iframe src="${docL68.fileContent}" style="width:100vw;height:100vh;border:none;"></iframe>`);
             } else {
@@ -281,7 +283,9 @@
         if (btnPreviewIC) {
           btnPreviewIC.classList.remove("hidden");
           btnPreviewIC.onclick = () => {
-            if (docIC.fileContent) {
+            if (typeof window.openDocumentViewer === "function") {
+              window.openDocumentViewer(docIC, p);
+            } else if (docIC.fileContent) {
               const win = window.open();
               if (win) win.document.write(`<iframe src="${docIC.fileContent}" style="width:100vw;height:100vh;border:none;"></iframe>`);
             } else {
