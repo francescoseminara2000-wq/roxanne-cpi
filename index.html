@@ -724,67 +724,17 @@
           <!-- RIGHT AREA: CITIZEN HUB RIEPILOGO HEADER + TAB CONTENTS (XL: 9 COLS) -->
           <div class="xl:col-span-9 space-y-6">
 
-            <!-- CITIZEN MASTER HEADER CARD (DESIGN LIQUID GLASS ARIOSO & ORDINATO) -->
-            <div id="hub-master-card" class="liquid-glass-panel p-5 sm:p-6 space-y-5 relative overflow-hidden">
+            <!-- CITIZEN MASTER HEADER CARD (DESIGN UNIFICATO LIQUID GLASS, ORDINATO ED ELEGANTE) -->
+            <div id="hub-master-card" class="liquid-glass-panel p-5 sm:p-6 relative overflow-hidden">
               
-              <!-- LIVELLO 1: TOOLBAR SUPERIORE AZIONI & STATUS (PERFETTAMENTE DISTRIBUITA) -->
-              <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3 border-b border-white/60 pb-4">
-                <!-- Sinistra: Badge Identificativo Fascicolo & Alert Sanitario -->
-                <div class="flex items-center space-x-2.5 flex-wrap gap-y-2">
-                  <span class="liquid-glass-badge-blue font-mono text-xs flex items-center gap-1.5 py-1 px-3">
-                    <i class="pi pi-id-card text-blue-600"></i>
-                    <span>Fascicolo Iscritto</span>
-                  </span>
-
-                  <!-- Alert Revisione Verbale Sanitario Dinamico -->
-                  <div id="hub-revisione-alert" class="hidden items-center gap-2 px-3 py-1 rounded-xl text-xs font-bold font-heading">
-                    <i class="pi pi-exclamation-triangle"></i>
-                    <span id="hub-revisione-text">Revisione Sanitaria: 15/06/2026</span>
-                  </div>
-                </div>
-
-                <!-- Destra: Toolbar Azioni Rapide con Bottoni Liquid Glass Armonizzati -->
-                <div class="flex items-center space-x-2 flex-wrap gap-y-2">
-                  <!-- Pulsante Torna alla Ricerca -->
-                  <button id="btn-back-to-search" class="liquid-btn-ghost text-xs cursor-pointer flex items-center gap-1.5 px-3 py-1.5" title="Torna alla ricerca">
-                    <i class="pi pi-arrow-left text-xs"></i>
-                    <span>Indietro</span>
-                  </button>
-
-                  <!-- Pulsante Esporta PDF -->
-                  <button id="btn-export-dossier-pdf" class="liquid-btn-ghost text-xs cursor-pointer flex items-center gap-1.5 px-3 py-1.5" title="Esporta Fascicolo in PDF">
-                    <i class="pi pi-file-pdf text-rose-500 text-xs"></i>
-                    <span class="hidden sm:inline">Esporta</span> PDF
-                  </button>
-
-                  <!-- Pulsante Carica nel Wallet -->
-                  <button id="btn-hub-upload-doc" class="liquid-btn-ghost text-xs cursor-pointer flex items-center gap-1.5 px-3 py-1.5" title="Carica Documento nel Wallet">
-                    <i class="pi pi-upload text-blue-600 text-xs"></i>
-                    <span>Wallet</span>
-                  </button>
-
-                  <!-- Pulsante Aggiungi Nota Diario -->
-                  <button id="btn-hub-add-nota" class="liquid-btn-soft-indigo text-xs cursor-pointer flex items-center gap-1.5 px-3.5 py-1.5 font-bold" title="Aggiungi Nota al Diario">
-                    <i class="pi pi-plus text-xs"></i>
-                    <span>+ Nota</span>
-                  </button>
-
-                  <!-- Pulsante Salva Modifiche Principale -->
-                  <button id="btn-save-inline-hub" class="liquid-btn-primary text-xs cursor-pointer flex items-center gap-1.5 px-4 py-1.5 font-bold" title="Salva Modifiche Fascicolo">
-                    <i class="pi pi-save text-xs"></i>
-                    <span>Salva</span>
-                  </button>
-                </div>
-              </div>
-
-              <!-- LIVELLO 2: RIGA ANAGRAFICA & METRICHE IN VETRO SATINATO (NESSUNA COMPRESSIONE) -->
-              <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+              <!-- LAYOUT PRINCIPALE: GRIGLIA UNIFICATA ANAGRAFICA (SX) E AZIONI + WIDGET (DX) -->
+              <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-center">
                 
-                <!-- Colonna 1: Profilo Anagrafico & Recapiti (7/12 cols su desktop per massima leggibilità) -->
-                <div class="lg:col-span-7 flex items-start sm:items-center gap-6 min-w-0">
+                <!-- COLONNA SINISTRA: Profilo Anagrafico & Recapiti (7/12 cols) -->
+                <div class="xl:col-span-7 flex items-start sm:items-center gap-5 min-w-0">
                   <!-- Avatar Glass con Indicatore di Presenza -->
                   <div class="relative shrink-0">
-                    <div id="hub-avatar" class="w-18 h-18 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-2xl shadow-md shadow-blue-500/20 border border-white/50">
+                    <div id="hub-avatar" class="w-20 h-20 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-2xl shadow-md shadow-blue-500/20 border border-white/60">
                       MR
                     </div>
                     <div id="hub-active-dot" class="absolute -bottom-1 -right-1 bg-emerald-500 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white shadow-xs" title="Iscritto Attivo">
@@ -792,7 +742,7 @@
                     </div>
                   </div>
 
-                  <!-- Dati Anagrafici Strutturati con Gerarchia Chiara e Spaziatura Precisa -->
+                  <!-- Dati Anagrafici Strutturati in Modo Pulito e Ordinato -->
                   <div class="flex-1 min-w-0 space-y-2.5">
                     <!-- Riga 1: Nome Cognome & Badge Categoria / Stato Allineati -->
                     <div class="flex items-center gap-3 flex-wrap">
@@ -818,6 +768,11 @@
                         <span class="text-[10px] uppercase font-semibold text-blue-500 tracking-wider">Iscriz.</span>
                         <strong id="hub-num-iscriz" class="font-bold text-blue-700">#10452</strong>
                       </div>
+                      <!-- Alert Revisione Verbale Sanitario Dinamico -->
+                      <div id="hub-revisione-alert" class="hidden items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-xs font-bold font-heading">
+                        <i class="pi pi-exclamation-triangle text-xs"></i>
+                        <span id="hub-revisione-text">Revisione Sanitaria: 15/06/2026</span>
+                      </div>
                     </div>
 
                     <!-- Riga 3: Recapiti Contatto Cliccabili con Allineamento Preciso -->
@@ -841,36 +796,69 @@
                   </div>
                 </div>
 
-                <!-- Colonna 2: Metriche & Widget Chiave in Card Indipendenti (5/12 cols) -->
-                <div class="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-3 min-w-0">
+                <!-- COLONNA DESTRA: Toolbar Azioni Rapide (In Alto) + Widget Metriche & Nota (5/12 cols) -->
+                <div class="xl:col-span-5 space-y-3.5 min-w-0">
                   
-                  <!-- Widget 1: Radial Gauge Invalidità Civile in Vetro Frosted -->
-                  <div class="liquid-metric-card p-3 flex items-center space-x-3">
-                    <div class="relative w-12 h-12 shrink-0 flex items-center justify-center">
-                      <svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
-                        <path class="text-slate-200/80" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        <path id="hub-radial-circle" class="text-rose-500" stroke-dasharray="67, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                      </svg>
-                      <span id="hub-ic-perc" class="absolute text-[11px] font-extrabold text-slate-900 font-heading">67%</span>
-                    </div>
-                    <div class="min-w-0 flex-1">
-                      <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block font-heading truncate">Invalidità Civile</span>
-                      <span id="hub-ic-label" class="text-xs font-extrabold text-rose-600 font-heading block truncate">Disabilità Grave (≥67%)</span>
-                    </div>
+                  <!-- Toolbar Azioni Rapide Compatta ed Elegante -->
+                  <div class="flex items-center justify-start xl:justify-end space-x-2 flex-wrap gap-y-2">
+                    <button id="btn-back-to-search" class="liquid-btn-ghost text-xs cursor-pointer flex items-center gap-1.5 px-3 py-1.5" title="Torna alla ricerca">
+                      <i class="pi pi-arrow-left text-xs"></i>
+                      <span>Indietro</span>
+                    </button>
+
+                    <button id="btn-export-dossier-pdf" class="liquid-btn-ghost text-xs cursor-pointer flex items-center gap-1.5 px-3 py-1.5" title="Esporta Fascicolo in PDF">
+                      <i class="pi pi-file-pdf text-rose-500 text-xs"></i>
+                      <span class="hidden sm:inline">Esporta</span> PDF
+                    </button>
+
+                    <button id="btn-hub-upload-doc" class="liquid-btn-ghost text-xs cursor-pointer flex items-center gap-1.5 px-3 py-1.5" title="Carica Documento nel Wallet">
+                      <i class="pi pi-upload text-blue-600 text-xs"></i>
+                      <span>Wallet</span>
+                    </button>
+
+                    <button id="btn-hub-add-nota" class="liquid-btn-soft-indigo text-xs cursor-pointer flex items-center gap-1.5 px-3 py-1.5 font-bold" title="Aggiungi Nota al Diario">
+                      <i class="pi pi-plus text-xs"></i>
+                      <span>+ Nota</span>
+                    </button>
+
+                    <button id="btn-save-inline-hub" class="liquid-btn-primary text-xs cursor-pointer flex items-center gap-1.5 px-4 py-1.5 font-bold" title="Salva Modifiche Fascicolo">
+                      <i class="pi pi-save text-xs"></i>
+                      <span>Salva</span>
+                    </button>
                   </div>
 
-                  <!-- Widget 2: Ultima Nota Diario in Vetro Soft con Click Rapido -->
-                  <div id="hub-last-note-box" class="liquid-note-card p-3 space-y-1 cursor-pointer transition">
-                    <div class="flex items-center justify-between text-[10px] font-heading">
-                      <span class="font-bold text-amber-900 flex items-center gap-1.5 truncate">
-                        <i class="pi pi-book text-amber-600 text-[10px]"></i>
-                        <span id="hub-last-note-author" class="truncate">Elena Bianchi</span>
-                      </span>
-                      <span id="hub-last-note-date" class="text-[9px] font-semibold text-amber-700/80 shrink-0 ml-1">05/03/2026</span>
+                  <!-- Widget Metriche: Invalidità Civile & Ultima Nota Affiancati -->
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    
+                    <!-- Widget 1: Radial Gauge Invalidità Civile in Vetro Frosted -->
+                    <div class="liquid-metric-card p-3 flex items-center space-x-3">
+                      <div class="relative w-11 h-11 shrink-0 flex items-center justify-center">
+                        <svg class="w-11 h-11 transform -rotate-90" viewBox="0 0 36 36">
+                          <path class="text-slate-200/80" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                          <path id="hub-radial-circle" class="text-rose-500" stroke-dasharray="67, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        </svg>
+                        <span id="hub-ic-perc" class="absolute text-[11px] font-extrabold text-slate-900 font-heading">67%</span>
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block font-heading truncate">Invalidità Civile</span>
+                        <span id="hub-ic-label" class="text-xs font-extrabold text-rose-600 font-heading block truncate">Disabilità Grave (≥67%)</span>
+                      </div>
                     </div>
-                    <p id="hub-last-note-text" class="text-[11px] text-slate-600 italic line-clamp-2 leading-tight" title="Clicca per aprire nel diario">
-                      Colloquio orientativo per inserimento L.68 completato con successo.
-                    </p>
+
+                    <!-- Widget 2: Ultima Nota Diario in Vetro Soft con Click Rapido -->
+                    <div id="hub-last-note-box" class="liquid-note-card p-3 space-y-1 cursor-pointer transition">
+                      <div class="flex items-center justify-between text-[10px] font-heading">
+                        <span class="font-bold text-amber-900 flex items-center gap-1.5 truncate">
+                          <i class="pi pi-book text-amber-600 text-[10px]"></i>
+                          <span id="hub-last-note-author" class="truncate">Elena Bianchi</span>
+                        </span>
+                        <span id="hub-last-note-date" class="text-[9px] font-semibold text-amber-700/80 shrink-0 ml-1">05/03/2026</span>
+                      </div>
+                      <p id="hub-last-note-text" class="text-[11px] text-slate-600 italic line-clamp-2 leading-tight" title="Clicca per aprire nel diario">
+                        Colloquio orientativo per inserimento L.68 completato con successo.
+                      </p>
+                    </div>
+
                   </div>
 
                 </div>
