@@ -17,7 +17,7 @@ html.zoom-130 {
 }
 
 body {
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  background: radial-gradient(circle at 15% 10%, #f0f7ff 0%, #edf4fc 40%, #e2eaf5 100%);
   color: #0f172a;
   font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
   overflow-x: hidden;
@@ -52,11 +52,13 @@ body {
   }
 
 /* CHRONO STELLAR DESIGN SYSTEM TOKENS */
-/* TOP HEADER CON SFONDO AZZURRINO CHIARO & ACCENTO BRAND CPI */
+/* TOP HEADER CON EFFETTO LIQUID GLASS SATINATO TRASLUCIDO */
 #main-header {
-  background: linear-gradient(180deg, #f0f7ff 0%, #e8f2fe 100%) !important;
-  border-bottom: 1px solid rgba(191, 219, 254, 0.85) !important;
-  box-shadow: 0 4px 15px -3px rgba(37, 99, 235, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.03) !important;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(240, 247, 255, 0.78) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.95) !important;
+  box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.06), 0 2px 6px -2px rgba(15, 23, 42, 0.03) !important;
 }
 
 /* GLOBAL ANIMATED LOADING PROGRESS BAR (MANTINE / PRIMEKIT STYLE) */
@@ -258,24 +260,31 @@ body {
   transform: translateY(-2px);
 }
 
-/* Grouped Form Cards (Mantine Paper + PrimeTek Panel Hybrid) */
+/* Grouped Form Cards (Liquid Glass Form Groups) */
 .form-group-card {
-  background: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(248, 251, 255, 0.86) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
   padding: 1.25rem 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: 
+    0 4px 18px -2px rgba(37, 99, 235, 0.05),
+    0 1px 3px 0 rgba(15, 23, 42, 0.02),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .form-group-card:hover {
-  border-color: #ced4da;
-  box-shadow: 0 6px 16px -2px rgba(15, 23, 42, 0.06);
+  border-color: rgba(191, 219, 254, 0.95);
+  box-shadow: 
+    0 10px 25px -4px rgba(37, 99, 235, 0.09),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
 }
 
 .form-group-card:focus-within {
-  border-color: #228be6;
-  box-shadow: 0 0 0 3px rgba(34, 139, 230, 0.12), 0 6px 16px -2px rgba(34, 139, 230, 0.08);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12), 0 8px 20px -2px rgba(37, 99, 235, 0.1);
 }
 
 .form-group-title {
@@ -678,20 +687,24 @@ body {
 }
 
 /* CITIZEN HUB SUB-TABS DYNAMIC THEMES & VIBRANT PALETTES (VERTICAL SIDEBAR & HORIZONTAL) */
+/* CITIZEN HUB SUB-TABS DYNAMIC THEMES & VIBRANT PALETTES (FROSTED GLASS SIDEBAR) */
 .hub-tab-link {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: 'Outfit', sans-serif;
   color: #475569;
   border: 1px solid transparent;
   user-select: none;
   background-color: transparent;
   text-align: left;
+  border-radius: 12px;
 }
 
 .hub-tab-link:hover {
   color: #0f172a;
-  background-color: #f1f5f9;
-  transform: translateX(3px);
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(255, 255, 255, 0.9);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.04);
 }
 
 .hub-sidebar-nav {
@@ -711,74 +724,74 @@ body {
 
 /* 1. Anagrafica & CPI (Blue Ocean Theme) */
 .hub-tab-link[data-tab="hub-tab-panoramica"].active {
-  background-color: #eff6ff !important;
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.85) 100%) !important;
   color: #1d4ed8 !important;
-  border-color: #bfdbfe !important;
-  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.15) !important;
+  border-color: rgba(191, 219, 254, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(37, 99, 235, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 2. Sanitario & Diagnosi (Rose Medical Theme) */
 .hub-tab-link[data-tab="hub-tab-sanitario"].active {
-  background-color: #fff1f2 !important;
+  background: linear-gradient(135deg, rgba(255, 241, 242, 0.95) 0%, rgba(254, 205, 211, 0.85) 100%) !important;
   color: #be123c !important;
-  border-color: #fecdd3 !important;
-  box-shadow: 0 4px 12px -2px rgba(225, 29, 72, 0.15) !important;
+  border-color: rgba(254, 205, 211, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(225, 29, 72, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 3. Istruzione & Formazione (Indigo Academy Theme) */
 .hub-tab-link[data-tab="hub-tab-istruzione"].active {
-  background-color: #eef2ff !important;
+  background: linear-gradient(135deg, rgba(238, 242, 255, 0.95) 0%, rgba(199, 210, 254, 0.85) 100%) !important;
   color: #4338ca !important;
-  border-color: #c7d2fe !important;
-  box-shadow: 0 4px 12px -2px rgba(99, 102, 241, 0.15) !important;
+  border-color: rgba(199, 210, 254, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(99, 102, 241, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 4. Capacità & Mansioni L.68 (Purple Functional Theme) */
 .hub-tab-link[data-tab="hub-tab-funzionale"].active {
-  background-color: #faf5ff !important;
+  background: linear-gradient(135deg, rgba(250, 245, 255, 0.95) 0%, rgba(233, 213, 255, 0.85) 100%) !important;
   color: #7e22ce !important;
-  border-color: #e9d5ff !important;
-  box-shadow: 0 4px 12px -2px rgba(168, 85, 247, 0.15) !important;
+  border-color: rgba(233, 213, 255, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(168, 85, 247, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 5. Disponibilità & Mobilità (Emerald Eco Theme) */
 .hub-tab-link[data-tab="hub-tab-disponibilita"].active {
-  background-color: #ecfdf5 !important;
+  background: linear-gradient(135deg, rgba(236, 253, 245, 0.95) 0%, rgba(167, 243, 208, 0.85) 100%) !important;
   color: #047857 !important;
-  border-color: #a7f3d0 !important;
-  box-shadow: 0 4px 12px -2px rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(167, 243, 208, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(16, 185, 129, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 6. Wallet Allegati (Amber Gold Theme) */
 .hub-tab-link[data-tab="hub-tab-wallet"].active {
-  background-color: #fffbeb !important;
+  background: linear-gradient(135deg, rgba(255, 251, 235, 0.95) 0%, rgba(253, 230, 138, 0.85) 100%) !important;
   color: #b45309 !important;
-  border-color: #fde68a !important;
-  box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.15) !important;
+  border-color: rgba(253, 230, 138, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(245, 158, 11, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 7. Comitato Tecnico ASL (Cyan Institutional Theme) */
 .hub-tab-link[data-tab="hub-tab-comitato"].active {
-  background-color: #ecfeff !important;
+  background: linear-gradient(135deg, rgba(236, 254, 255, 0.95) 0%, rgba(165, 243, 252, 0.85) 100%) !important;
   color: #0e7490 !important;
-  border-color: #a5f3fc !important;
-  box-shadow: 0 4px 12px -2px rgba(6, 182, 212, 0.15) !important;
+  border-color: rgba(165, 243, 252, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(6, 182, 212, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 8. Progetto Inserimento Lavorativo PIL (Teal Mint Theme) */
 .hub-tab-link[data-tab="hub-tab-pil"].active {
-  background-color: #f0fdfa !important;
+  background: linear-gradient(135deg, rgba(240, 253, 250, 0.95) 0%, rgba(153, 246, 228, 0.85) 100%) !important;
   color: #0f766e !important;
-  border-color: #99f6e4 !important;
-  box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.15) !important;
+  border-color: rgba(153, 246, 228, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(13, 148, 136, 0.15), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* 9. Diario Operatore (Slate Dark Note Theme) */
 .hub-tab-link[data-tab="hub-tab-diario"].active {
-  background-color: #f8fafc !important;
+  background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(226, 232, 240, 0.85) 100%) !important;
   color: #0f172a !important;
-  border-color: #cbd5e1 !important;
-  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.1) !important;
+  border-color: rgba(203, 213, 225, 0.95) !important;
+  box-shadow: 0 4px 14px -2px rgba(15, 23, 42, 0.1), inset 0 1px 1.5px rgba(255, 255, 255, 1) !important;
 }
 
 /* TIMELINE DIARIO & TIROCINI STYLING */
@@ -988,19 +1001,27 @@ body {
    Ispirato ai componenti ufficiali di Mantine (Paper, Badge, Card, Stat, Timeline)
    ========================================================================== */
 
-/* Mantine Paper (Sostituto ad alta rifinitura per cards e pannelli) */
+/* Mantine Paper (Pannelli a Vetro Satinato Liquid Glass) */
 .mantine-paper {
-  background-color: #ffffff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 150ms ease, transform 150ms ease, border-color 150ms ease;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(246, 250, 255, 0.86) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 24px -3px rgba(37, 99, 235, 0.05),
+    0 1px 3px 0 rgba(15, 23, 42, 0.03),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+  transition: box-shadow 200ms ease, transform 200ms ease, border-color 200ms ease;
 }
 
 .mantine-paper-hover:hover {
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
-  border-color: #ced4da;
-  transform: translateY(-1px);
+  box-shadow: 
+    0 14px 30px -4px rgba(37, 99, 235, 0.09),
+    0 4px 8px -2px rgba(15, 23, 42, 0.03),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+  border-color: rgba(191, 219, 254, 0.95);
+  transform: translateY(-2px);
 }
 
 /* Mantine StatCard (KPI con icona in risalto soft) */
@@ -1168,20 +1189,25 @@ body {
    Componenti Enterprise per tabelle gestionali, filtri e tag di stato
    ========================================================================== */
 
-/* PrimeTek DataTable Styling */
+/* PrimeTek DataTable Styling (Frosted Liquid Glass Datagrid) */
 .p-datatable {
   position: relative;
-  background: #ffffff;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.94) 0%, rgba(246, 250, 255, 0.86) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.95);
   overflow: hidden;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 
+    0 8px 24px -3px rgba(37, 99, 235, 0.05),
+    0 1px 3px 0 rgba(15, 23, 42, 0.03),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
 }
 
 .p-datatable-header {
-  background: #f8fafc;
+  background: rgba(248, 250, 252, 0.7);
   color: #334155;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   padding: 0.875rem 1.25rem;
   font-weight: 700;
   display: flex;
@@ -1190,26 +1216,26 @@ body {
 }
 
 .p-datatable-thead th {
-  background: #f8fafc;
+  background: rgba(248, 250, 252, 0.85);
   color: #475569;
   font-weight: 700;
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   padding: 0.875rem 1rem;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid rgba(226, 232, 240, 0.8);
   text-align: left;
 }
 
 .p-datatable-tbody tr {
-  background: #ffffff;
+  background: transparent;
   color: #334155;
   transition: background-color 0.15s;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid rgba(241, 245, 249, 0.9);
 }
 
 .p-datatable-tbody tr:hover {
-  background: #f8fafc;
+  background: rgba(239, 246, 255, 0.6);
 }
 
 .p-datatable-tbody td {
@@ -1218,92 +1244,25 @@ body {
   vertical-align: middle;
 }
 
-/* PrimeTek Tags (Pillole di stato enterprise) */
-.p-tag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.25rem 0.65rem;
-  border-radius: 6px;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  gap: 0.35rem;
-}
-
-.p-tag-rounded {
-  border-radius: 9999px;
-}
-
-.p-tag-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; }
-.p-tag-success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-.p-tag-warning { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
-.p-tag-danger { background: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; }
-.p-tag-secondary { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
-
-/* PrimeTek Button Styles */
-.p-button {
-  display: inline-flex;
-  cursor: pointer;
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  overflow: hidden;
-  position: relative;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
-  border: 1px solid transparent;
-}
-
-.p-button-primary {
-  background: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
-}
-
-.p-button-primary:hover {
-  background: #1d4ed8;
-  border-color: #1d4ed8;
-}
-
-.p-button-outlined {
-  background: transparent;
-  color: #2563eb;
-  border: 1px solid #2563eb;
-}
-
-.p-button-outlined:hover {
-  background: rgba(37, 99, 235, 0.04);
-}
-
-.p-button-sm {
-  padding: 0.375rem 0.75rem;
-  font-size: 0.75rem;
-  border-radius: 6px;
-}
-
-.p-button-rounded {
-  border-radius: 2rem;
-}
-
-/* PrimeTek Panel / Fieldset Card */
+/* PrimeTek Panel / Fieldset Card (Liquid Glass Frosted Panel) */
 .p-panel {
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  background: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(246, 250, 255, 0.82) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: #334155;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 
+    0 8px 24px -3px rgba(37, 99, 235, 0.05),
+    0 1px 3px 0 rgba(15, 23, 42, 0.03),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
 }
 
 .p-panel-header {
-  background: #f8fafc;
+  background: rgba(248, 250, 252, 0.6);
   color: #0f172a;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
   padding: 0.875rem 1.25rem;
   font-weight: 700;
   font-size: 0.875rem;
@@ -1387,5 +1346,223 @@ body {
 
 .nav-mode-btn.active i {
   color: #2563eb !important; /* blue-600 */
+}
+
+/* ==========================================================================
+   ROXANNE LIQUID GLASS DESIGN SYSTEM (FROSTED GLASSMORPHISM ENTERPRISE)
+   ========================================================================== */
+
+/* Pannello Principale Liquid Glass (Card con riflessi specchiati e trasparenza fluida) */
+.liquid-glass-panel {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(244, 249, 255, 0.82) 100%
+  ) !important;
+  backdrop-filter: blur(20px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(190%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.95) !important;
+  border-radius: 1.25rem; /* 20px */
+  box-shadow: 
+    0 12px 36px -4px rgba(37, 99, 235, 0.08),
+    0 4px 12px -2px rgba(15, 23, 42, 0.04),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 1) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-glass-panel:hover {
+  box-shadow: 
+    0 16px 42px -4px rgba(37, 99, 235, 0.12),
+    0 6px 16px -2px rgba(15, 23, 42, 0.05),
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 1) !important;
+  border-color: rgba(191, 219, 254, 0.9) !important;
+}
+
+/* Card Metrica Liquid Glass per Gauge Invalidità */
+.liquid-metric-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.88) 0%,
+    rgba(240, 247, 255, 0.75) 100%
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 1rem; /* 16px */
+  box-shadow: 
+    0 4px 16px -2px rgba(37, 99, 235, 0.06),
+    0 1px 3px 0 rgba(15, 23, 42, 0.03),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+  transition: all 0.2s ease;
+}
+
+.liquid-metric-card:hover {
+  transform: translateY(-1.5px);
+  border-color: rgba(191, 219, 254, 0.95);
+  box-shadow: 
+    0 8px 24px -4px rgba(37, 99, 235, 0.1),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+}
+
+/* Card Nota Diario Liquid Glass con Riflesso Ambrato Delicato */
+.liquid-note-card {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 251, 235, 0.85) 0%,
+    rgba(254, 243, 199, 0.65) 100%
+  );
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(253, 230, 138, 0.7);
+  border-radius: 1rem;
+  box-shadow: 
+    0 4px 14px -2px rgba(217, 119, 6, 0.08),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.9);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-note-card:hover {
+  transform: translateY(-1.5px);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 251, 235, 0.95) 0%,
+    rgba(254, 243, 199, 0.8) 100%
+  );
+  border-color: rgba(245, 158, 11, 0.8);
+  box-shadow: 
+    0 8px 20px -3px rgba(217, 119, 6, 0.15),
+    inset 0 1px 1.5px 0 rgba(255, 255, 255, 1);
+}
+
+/* Badge & Chip Liquid Glass */
+.liquid-glass-badge-blue {
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.9) 0%, rgba(219, 234, 254, 0.7) 100%);
+  color: #1d4ed8;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(191, 219, 254, 0.9);
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+.liquid-glass-badge-green {
+  background: linear-gradient(135deg, rgba(240, 253, 244, 0.9) 0%, rgba(220, 252, 231, 0.7) 100%);
+  color: #15803d;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.7rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(187, 247, 208, 0.9);
+  box-shadow: 0 1px 3px rgba(22, 163, 74, 0.08), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+}
+
+.liquid-chip {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(248, 250, 252, 0.9);
+  color: #334155;
+  border-radius: 9999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  gap: 0.4rem;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 1);
+  transition: all 0.15s ease;
+}
+
+.liquid-chip.active {
+  background: linear-gradient(135deg, rgba(239, 246, 255, 0.95) 0%, rgba(219, 234, 254, 0.8) 100%);
+  color: #1d4ed8;
+  border-color: rgba(191, 219, 254, 0.95);
+  box-shadow: 0 1px 4px rgba(37, 99, 235, 0.1), inset 0 1px 1.5px rgba(255, 255, 255, 1);
+}
+
+.liquid-contact-pill {
+  background: rgba(248, 250, 252, 0.85);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  border-radius: 8px;
+  padding: 0.2rem 0.55rem;
+  transition: all 0.15s ease;
+}
+
+.liquid-contact-pill:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(191, 219, 254, 0.9);
+}
+
+/* Pulsanti d'Azione Stile Liquid Glass */
+.liquid-btn-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 0.65rem; /* 10px */
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  box-shadow: 
+    0 4px 14px -2px rgba(37, 99, 235, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-btn-primary:hover {
+  background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 
+    0 6px 18px -2px rgba(37, 99, 235, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.liquid-btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.liquid-btn-soft-indigo {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 0.65rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  box-shadow: 
+    0 4px 12px -2px rgba(79, 70, 229, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-btn-soft-indigo:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+  transform: translateY(-1.5px) scale(1.02);
+  box-shadow: 
+    0 6px 16px -2px rgba(79, 70, 229, 0.45),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.liquid-btn-ghost {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(241, 245, 249, 0.7) 100%);
+  color: #334155;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 0.65rem;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  box-shadow: 
+    0 2px 6px -1px rgba(15, 23, 42, 0.05),
+    inset 0 1px 1.5px rgba(255, 255, 255, 1);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.liquid-btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.98);
+  color: #0f172a;
+  border-color: rgba(191, 219, 254, 0.95);
+  transform: translateY(-1px);
+  box-shadow: 
+    0 4px 12px -2px rgba(37, 99, 235, 0.1),
+    inset 0 1px 1.5px rgba(255, 255, 255, 1);
 }
 
