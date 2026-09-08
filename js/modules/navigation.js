@@ -71,13 +71,60 @@ function initTopNavigation() {
     }
   }
 
-  if (btnDash) {
-    btnDash.addEventListener("click", () => {
-      setActiveBtn(btnDash);
-      hideAllSections();
+  // Helper per attivare una sezione salvando lo stato
+  function navigateToSection(sectionId, updateHash = true) {
+    hideAllSections();
+
+    let targetBtn = null;
+    let renderFunc = null;
+
+    if (sectionId === "section-dashboard") {
+      targetBtn = btnDash;
       if (sectionDash) sectionDash.classList.remove("hidden");
-      if (typeof window.renderDashboardAnalytics === "function") window.renderDashboardAnalytics();
-    });
+      renderFunc = window.renderDashboardAnalytics;
+    } else if (sectionId === "section-citizen-hub") {
+      targetBtn = btnHub;
+      if (sectionHub) sectionHub.classList.remove("hidden");
+      renderFunc = window.renderCitizenHub;
+    } else if (sectionId === "section-matcher") {
+      targetBtn = btnMatcher;
+      if (sectionMatcher) sectionMatcher.classList.remove("hidden");
+      renderFunc = window.runMatcher;
+    } else if (sectionId === "section-users") {
+      targetBtn = btnUsers;
+      if (sectionUsers) sectionUsers.classList.remove("hidden");
+      renderFunc = window.renderUsersTable;
+    } else if (sectionId === "section-audit") {
+      targetBtn = btnAudit;
+      if (sectionAudit) sectionAudit.classList.remove("hidden");
+      renderFunc = window.renderAuditLogsTable;
+    } else {
+      // Default: Ricerca
+      sectionId = "section-search";
+      targetBtn = btnSearch;
+      if (sectionSearch) sectionSearch.classList.remove("hidden");
+      renderFunc = window.renderMainSearchTable;
+    }
+
+    setActiveBtn(targetBtn);
+    if (typeof renderFunc === "function") renderFunc();
+
+    try {
+      sessionStorage.setItem("ROXANNE_ACTIVE_VIEW", sectionId);
+      localStorage.setItem("ROXANNE_ACTIVE_VIEW", sectionId);
+      if (updateHash) {
+        const hashPart = sectionId.replace("section-", "");
+        if (window.location.hash !== `#${hashPart}`) {
+          history.replaceState(null, "", `#${hashPart}`);
+        }
+      }
+    } catch (e) {}
+  }
+
+  window.navigateToSection = navigateToSection;
+
+  if (btnDash) {
+    btnDash.addEventListener("click", () => navigateToSection("section-dashboard"));
   }
 
   const btnDashNew = document.getElementById("btn-dash-new-cittadino");
@@ -89,55 +136,60 @@ function initTopNavigation() {
   }
 
   if (btnSearch) {
-    btnSearch.addEventListener("click", () => {
-      setActiveBtn(btnSearch);
-      hideAllSections();
-      if (sectionSearch) sectionSearch.classList.remove("hidden");
-      if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
-    });
+    btnSearch.addEventListener("click", () => navigateToSection("section-search"));
   }
 
   if (btnHub) {
-    btnHub.addEventListener("click", () => {
-      setActiveBtn(btnHub);
-      hideAllSections();
-      if (sectionHub) sectionHub.classList.remove("hidden");
-      if (typeof window.renderCitizenHub === "function") window.renderCitizenHub();
-    });
+    btnHub.addEventListener("click", () => navigateToSection("section-citizen-hub"));
   }
 
   if (btnMatcher) {
-    btnMatcher.addEventListener("click", () => {
-      setActiveBtn(btnMatcher);
-      hideAllSections();
-      if (sectionMatcher) sectionMatcher.classList.remove("hidden");
-      if (typeof window.runMatcher === "function") window.runMatcher();
-    });
+    btnMatcher.addEventListener("click", () => navigateToSection("section-matcher"));
   }
 
   if (btnUsers) {
-    btnUsers.addEventListener("click", () => {
-      setActiveBtn(btnUsers);
-      hideAllSections();
-      if (sectionUsers) sectionUsers.classList.remove("hidden");
-      if (typeof window.renderUsersTable === "function") window.renderUsersTable();
-    });
+    btnUsers.addEventListener("click", () => navigateToSection("section-users"));
   }
 
   if (btnAudit) {
-    btnAudit.addEventListener("click", () => {
-      setActiveBtn(btnAudit);
-      hideAllSections();
-      if (sectionAudit) sectionAudit.classList.remove("hidden");
-      if (typeof window.renderAuditLogsTable === "function") window.renderAuditLogsTable();
-    });
+    btnAudit.addEventListener("click", () => navigateToSection("section-audit"));
   }
 
   if (btnBackSearch) {
-    btnBackSearch.addEventListener("click", () => {
-      if (btnSearch) btnSearch.click();
-    });
+    btnBackSearch.addEventListener("click", () => navigateToSection("section-search"));
   }
+
+  // Ripristina l'ultima schermata attiva dal Session/Local Storage o dall'URL Hash
+  function restorePersistedNavigation() {
+    const hash = (window.location.hash || "").replace("#", "").toLowerCase();
+    const stored = sessionStorage.getItem("ROXANNE_ACTIVE_VIEW") || localStorage.getItem("ROXANNE_ACTIVE_VIEW");
+    
+    let target = "section-search";
+    if (hash === "dashboard" || hash === "section-dashboard") {
+      target = "section-dashboard";
+    } else if (hash === "citizen-hub" || hash === "hub" || hash === "section-citizen-hub") {
+      target = "section-citizen-hub";
+    } else if (hash === "matcher" || hash === "section-matcher") {
+      target = "section-matcher";
+    } else if (hash === "users" || hash === "section-users") {
+      target = "section-users";
+    } else if (hash === "audit" || hash === "section-audit") {
+      target = "section-audit";
+    } else if (hash === "search" || hash === "section-search") {
+      target = "section-search";
+    } else if (stored) {
+      target = stored;
+    }
+
+    navigateToSection(target, false);
+  }
+
+  window.restorePersistedNavigation = restorePersistedNavigation;
+
+  // Ascolta cambi hash manuali o navigazione cronologia browser
+  window.addEventListener("hashchange", () => {
+    restorePersistedNavigation();
+  });
 
   // Advanced Search filters listeners
   const searchInputs = ["af-nome", "af-cf", "af-num-iscriz", "af-comune", "af-categoria", "af-stato", "af-min-ic", "af-noeretta"];

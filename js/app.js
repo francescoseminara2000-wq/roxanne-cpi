@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof window.initMobileDrawer === "function") window.initMobileDrawer();
   if (typeof window.initTopNavigation === "function") window.initTopNavigation();
   if (typeof window.initHubSubTabs === "function") window.initHubSubTabs();
+  if (typeof window.restorePersistedNavigation === "function") window.restorePersistedNavigation();
 
   // 3. Matcher & Moduli Funzionali
   if (typeof window.initMatcherModule === "function") window.initMatcherModule();
@@ -24,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // 4. Sessione Operatore & Preloader
   if (typeof window.initAuthSession === "function") window.initAuthSession();
 
-  // 5. Primo Rendering Dashboard e Tabella Iscritti
+  // 5. Primo Rendering Sezioni
   if (typeof window.renderDashboardAnalytics === "function") window.renderDashboardAnalytics();
   if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
 

@@ -103,13 +103,25 @@ class StoreManager {
             }
           });
 
-          if (!this.selectedPersonaId && this.data.persone.length > 0) {
+          // Controlla se c'era una persona già memorizzata
+          const urlParams = new URLSearchParams(window.location.search);
+          const paramId = urlParams.get("personaId") || urlParams.get("id");
+          const storedId = paramId || sessionStorage.getItem("ROXANNE_SELECTED_PERSONA_ID") || localStorage.getItem("ROXANNE_SELECTED_PERSONA_ID");
+          if (storedId && this.data.persone.some(p => p.id === parseInt(storedId))) {
+            this.selectedPersonaId = parseInt(storedId);
+          } else if (!this.selectedPersonaId && this.data.persone.length > 0) {
             this.selectedPersonaId = this.data.persone[0].id;
           }
+
           console.log(`[MySQL Sync] Sincronizzati ${personeDb.length} iscritti dal Database con relative note, verbali e progetti PIL.`);
           if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
           if (typeof window.renderCitizenHub === "function") window.renderCitizenHub();
           if (typeof window.renderDashboardAnalytics === "function") window.renderDashboardAnalytics();
+
+          // Se l'utente era nella Scheda Cittadino o in altra vista, ripristina la vista esatta
+          if (typeof window.restorePersistedNavigation === "function") {
+            window.restorePersistedNavigation();
+          }
         }
       }
     } catch (e) {
@@ -123,14 +135,41 @@ class StoreManager {
   }
 
   getSelectedPersona() {
+    // Se non impostato in memoria, controlla URL param o localStorage
+    if (!this.selectedPersonaId) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramId = urlParams.get("personaId") || urlParams.get("id");
+      const storedId = paramId || sessionStorage.getItem("ROXANNE_SELECTED_PERSONA_ID") || localStorage.getItem("ROXANNE_SELECTED_PERSONA_ID");
+      if (storedId) {
+        this.selectedPersonaId = parseInt(storedId);
+      }
+    }
+
     if (!this.selectedPersonaId && this.data.persone.length > 0) {
       this.selectedPersonaId = this.data.persone[0].id;
     }
-    return this.data.persone.find(p => p.id === parseInt(this.selectedPersonaId));
+
+    let found = this.data.persone.find(p => p.id === parseInt(this.selectedPersonaId));
+    if (!found && this.data.persone.length > 0) {
+      found = this.data.persone[0];
+      this.selectedPersonaId = found.id;
+    }
+    return found;
   }
 
   setSelectedPersonaId(id) {
     this.selectedPersonaId = parseInt(id);
+    try {
+      if (this.selectedPersonaId) {
+        sessionStorage.setItem("ROXANNE_SELECTED_PERSONA_ID", String(this.selectedPersonaId));
+        localStorage.setItem("ROXANNE_SELECTED_PERSONA_ID", String(this.selectedPersonaId));
+        
+        // Aggiorna URL senza ricaricare la pagina per conservare lo stato
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set("personaId", String(this.selectedPersonaId));
+        window.history.replaceState(null, "", currentUrl.toString());
+      }
+    } catch (e) {}
   }
 
   async addPersona(personaData) {

@@ -4,26 +4,45 @@
  */
 
   // --- CITIZEN HUB SUB-TABS INITIALIZATION ---
+  function activateHubSubTab(tabId) {
+    if (!tabId) return;
+    const tabLinks = document.querySelectorAll(".hub-tab-link");
+    const targetLink = Array.from(tabLinks).find(l => l.getAttribute("data-tab") === tabId);
+    
+    if (targetLink) {
+      tabLinks.forEach(l => l.classList.remove("active"));
+      targetLink.classList.add("active");
+
+      document.querySelectorAll(".hub-tab-content").forEach(content => {
+        content.classList.add("hidden");
+      });
+
+      const activeContent = document.getElementById(tabId);
+      if (activeContent) {
+        activeContent.classList.remove("hidden");
+      }
+
+      try {
+        localStorage.setItem("ROXANNE_ACTIVE_HUB_SUBTAB", tabId);
+      } catch (e) {}
+    }
+  }
+
   function initHubSubTabs() {
     const tabLinks = document.querySelectorAll(".hub-tab-link");
     tabLinks.forEach(link => {
       link.addEventListener("click", () => {
         const tabId = link.getAttribute("data-tab");
-        
-        tabLinks.forEach(l => l.classList.remove("active"));
-        link.classList.add("active");
-
-        document.querySelectorAll(".hub-tab-content").forEach(content => {
-          content.classList.add("hidden");
-        });
-
-        const activeContent = document.getElementById(tabId);
-        if (activeContent) {
-          activeContent.classList.remove("hidden");
-        }
+        activateHubSubTab(tabId);
       });
     });
+
+    // Ripristina l'ultimo tab attivo della scheda (default: Anagrafica hub-tab-panoramica)
+    const savedSubTab = localStorage.getItem("ROXANNE_ACTIVE_HUB_SUBTAB") || "hub-tab-panoramica";
+    activateHubSubTab(savedSubTab);
   }
+
+  window.activateHubSubTab = activateHubSubTab;
 
   // --- CITIZEN HUB 360° MASTER RENDERER (IN-PLACE INLINE EDITING) ---
   function renderCitizenHub() {
