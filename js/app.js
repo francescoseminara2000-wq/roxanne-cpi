@@ -6,7 +6,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("Inizializzazione Roxanne CPI Modulare...");
 
-  // 1. Controlli Interfaccia (Datepicker, Select ricercabili, Textareas, ViewMode)
+  // 1. Controlli Interfaccia & Dataset Comuni (7.904 Comuni Italiani ISTAT)
+  if (typeof window.populateAllComuniElements === "function") window.populateAllComuniElements();
   if (typeof window.initCustomSearchableSelects === "function") window.initCustomSearchableSelects();
   if (typeof window.initCustomDatePickers === "function") window.initCustomDatePickers();
   if (typeof window.initViewModeSwitcher === "function") window.initViewModeSwitcher();

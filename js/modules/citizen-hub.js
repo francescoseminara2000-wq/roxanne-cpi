@@ -633,14 +633,16 @@
 
   function updateComuneGeoData() {
     const comRes = document.getElementById("ef-residenza").value;
-    const geoRes = COMUNI_MAP[comRes] || { prov: "LC", cap: "23900" };
-    document.getElementById("ef-residenza-prov").value = geoRes.prov;
-    document.getElementById("ef-residenza-cap").value = geoRes.cap;
+    const infoRes = (typeof window.findComune === "function") ? window.findComune(comRes) : null;
+    const geoRes = infoRes || COMUNI_MAP[comRes] || { provincia: "LC", cap: "23900" };
+    document.getElementById("ef-residenza-prov").value = geoRes.provincia || geoRes.prov || "LC";
+    document.getElementById("ef-residenza-cap").value = geoRes.cap || "23900";
 
     const comDom = document.getElementById("ef-domicilio-comune").value;
-    const geoDom = COMUNI_MAP[comDom] || { prov: "LC", cap: "23900" };
-    document.getElementById("ef-domicilio-prov").value = geoDom.prov;
-    document.getElementById("ef-domicilio-cap").value = geoDom.cap;
+    const infoDom = (typeof window.findComune === "function") ? window.findComune(comDom) : null;
+    const geoDom = infoDom || COMUNI_MAP[comDom] || { provincia: "LC", cap: "23900" };
+    document.getElementById("ef-domicilio-prov").value = geoDom.provincia || geoDom.prov || "LC";
+    document.getElementById("ef-domicilio-cap").value = geoDom.cap || "23900";
   }
 
   document.getElementById("ef-residenza").addEventListener("change", updateComuneGeoData);

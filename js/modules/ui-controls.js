@@ -71,10 +71,14 @@ function initCustomSearchableSelects() {
       optionsList.innerHTML = "";
       const query = filterText.toLowerCase().trim();
       let matchCount = 0;
+      const MAX_DISPLAY = 80;
 
-      Array.from(selectEl.options).forEach(opt => {
-        if (query && !opt.text.toLowerCase().includes(query)) return;
+      const opts = Array.from(selectEl.options);
+      for (let i = 0; i < opts.length; i++) {
+        const opt = opts[i];
+        if (query && !opt.text.toLowerCase().includes(query)) continue;
         matchCount++;
+        if (matchCount > MAX_DISPLAY) continue;
 
         const optDiv = document.createElement("div");
         optDiv.className = `custom-select-option ${opt.value === selectEl.value ? 'selected' : ''}`;
@@ -93,10 +97,15 @@ function initCustomSearchableSelects() {
         });
 
         optionsList.appendChild(optDiv);
-      });
+      }
 
       if (matchCount === 0) {
         optionsList.innerHTML = `<div class="custom-select-no-results">Nessuna opzione corrispondente</div>`;
+      } else if (matchCount > MAX_DISPLAY) {
+        const moreDiv = document.createElement("div");
+        moreDiv.className = "px-3 py-1.5 text-[11px] text-slate-400 bg-slate-50 italic text-center border-t border-slate-100";
+        moreDiv.textContent = `Visualizzati primi ${MAX_DISPLAY} di ${matchCount} risultati. Digita per affinare la ricerca...`;
+        optionsList.appendChild(moreDiv);
       }
     }
 
