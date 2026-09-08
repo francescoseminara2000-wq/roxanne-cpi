@@ -129,34 +129,44 @@
         <!-- LIQUID GLASS SLIDING PILL INDICATOR (SOTTO AI PULSANTI) -->
         <div id="liquid-glass-pill" class="liquid-glass-pill" aria-hidden="true"></div>
 
-        <button id="nav-mode-dashboard" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-home" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
+          <i class="fa-solid fa-house-chimney text-blue-500"></i>
+          <span>Home Operatore</span>
+        </button>
+
+        <button id="nav-mode-dashboard" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-chart-pie text-slate-400"></i>
           <span>Dashboard KPI</span>
         </button>
 
-        <button id="nav-mode-search" class="nav-mode-btn active relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-search" class="nav-mode-btn active relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-magnifying-glass text-slate-400"></i>
           <span>Ricerca Iscritti</span>
         </button>
 
-        <button id="nav-mode-hub" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-hub" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-address-card text-slate-400"></i>
           <span>Scheda 360°</span>
         </button>
 
-        <button id="nav-mode-matcher" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-tirocini" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
+          <i class="fa-solid fa-graduation-cap text-purple-500"></i>
+          <span>Monitoraggi Tirocini</span>
+        </button>
+
+        <button id="nav-mode-matcher" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-wand-magic-sparkles text-slate-400"></i>
           <span>Matcher L.68</span>
         </button>
 
-        <button id="nav-mode-audit" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-audit" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-clock-rotate-left text-slate-400"></i>
           <span>Audit Logs</span>
         </button>
 
-        <button id="nav-mode-users" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3.5 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-2 text-slate-500 hover:text-slate-900">
+        <button id="nav-mode-users" class="nav-mode-btn relative z-1 cursor-pointer text-xs font-semibold px-3 py-1.5 rounded-xl transition-colors font-heading flex items-center space-x-1.5 text-slate-500 hover:text-slate-900">
           <i class="fa-solid fa-users-gear text-slate-400"></i>
-          <span>Gestione Utenze</span>
+          <span>Admin & Utenze</span>
         </button>
       </div>
     </div>
@@ -168,15 +178,15 @@
         <span class="hidden sm:inline">Nuovo Iscritto</span>
       </button>
 
-      <!-- Logged User Badge & Profile (Liquid Glass Pill) -->
-      <div class="flex items-center space-x-2 bg-white/80 backdrop-blur-md border border-white/90 shadow-2xs rounded-xl px-2.5 py-1.5">
-        <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-[10px] font-bold font-heading shadow-xs">
+      <!-- Logged User Badge & Profile (Liquid Glass Pill Cliccabile) -->
+      <button type="button" id="btn-open-user-profile" class="cursor-pointer flex items-center space-x-2 bg-white/80 hover:bg-white hover:border-blue-300 backdrop-blur-md border border-white/90 shadow-2xs rounded-xl px-2.5 py-1.5 transition group text-left" title="Visualizza e Modifica Profilo Operatore">
+        <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-[10px] font-bold font-heading shadow-xs group-hover:scale-105 transition">
           <i class="fa-solid fa-user-shield"></i>
         </div>
         <div class="text-left text-xs">
-          <span id="current-user-display" class="font-bold text-slate-800 text-xs block font-heading">Marco Galli (Admin)</span>
+          <span id="current-user-display" class="font-bold text-slate-800 text-xs block font-heading group-hover:text-blue-600 transition">Marco Galli (Admin)</span>
         </div>
-      </div>
+      </button>
 
       <button id="btn-logout" class="cursor-pointer text-slate-400 hover:text-rose-600 text-sm p-2 rounded-xl hover:bg-rose-50/80 transition" title="Disconnetti Sessione">
         <i class="fa-solid fa-arrow-right-from-bracket"></i>
@@ -201,6 +211,10 @@
         </div>
 
         <nav class="space-y-1.5 text-xs font-semibold font-heading">
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-home">
+            <i class="fa-solid fa-house-chimney text-blue-600"></i>
+            <span>Home Operatore & Attività</span>
+          </button>
           <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 bg-blue-50 text-blue-700" data-target="section-dashboard">
             <i class="fa-solid fa-chart-pie text-emerald-600"></i>
             <span>Dashboard KPI & Analytics</span>
@@ -213,6 +227,10 @@
             <i class="fa-solid fa-address-card text-slate-600"></i>
             <span>Scheda Cittadino 360°</span>
           </button>
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-tirocini">
+            <i class="fa-solid fa-graduation-cap text-purple-600"></i>
+            <span>Monitoraggi Tirocini & Alert</span>
+          </button>
           <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-matcher">
             <i class="fa-solid fa-wand-magic-sparkles text-purple-600"></i>
             <span>Matcher Domanda/Offerta</span>
@@ -220,6 +238,10 @@
           <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-audit">
             <i class="fa-solid fa-clock-rotate-left text-amber-600"></i>
             <span>Audit Logs Operatori</span>
+          </button>
+          <button class="mobile-nav-btn w-full text-left px-3.5 py-2.5 rounded-xl flex items-center space-x-3 text-slate-700 hover:bg-slate-50" data-target="section-users">
+            <i class="fa-solid fa-users-gear text-indigo-600"></i>
+            <span>Admin & Utenze CPI</span>
           </button>
         </nav>
       </div>
@@ -233,6 +255,171 @@
 
   <!-- MAIN WRAPPER -->
   <main class="flex-1 p-4 sm:p-6 md:p-8 space-y-6">
+
+    <!-- VIEW HOME: SPAZIO PERSONALE OPERATORE & FEED ULTIME ATTIVITÀ (LIQUID GLASS UI) -->
+    <section id="section-home" class="space-y-6">
+      <!-- Welcome Hero Banner Liquid Glass -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 text-white p-6 sm:p-8 shadow-xl shadow-blue-500/10 border border-white/20">
+        <!-- Glow accents -->
+        <div class="absolute -right-12 -top-12 w-64 h-64 bg-blue-400/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute right-1/3 -bottom-10 w-48 h-48 bg-purple-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div class="space-y-2">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+              <span id="home-welcome-date">Oggi &bull; Centro per l'Impiego L.68/99</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl lg:text-4xl font-black font-heading tracking-tight leading-tight">
+              Bentornato, <span id="home-welcome-name" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-indigo-200">Operatore CPI</span>
+            </h1>
+            <p class="text-xs sm:text-sm text-blue-100/80 max-w-2xl leading-relaxed">
+              Hai accesso completo alla gestione delle prese in carico, monitoraggio tirocini, verbali collegiali ASL e matching domanda-offerta per le quote di riserva.
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5">
+            <button id="btn-home-quick-new" class="cursor-pointer bg-white text-blue-700 hover:bg-blue-50 text-xs font-bold px-4 py-2.5 rounded-xl shadow-lg transition flex items-center gap-2 font-heading">
+              <i class="fa-solid fa-user-plus text-blue-600"></i>
+              <span>Nuovo Iscritto</span>
+            </button>
+            <button id="btn-home-open-profile" class="cursor-pointer bg-white/15 hover:bg-white/25 border border-white/20 text-white text-xs font-bold px-4 py-2.5 rounded-xl backdrop-blur-md transition flex items-center gap-2 font-heading">
+              <i class="fa-solid fa-user-gear"></i>
+              <span>Modifica Profilo</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards Row (Mantine Fluid Glass) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div id="card-home-go-search" class="stellar-glass-card p-4 hover:shadow-lg hover:border-blue-300 transition cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg group-hover:scale-110 transition shrink-0">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs font-heading group-hover:text-blue-600 transition">Ricerca Iscritti</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">Archivio anagrafico e fascicoli</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="card-home-go-tirocini" class="stellar-glass-card p-4 hover:shadow-lg hover:border-purple-300 transition cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg group-hover:scale-110 transition shrink-0">
+              <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs font-heading group-hover:text-purple-600 transition">Monitoraggi Tirocini</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">Alert scadenze e verifiche periodiche</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="card-home-go-matcher" class="stellar-glass-card p-4 hover:shadow-lg hover:border-indigo-300 transition cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-lg group-hover:scale-110 transition shrink-0">
+              <i class="fa-solid fa-wand-magic-sparkles"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs font-heading group-hover:text-indigo-600 transition">Matcher Domanda/Offerta</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">Graduatoria e raggio km reale</p>
+            </div>
+          </div>
+        </div>
+
+        <div id="card-home-go-dashboard" class="stellar-glass-card p-4 hover:shadow-lg hover:border-emerald-300 transition cursor-pointer group">
+          <div class="flex items-center gap-3">
+            <div class="w-11 h-11 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg group-hover:scale-110 transition shrink-0">
+              <i class="fa-solid fa-chart-pie"></i>
+            </div>
+            <div>
+              <h4 class="font-bold text-slate-900 text-xs font-heading group-hover:text-emerald-600 transition">Dashboard Statistiche</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">KPI e reportistica L.68/99</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Feed: Ultime Attività Svolte & Riepilogo Operativo (Grid 12 Cols) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        
+        <!-- Colonna Sinistra: Timeline Ultime Attività (8 Cols) -->
+        <div class="lg:col-span-8 stellar-glass-card p-5 sm:p-6 space-y-5">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3.5">
+            <div>
+              <h3 class="font-bold text-slate-900 text-sm font-heading flex items-center gap-2">
+                <i class="fa-solid fa-clock-rotate-left text-blue-600"></i>
+                <span>Ultime Attività & Interventi Operatore</span>
+              </h3>
+              <p class="text-xs text-slate-400 mt-0.5">Registro in tempo reale delle ultime modifiche, inserimenti fascicoli e note diario</p>
+            </div>
+            <span id="badge-home-activity-count" class="text-xs px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 font-bold border border-blue-200">
+              10 Eventi Recenti
+            </span>
+          </div>
+
+          <!-- Feed Lista Attività Liquid Glass -->
+          <div id="home-activities-timeline" class="space-y-3.5">
+            <!-- Renderizzato dinamicamente da js/modules/home.js -->
+          </div>
+        </div>
+
+        <!-- Colonna Destra: Box Operatore & Promemoria Rapidi (4 Cols) -->
+        <div class="lg:col-span-4 space-y-5">
+          <!-- Card Profilo Operatore Attivo -->
+          <div class="stellar-glass-card p-5 space-y-4 border-l-4 border-l-blue-600">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-lg font-black font-heading shadow-md shadow-blue-500/20">
+                <i class="fa-solid fa-user-shield"></i>
+              </div>
+              <div>
+                <h4 id="home-box-user-name" class="font-bold text-slate-900 text-sm font-heading">Marco Galli</h4>
+                <div class="text-[11px] text-blue-600 font-bold font-heading uppercase" id="home-box-user-role">Amministratore CPI</div>
+                <div class="text-[11px] text-slate-400 font-mono" id="home-box-user-sede">Sede Lecco Centro</div>
+              </div>
+            </div>
+
+            <div class="border-t border-slate-100 pt-3 space-y-2 text-xs">
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Email:</span>
+                <strong id="home-box-user-email" class="text-slate-800 font-mono text-[11px]">admin.cpi@provincia.lecco.it</strong>
+              </div>
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Sessione:</span>
+                <span class="inline-flex items-center gap-1.5 text-emerald-600 font-semibold text-[11px]">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Connesso (MySQL Live)
+                </span>
+              </div>
+            </div>
+
+            <button id="btn-home-edit-my-profile" class="w-full cursor-pointer bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-bold text-xs py-2 rounded-xl border border-slate-200 hover:border-blue-200 transition font-heading flex items-center justify-center gap-2">
+              <i class="fa-solid fa-pen-to-square"></i>
+              <span>Gestisci Il Tuo Profilo</span>
+            </button>
+          </div>
+
+          <!-- Card Promemoria Tirocini in Scadenza -->
+          <div class="stellar-glass-card p-5 space-y-3 bg-gradient-to-br from-purple-50/50 to-white">
+            <div class="flex items-center justify-between">
+              <h4 class="font-bold text-purple-900 text-xs font-heading flex items-center gap-1.5">
+                <i class="fa-solid fa-bell text-purple-600 animate-bounce"></i> Promemoria Scadenze Tirocini
+              </h4>
+              <span class="text-[10px] bg-purple-100 text-purple-800 font-bold px-2 py-0.5 rounded-full">L.68/99</span>
+            </div>
+            <p class="text-xs text-slate-500 leading-relaxed">
+              Verifica le relazioni periodiche bimestrali dei tirocinanti per mantenere regolari i progetti attivi.
+            </p>
+            <button id="btn-home-view-tirocini-alerts" class="w-full cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs py-2 rounded-xl shadow-xs transition font-heading flex items-center justify-center gap-1.5">
+              <span>Apri Registro Scadenze</span>
+              <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
 
     <!-- VIEW 0: DASHBOARD KPI & ANALYTICS (CHRONO STELLAR EXECUTIVE OVERVIEW) -->
     <section id="section-dashboard" class="space-y-6 hidden">
@@ -2147,8 +2334,11 @@
 
                 <!-- Comune / Ambito Territoriale -->
                 <div class="border-t border-slate-100 pt-3">
-                  <label class="rox-label font-semibold text-slate-700">Filtro Territoriale (Comune residenza)</label>
-                  <input type="text" id="m-comune" placeholder="Es. Lecco, Merate, Calolziocorte..." class="rox-input w-full mt-1">
+                  <div class="flex items-center justify-between">
+                    <label class="rox-label font-semibold text-slate-700">Sede Lavoro / Comune Aziendale</label>
+                    <span class="text-[10px] text-blue-600 font-bold"><i class="fa-solid fa-route mr-1"></i>Distanza KM Reale</span>
+                  </div>
+                  <input type="text" id="m-comune" list="dl-comuni-italia" placeholder="Es. Lecco, Merate, Milano, Monza..." class="rox-input w-full mt-1">
                 </div>
 
                 <div class="pt-2">
@@ -2193,6 +2383,124 @@
             <div id="matcher-results-container" class="space-y-4">
               <!-- Renderizzato dinamicamente da js/modules/matcher-view.js -->
             </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION TIROCINI: GESTIONE MONITORAGGI PERIODICI TIROCINANTI CON ALERT E AVVISI -->
+      <section id="section-tirocini" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold font-heading text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-graduation-cap text-purple-600"></i>
+              <span>Gestione Monitoraggi Periodici Tirocinanti L.68/99</span>
+            </h1>
+            <p class="text-xs text-slate-500">
+              Tracciamento scadenze bimestrali, verifiche sul posto di lavoro, relazioni tutor e sistema automatico di allerta scadenze.
+            </p>
+          </div>
+
+          <div class="flex items-center space-x-3">
+            <span id="badge-tirocini-count" class="text-xs px-3 py-1 rounded-full bg-purple-50 text-purple-700 font-bold border border-purple-200 font-heading">
+              0 Tirocini Attivi
+            </span>
+          </div>
+        </div>
+
+        <!-- 4 StatCards KPI Monitoraggi & Scadenze -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="mantine-stat-card">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-heading">Tirocini in Corso</span>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span id="kpi-tirocini-totale" class="text-3xl font-extrabold text-slate-900 font-heading">0</span>
+                <span class="mantine-badge mantine-badge-indigo-light">Attivi</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Convenzioni L.68/99 attive</p>
+            </div>
+            <div class="mantine-stat-icon bg-purple-50 text-purple-600">
+              <i class="fa-solid fa-handshake-angle"></i>
+            </div>
+          </div>
+
+          <div class="mantine-stat-card border-rose-200 bg-rose-50/20">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-rose-600 font-heading">Verifiche Scadute</span>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span id="kpi-tirocini-scaduti" class="text-3xl font-extrabold text-rose-600 font-heading">0</span>
+                <span class="mantine-badge mantine-badge-rose-light animate-pulse">Urgente</span>
+              </div>
+              <p class="text-[11px] text-rose-500 mt-1">Superati i 60 giorni dall'ultimo colloquio</p>
+            </div>
+            <div class="mantine-stat-icon bg-rose-100 text-rose-600">
+              <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+          </div>
+
+          <div class="mantine-stat-card border-amber-200 bg-amber-50/20">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-amber-700 font-heading">In Scadenza (15 gg)</span>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span id="kpi-tirocini-in-scadenza" class="text-3xl font-extrabold text-amber-600 font-heading">0</span>
+                <span class="mantine-badge mantine-badge-blue-light">In Arrivo</span>
+              </div>
+              <p class="text-[11px] text-amber-600 mt-1">Verifica programmata entro 2 settimane</p>
+            </div>
+            <div class="mantine-stat-icon bg-amber-100 text-amber-700">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+          </div>
+
+          <div class="mantine-stat-card">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-slate-400 font-heading">Stato Regolare</span>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span id="kpi-tirocini-regolari" class="text-3xl font-extrabold text-emerald-600 font-heading">0</span>
+                <span class="mantine-badge mantine-badge-teal-light">Aggiornati</span>
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">Monitoraggio recente verbalizzato</p>
+            </div>
+            <div class="mantine-stat-icon bg-emerald-50 text-emerald-600">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filtri Rapidi & Tabella Tirocini -->
+        <div class="card-white overflow-hidden shadow-sm">
+          <div class="p-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center space-x-2">
+              <span class="font-bold text-slate-700 font-heading">Filtra per Stato Alert:</span>
+              <select id="tirocini-filter-alert" class="rox-select font-semibold">
+                <option value="ALL">Tutti i Tirocini</option>
+                <option value="SCADUTO">Solo Scaduti (Priorità Alta)</option>
+                <option value="IN_SCADENZA">In Scadenza entro 15 giorni</option>
+                <option value="REGOLARE">Regolari</option>
+              </select>
+            </div>
+
+            <div class="text-[11px] text-slate-400 flex items-center gap-2">
+              <i class="fa-solid fa-info-circle text-blue-500"></i>
+              <span>Le verifiche verbalizzate vengono registrate istantaneamente nel Fascicolo 360° dell'iscritto</span>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-700">
+              <thead class="bg-slate-100/80 text-slate-500 uppercase font-semibold text-[10px] tracking-wider border-b border-slate-200 font-heading">
+                <tr>
+                  <th class="px-5 py-3.5">Tirocinante / Iscritto</th>
+                  <th class="px-5 py-3.5">Azienda Ospitante & Tutor</th>
+                  <th class="px-5 py-3.5">Periodo & Avanzamento</th>
+                  <th class="px-5 py-3.5">Stato & Alert Scadenza</th>
+                  <th class="px-5 py-3.5">Prossima Verifica</th>
+                  <th class="px-5 py-3.5 text-right">Azioni</th>
+                </tr>
+              </thead>
+              <tbody id="tbody-tirocini-monitoraggio" class="divide-y divide-slate-100">
+                <!-- Renderizzato dinamicamente da js/modules/tirocini.js -->
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -2524,7 +2832,9 @@
               <option value="ADMIN">Amministratore Completo (ADMIN)</option>
               <option value="OPERATORE_SILV">Operatore SILV</option>
               <option value="TUTOR_L68">Tutor L.68 / Tirocini</option>
-              <option value="ASL_MEDICO">Medico / Membro ASL</option>
+              <option value="ASL_MEDICO">Medico / Sanitario ASL</option>
+              <option value="ASL_PSICOLOGO">Psicologo / Assistente Sociale</option>
+              <option value="ORIENTATORE">Orientatore Professionale</option>
             </select>
           </div>
           <div>
@@ -2541,6 +2851,111 @@
         <div class="flex justify-end space-x-3 pt-3 border-t border-slate-200/80">
           <button id="btn-cancel-modal-user" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
           <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-bold font-heading shadow-xs">Salva Operatore</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL PROFILO UTENTE OPERATORE CONNESSO (LIQUID GLASS POPUP) -->
+  <div id="modal-operator-profile" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="liquid-modal-card w-full max-w-md rounded-2xl border border-white/95 shadow-2xl p-6 space-y-5 text-xs animate-scale-up">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900 text-base font-heading flex items-center gap-2">
+          <i class="fa-solid fa-user-gear text-blue-600"></i>
+          <span>Profilo Operatore Personale</span>
+        </h3>
+        <button id="btn-close-modal-profile" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="form-operator-profile" class="space-y-4">
+        <div class="flex items-center gap-3.5 p-3 rounded-2xl bg-blue-50/60 border border-blue-100">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-lg font-bold font-heading shadow-sm">
+            <i class="fa-solid fa-user-shield"></i>
+          </div>
+          <div>
+            <div id="profile-display-role" class="text-[10px] font-extrabold uppercase tracking-wider text-blue-700 font-heading">AMMINISTRATORE CPI</div>
+            <div id="profile-display-user" class="font-bold text-slate-900 text-sm font-heading">admin</div>
+            <div class="text-[10px] text-slate-500">Sessione autenticata MySQL</div>
+          </div>
+        </div>
+
+        <div>
+          <label class="rox-label">Nome Completo *</label>
+          <input type="text" id="prof-nome-completo" required class="rox-input font-semibold">
+        </div>
+
+        <div>
+          <label class="rox-label">Email Istituzionale *</label>
+          <input type="email" id="prof-email" required class="rox-input">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Sede CPI</label>
+            <input type="text" id="prof-sede" class="rox-input font-medium">
+          </div>
+          <div>
+            <label class="rox-label">Nuova Password</label>
+            <input type="password" id="prof-password" placeholder="Lascia vuoto per non cambiare" class="rox-input">
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
+          <button id="btn-cancel-modal-profile" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Chiudi</button>
+          <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-bold font-heading shadow-xs">Aggiorna Profilo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL REGISTRAZIONE VERIFICA MONITORAGGIO TIROCINIO -->
+  <div id="modal-nuovo-monitoraggio" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="liquid-modal-card w-full max-w-lg rounded-2xl border border-white/95 shadow-2xl p-6 space-y-4 text-xs animate-scale-up">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <div>
+          <h3 class="font-bold text-slate-900 text-base font-heading flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-check text-purple-600"></i>
+            <span>Verbalizzazione Monitoraggio Tirocinio</span>
+          </h3>
+          <p class="text-[11px] text-slate-400 mt-0.5">La verifica verrà registrata istantaneamente nel diario del tirocinante</p>
+        </div>
+        <button id="btn-close-modal-monit" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="form-nuovo-monitoraggio" class="space-y-4">
+        <input type="hidden" id="monit-persona-id">
+        <input type="hidden" id="monit-numero-iscriz">
+
+        <div class="p-3 rounded-xl bg-purple-50/50 border border-purple-100 flex items-center justify-between">
+          <span class="text-slate-600 font-medium">Tirocinante:</span>
+          <span id="monit-persona-nome" class="font-bold text-purple-950 font-heading">---</span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="rox-label">Data Incontro / Verifica *</label>
+            <input type="date" id="monit-data" required class="rox-input font-bold text-slate-800">
+          </div>
+          <div>
+            <label class="rox-label">Esito del Monitoraggio *</label>
+            <select id="monit-esito" class="rox-select w-full font-semibold">
+              <option value="Positivo / Regolare">Positivo / Regolare</option>
+              <option value="Ottimo rendimento">Ottimo rendimento</option>
+              <option value="Criticità lievi da monitorare">Criticità lievi da monitorare</option>
+              <option value="Richiesta proroga tirocinio">Richiesta proroga tirocinio</option>
+              <option value="Proposta assunzione anticipata">Proposta assunzione anticipata</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="rox-label">Relazione Verbale / Note di Monitoraggio *</label>
+          <textarea id="monit-testo" rows="4" required placeholder="Inserisci note sulla puntualità, integrazione con i colleghi, rispetto compiti e colloquio con il tutor aziendale..." class="rox-input font-medium"></textarea>
+        </div>
+
+        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
+          <button id="btn-cancel-modal-monit" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white font-bold font-heading px-5 py-2 rounded-xl shadow-xs transition">Verbalizza Monitoraggio</button>
         </div>
       </form>
     </div>
@@ -3489,7 +3904,7 @@
   </div>
 
   <!-- DATALIST COMUNI PROVINCIA DI LECCO & TERRITORIO PER RICERCA RAPIDA -->
-  <datalist id="dl-comuni-lecco">
+  <datalist id="dl-comuni-italia">
     <option value="Lecco (LC)">
     <option value="Abbadia Lariana (LC)">
     <option value="Airuno (LC)">
@@ -3568,13 +3983,36 @@
     <option value="Vercurago (LC)">
     <option value="Verderio (LC)">
     <option value="Viganò (LC)">
-    <option value="Milano (MI)">
     <option value="Monza (MB)">
+    <option value="Vimercate (MB)">
+    <option value="Seregno (MB)">
+    <option value="Desio (MB)">
+    <option value="Lissone (MB)">
     <option value="Como (CO)">
+    <option value="Cantù (CO)">
+    <option value="Erba (CO)">
     <option value="Bergamo (BG)">
+    <option value="Dalmine (BG)">
+    <option value="Milano (MI)">
+    <option value="Sesto San Giovanni (MI)">
+    <option value="Cinisello Balsamo (MI)">
+    <option value="Sondrio (SO)">
+    <option value="Brescia (BS)">
+    <option value="Varese (VA)">
+    <option value="Pavia (PV)">
+    <option value="Cremona (CR)">
+    <option value="Mantova (MN)">
+    <option value="Lodi (LO)">
+    <option value="Torino (TO)">
+    <option value="Genova (GE)">
+    <option value="Bologna (BO)">
+    <option value="Firenze (FI)">
+    <option value="Roma (RM)">
+    <option value="Napoli (NA)">
   </datalist>
 
   <!-- JavaScript Core Data & Store -->
+  <script src="js/data-comuni.js"></script>
   <script src="js/data.js"></script>
   <script src="js/store.js"></script>
   <script src="js/matcher.js"></script>
@@ -3584,6 +4022,7 @@
   <script src="js/modules/toast.js"></script>
   <script src="js/modules/ui-controls.js"></script>
   <script src="js/modules/auth.js"></script>
+  <script src="js/modules/home.js"></script>
   <script src="js/modules/navigation.js"></script>
   <script src="js/modules/dashboard.js"></script>
   <script src="js/modules/search-table.js"></script>
@@ -3592,6 +4031,7 @@
   <script src="js/modules/comitato-asl.js"></script>
   <script src="js/modules/pil.js"></script>
   <script src="js/modules/diario.js"></script>
+  <script src="js/modules/tirocini.js"></script>
   <script src="js/modules/wizard.js"></script>
   <script src="js/modules/matcher-view.js"></script>
   <script src="js/modules/admin.js"></script>

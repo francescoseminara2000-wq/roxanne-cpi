@@ -36,23 +36,27 @@ function initMobileDrawer() {
 }
 
 function initTopNavigation() {
+  const btnHome = document.getElementById("nav-mode-home");
   const btnDash = document.getElementById("nav-mode-dashboard");
   const btnSearch = document.getElementById("nav-mode-search");
   const btnHub = document.getElementById("nav-mode-hub");
+  const btnTirocini = document.getElementById("nav-mode-tirocini");
   const btnMatcher = document.getElementById("nav-mode-matcher");
   const btnUsers = document.getElementById("nav-mode-users");
   const btnAudit = document.getElementById("nav-mode-audit");
   const btnBackSearch = document.getElementById("btn-back-to-search");
 
+  const sectionHome = document.getElementById("section-home");
   const sectionDash = document.getElementById("section-dashboard");
   const sectionSearch = document.getElementById("section-search");
   const sectionHub = document.getElementById("section-citizen-hub");
+  const sectionTirocini = document.getElementById("section-tirocini");
   const sectionMatcher = document.getElementById("section-matcher");
   const sectionAudit = document.getElementById("section-audit");
   const sectionUsers = document.getElementById("section-users");
 
   function hideAllSections() {
-    const allSecs = [sectionDash, sectionSearch, sectionHub, sectionMatcher, sectionAudit, sectionUsers];
+    const allSecs = [sectionHome, sectionDash, sectionSearch, sectionHub, sectionTirocini, sectionMatcher, sectionAudit, sectionUsers];
     allSecs.forEach(s => {
       if (s) s.classList.add("hidden");
     });
@@ -61,7 +65,7 @@ function initTopNavigation() {
   let liquidNavInstance = null;
 
   function setActiveBtn(activeBtn) {
-    [btnDash, btnSearch, btnHub, btnMatcher, btnAudit, btnUsers].forEach(btn => {
+    [btnHome, btnDash, btnSearch, btnHub, btnTirocini, btnMatcher, btnAudit, btnUsers].forEach(btn => {
       if (btn) {
         btn.classList.remove("active");
         btn.classList.add("text-slate-500");
@@ -84,7 +88,11 @@ function initTopNavigation() {
     let targetBtn = null;
     let renderFunc = null;
 
-    if (sectionId === "section-dashboard") {
+    if (sectionId === "section-home") {
+      targetBtn = btnHome;
+      if (sectionHome) sectionHome.classList.remove("hidden");
+      renderFunc = window.renderHomeFeed;
+    } else if (sectionId === "section-dashboard") {
       targetBtn = btnDash;
       if (sectionDash) sectionDash.classList.remove("hidden");
       renderFunc = window.renderDashboardAnalytics;
@@ -92,6 +100,10 @@ function initTopNavigation() {
       targetBtn = btnHub;
       if (sectionHub) sectionHub.classList.remove("hidden");
       renderFunc = window.renderCitizenHub;
+    } else if (sectionId === "section-tirocini") {
+      targetBtn = btnTirocini;
+      if (sectionTirocini) sectionTirocini.classList.remove("hidden");
+      renderFunc = window.renderMonitoraggioTirocini;
     } else if (sectionId === "section-matcher") {
       targetBtn = btnMatcher;
       if (sectionMatcher) sectionMatcher.classList.remove("hidden");
@@ -129,6 +141,10 @@ function initTopNavigation() {
 
   window.navigateToSection = navigateToSection;
 
+  if (btnHome) {
+    btnHome.addEventListener("click", () => navigateToSection("section-home"));
+  }
+
   if (btnDash) {
     btnDash.addEventListener("click", () => navigateToSection("section-dashboard"));
   }
@@ -147,6 +163,10 @@ function initTopNavigation() {
 
   if (btnHub) {
     btnHub.addEventListener("click", () => navigateToSection("section-citizen-hub"));
+  }
+
+  if (btnTirocini) {
+    btnTirocini.addEventListener("click", () => navigateToSection("section-tirocini"));
   }
 
   if (btnMatcher) {
@@ -170,11 +190,15 @@ function initTopNavigation() {
     const hash = (window.location.hash || "").replace("#", "").toLowerCase();
     const stored = sessionStorage.getItem("ROXANNE_ACTIVE_VIEW") || localStorage.getItem("ROXANNE_ACTIVE_VIEW");
     
-    let target = "section-search";
-    if (hash === "dashboard" || hash === "section-dashboard") {
+    let target = "section-home";
+    if (hash === "home" || hash === "section-home") {
+      target = "section-home";
+    } else if (hash === "dashboard" || hash === "section-dashboard") {
       target = "section-dashboard";
     } else if (hash === "citizen-hub" || hash === "hub" || hash === "section-citizen-hub") {
       target = "section-citizen-hub";
+    } else if (hash === "tirocini" || hash === "section-tirocini") {
+      target = "section-tirocini";
     } else if (hash === "matcher" || hash === "section-matcher") {
       target = "section-matcher";
     } else if (hash === "users" || hash === "section-users") {

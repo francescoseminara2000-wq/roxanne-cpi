@@ -112,22 +112,31 @@ function initCustomSearchableSelects() {
       e.stopPropagation();
       const isOpen = wrapper.classList.contains("open");
       
-      // Close other custom selects
+      // Close other custom selects and cleanup ancestors
       document.querySelectorAll(".custom-select-wrapper.open").forEach(w => {
         if (w !== wrapper) {
           w.classList.remove("open");
-          const parentCard = w.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
-          if (parentCard) parentCard.style.zIndex = "";
+          let el = w.parentElement;
+          while (el && el !== document.body) {
+            el.classList.remove("has-open-select-ancestor");
+            if (el.style) el.style.zIndex = "";
+            el = el.parentElement;
+          }
         }
       });
 
       const nextOpen = !isOpen;
       wrapper.classList.toggle("open", nextOpen);
 
-      // Assicura che la card/colonna genitore non tagli o sovrapponga la tendina
-      const parentCard = wrapper.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
-      if (parentCard) {
-        parentCard.style.zIndex = nextOpen ? "99998" : "";
+      // Eleva la priorità di tutti gli elementi antenati (evita che backdrop-filter o overflow nascondano la tendina)
+      let el = wrapper.parentElement;
+      while (el && el !== document.body) {
+        if (nextOpen) {
+          el.classList.add("has-open-select-ancestor");
+        } else {
+          el.classList.remove("has-open-select-ancestor");
+        }
+        el = el.parentElement;
       }
 
       if (nextOpen && searchInput) {
@@ -155,21 +164,21 @@ function initCustomSearchableSelects() {
   });
 
   // Close on click outside or ESC
-  document.addEventListener("click", () => {
+  const closeAllCustomSelects = () => {
     document.querySelectorAll(".custom-select-wrapper.open").forEach(w => {
       w.classList.remove("open");
-      const parentCard = w.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
-      if (parentCard) parentCard.style.zIndex = "";
     });
-  });
+    document.querySelectorAll(".has-open-select-ancestor").forEach(el => {
+      el.classList.remove("has-open-select-ancestor");
+      if (el.style) el.style.zIndex = "";
+    });
+  };
+
+  document.addEventListener("click", closeAllCustomSelects);
 
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
-      document.querySelectorAll(".custom-select-wrapper.open").forEach(w => {
-        w.classList.remove("open");
-        const parentCard = w.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
-        if (parentCard) parentCard.style.zIndex = "";
-      });
+      closeAllCustomSelects();
     }
   });
 }

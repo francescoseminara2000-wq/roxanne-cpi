@@ -21,11 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // 3. Matcher & Moduli Funzionali
   if (typeof window.initMatcherModule === "function") window.initMatcherModule();
   if (typeof window.loadBrandingConfig === "function") window.loadBrandingConfig();
+  if (typeof window.initProfileModal === "function") window.initProfileModal();
+  if (typeof window.initMonitoraggiEvents === "function") window.initMonitoraggiEvents();
 
   // 4. Sessione Operatore & Preloader
   if (typeof window.initAuthSession === "function") window.initAuthSession();
 
   // 5. Primo Rendering Sezioni
+  if (typeof window.renderHomeFeed === "function") window.renderHomeFeed();
   if (typeof window.renderDashboardAnalytics === "function") window.renderDashboardAnalytics();
   if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
 

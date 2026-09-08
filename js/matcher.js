@@ -142,17 +142,44 @@ class MatcherEngine {
       }
     }
 
-    // 12. Filtro Territoriale (Comune di Residenza)
+    // 12. Filtro Territoriale & Calcolo Distanza Reale (Comune di Residenza vs Sede Lavoro)
     if (requirements.comune && requirements.comune.trim()) {
-      const qComune = requirements.comune.trim().toLowerCase();
-      const pComune = (persona.comuneResidenza || '').toLowerCase();
-      const pDomicilio = (persona.domicilioComune || '').toLowerCase();
+      const sedeAzienda = requirements.comune.trim();
+      const pResidenza = persona.comuneResidenza || '';
+      const pDomicilio = persona.domicilioComune || '';
+      const comuneRiferimento = pDomicilio || pResidenza;
 
-      if (pComune.includes(qComune) || pDomicilio.includes(qComune)) {
+      const qComuneLower = sedeAzienda.toLowerCase();
+      const isStessoComune = (pResidenza.toLowerCase().includes(qComuneLower) || pDomicilio.toLowerCase().includes(qComuneLower));
+
+      if (isStessoComune) {
         score += 10;
-        matchReasons.push(`Territorialmente vicino alla sede (${persona.comuneResidenza})`);
+        matchReasons.push(`Residente direttamente nel comune della sede aziendale (${comuneRiferimento})`);
       } else {
-        adaptations.push(`Residente a ${persona.comuneResidenza || 'N.D.'}; verificare tempi di percorrenza`);
+        // Calcolo chilometrico tramite motore geo Haversine
+        const distKm = (window.getDistanceBetweenComuni) 
+          ? window.getDistanceBetweenComuni(sedeAzienda, comuneRiferimento) 
+          : null;
+
+        const maxRaggio = (persona.disponibilita && persona.disponibilita.raggioMaxKm) 
+          ? parseInt(persona.disponibilita.raggioMaxKm) 
+          : 25;
+
+        if (distKm !== null) {
+          if (distKm <= 10) {
+            score += 8;
+            matchReasons.push(`Ottima vicinanza chilometrica: ${distKm} km da ${sedeAzienda} (da ${comuneRiferimento})`);
+          } else if (distKm <= maxRaggio) {
+            score += 4;
+            matchReasons.push(`Distanza ${distKm} km compatibile con raggio max dichiarato di ${maxRaggio} km (${comuneRiferimento})`);
+          } else {
+            const extraKm = Math.round(distKm - maxRaggio);
+            score -= Math.min(20, Math.round(extraKm * 0.8));
+            adaptations.push(`Distanza stimata ${distKm} km (superiore al raggio di disponibilità di ${maxRaggio} km da ${comuneRiferimento}); valutare mobilità`);
+          }
+        } else {
+          adaptations.push(`Residente a ${comuneRiferimento || 'N.D.'}; verificare tempi di percorrenza verso ${sedeAzienda}`);
+        }
       }
     }
 

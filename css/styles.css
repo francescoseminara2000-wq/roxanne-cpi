@@ -424,6 +424,19 @@ select option {
   margin-bottom: 1rem;
   box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.9);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+/* Quando un dropdown interno è aperto, disattiva il backdrop-filter che crea uno stacking context isolato */
+.mantine-form-section:has(.custom-select-wrapper.open),
+.form-group-card:has(.custom-select-wrapper.open),
+.stellar-glass-card:has(.custom-select-wrapper.open),
+.p-input-icon-wrapper:has(.custom-select-wrapper.open),
+.has-open-select-ancestor {
+  z-index: 999999 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  position: relative !important;
 }
 
 .mantine-form-section:hover {
