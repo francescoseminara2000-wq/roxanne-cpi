@@ -14,12 +14,15 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static('.')); // Serve static frontend files (index.html, css, js)
 
 // --- API: PERSONE (ISCRITTI L.68/99) ---
+// Versione ottimizzata e veloce: carica anagrafica + disponibilità e metadati leggeri (senza BLOB pesanti/fileContent)
 app.get('/api/persone', async (req, res) => {
   try {
     const persone = await prisma.persona.findMany({
       include: {
         disponibilita: true,
-        wallet: true,
+        wallet: {
+          select: { id: true, personaId: true, nome: true, tipo: true, descrizione: true, data: true, dimensione: true, fileType: true }
+        },
         comitatoTecnico: true,
         progettiPIL: true,
         noteDiario: true,
@@ -186,7 +189,15 @@ app.put('/api/persone/:id', async (req, res) => {
           }
         } : undefined
       },
-      include: { disponibilita: true, wallet: true, comitatoTecnico: true, noteDiario: true, progettiPIL: true }
+      include: {
+        disponibilita: true,
+        wallet: {
+          select: { id: true, personaId: true, nome: true, tipo: true, descrizione: true, data: true, dimensione: true, fileType: true }
+        },
+        comitatoTecnico: true,
+        noteDiario: true,
+        progettiPIL: true
+      }
     });
     res.json(updated);
   } catch (error) {
@@ -336,6 +347,18 @@ app.delete('/api/diario/:id', async (req, res) => {
 });
 
 // --- API: WALLET DOCUMENTALE ---
+app.get('/api/wallet/:id', async (req, res) => {
+  try {
+    const doc = await prisma.documentoWallet.findUnique({
+      where: { id: parseInt(req.params.id) }
+    });
+    if (!doc) return res.status(404).json({ error: 'Documento non trovato' });
+    res.json(doc);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.post('/api/wallet', async (req, res) => {
   try {
     const newDoc = await prisma.documentoWallet.create({

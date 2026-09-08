@@ -46,22 +46,18 @@
 
   // --- CITIZEN HUB 360° MASTER RENDERER (IN-PLACE INLINE EDITING) ---
   function renderCitizenHub() {
+    const emptyState = document.getElementById("hub-empty-state");
+    const detailsContainer = document.getElementById("hub-details-container");
     const p = window.store.getSelectedPersona();
-    if (!p) return;
 
-    const personeList = window.store.getPersone();
-    const currentIndex = personeList.findIndex(item => item.id === p.id);
-
-    // 1. Update Indexer Badge & Navigation
-    const elIndexer = document.getElementById("hub-indexer-badge");
-    if (elIndexer) {
-      elIndexer.textContent = `${currentIndex !== -1 ? currentIndex + 1 : 1} / ${personeList.length}`;
+    if (!p) {
+      if (emptyState) emptyState.classList.remove("hidden");
+      if (detailsContainer) detailsContainer.classList.add("hidden");
+      return;
     }
 
-    const btnPrev = document.getElementById("btn-hub-prev-persona");
-    const btnNext = document.getElementById("btn-hub-next-persona");
-    if (btnPrev) btnPrev.disabled = (currentIndex <= 0);
-    if (btnNext) btnNext.disabled = (currentIndex === -1 || currentIndex >= personeList.length - 1);
+    if (emptyState) emptyState.classList.add("hidden");
+    if (detailsContainer) detailsContainer.classList.remove("hidden");
 
     // 2. Dynamic Avatar with colorful gradient based on gender/category
     const initials = (p.nome || "NN").split(" ").map(n => n.charAt(0)).join("").substring(0, 2).toUpperCase();
@@ -813,41 +809,12 @@
     });
   });
 
-  // --- PREV / NEXT CITIZEN FAST NAVIGATION CONTROLLER ---
-  const btnFastPrev = document.getElementById("btn-hub-prev-persona");
-  const btnFastNext = document.getElementById("btn-hub-next-persona");
-
-  if (btnFastPrev) {
-    btnFastPrev.addEventListener("click", () => {
-      const persone = window.store.getPersone();
-      const current = window.store.getSelectedPersona();
-      if (!current) return;
-      const idx = persone.findIndex(item => item.id === current.id);
-      if (idx > 0) {
-        if (window.RoxLoading) window.RoxLoading.show("Caricamento iscritto...", `Apertura fascicolo #${persone[idx - 1].numeroIscrizione}`);
-        window.store.setSelectedPersonaId(persone[idx - 1].id);
-        const stickyBar = document.getElementById("hub-sticky-save-bar");
-        if (stickyBar) stickyBar.classList.add("hidden");
-        renderCitizenHub();
-        setTimeout(() => { if (window.RoxLoading) window.RoxLoading.hide(); }, 200);
-      }
-    });
-  }
-
-  if (btnFastNext) {
-    btnFastNext.addEventListener("click", () => {
-      const persone = window.store.getPersone();
-      const current = window.store.getSelectedPersona();
-      if (!current) return;
-      const idx = persone.findIndex(item => item.id === current.id);
-      if (idx !== -1 && idx < persone.length - 1) {
-        if (window.RoxLoading) window.RoxLoading.show("Caricamento iscritto...", `Apertura fascicolo #${persone[idx + 1].numeroIscrizione}`);
-        window.store.setSelectedPersonaId(persone[idx + 1].id);
-        const stickyBar = document.getElementById("hub-sticky-save-bar");
-        if (stickyBar) stickyBar.classList.add("hidden");
-        renderCitizenHub();
-        setTimeout(() => { if (window.RoxLoading) window.RoxLoading.hide(); }, 200);
-      }
+  // --- LISTENER EMPTY STATE: VAI A RICERCA ISCRITTI ---
+  const btnEmptyGoToSearch = document.getElementById("btn-empty-go-to-search");
+  if (btnEmptyGoToSearch) {
+    btnEmptyGoToSearch.addEventListener("click", () => {
+      const btnSearch = document.getElementById("nav-mode-search");
+      if (btnSearch) btnSearch.click();
     });
   }
 

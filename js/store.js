@@ -103,14 +103,14 @@ class StoreManager {
             }
           });
 
-          // Controlla se c'era una persona già memorizzata
+          // Controlla se c'era una persona già memorizzata esplicitamente
           const urlParams = new URLSearchParams(window.location.search);
           const paramId = urlParams.get("personaId") || urlParams.get("id");
           const storedId = paramId || sessionStorage.getItem("ROXANNE_SELECTED_PERSONA_ID") || localStorage.getItem("ROXANNE_SELECTED_PERSONA_ID");
           if (storedId && this.data.persone.some(p => p.id === parseInt(storedId))) {
             this.selectedPersonaId = parseInt(storedId);
-          } else if (!this.selectedPersonaId && this.data.persone.length > 0) {
-            this.selectedPersonaId = this.data.persone[0].id;
+          } else {
+            this.selectedPersonaId = null;
           }
 
           console.log(`[MySQL Sync] Sincronizzati ${personeDb.length} iscritti dal Database con relative note, verbali e progetti PIL.`);
@@ -145,16 +145,12 @@ class StoreManager {
       }
     }
 
-    if (!this.selectedPersonaId && this.data.persone.length > 0) {
-      this.selectedPersonaId = this.data.persone[0].id;
+    if (!this.selectedPersonaId) {
+      return null;
     }
 
     let found = this.data.persone.find(p => p.id === parseInt(this.selectedPersonaId));
-    if (!found && this.data.persone.length > 0) {
-      found = this.data.persone[0];
-      this.selectedPersonaId = found.id;
-    }
-    return found;
+    return found || null;
   }
 
   setSelectedPersonaId(id) {
@@ -205,12 +201,12 @@ class StoreManager {
     const index = this.data.persone.findIndex(p => p.id === numericId);
     if (index !== -1) {
       this.data.persone[index] = { ...this.data.persone[index], ...updatedFields };
-      const p = this.data.persone[index];
 
+      // Invia esclusivamente i campi modificati per massima velocità di rete e query snella
       const res = await fetch(`/api/persone/${numericId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(p)
+        body: JSON.stringify(updatedFields)
       });
 
       if (!res.ok) {
@@ -219,8 +215,9 @@ class StoreManager {
       }
 
       const updatedFromDb = await res.json();
-      this.data.persone[index] = updatedFromDb;
-      return updatedFromDb;
+      // Aggiorna lo store locale unendo la risposta del database
+      this.data.persone[index] = { ...this.data.persone[index], ...updatedFromDb };
+      return this.data.persone[index];
     }
     return null;
   }

@@ -116,19 +116,13 @@
           <!-- Bottom Actions Bar -->
           <div class="pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
             <div class="flex items-center gap-2">
-              ${hasContent ? `
-                <button data-doc-id="${doc.id}" class="btn-preview-doc cursor-pointer text-xs font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1">
-                  <i class="pi pi-eye"></i> Visualizza
-                </button>
-                <span class="text-slate-200">|</span>
-                <a href="${doc.fileContent}" download="${doc.nome}" class="cursor-pointer text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1">
-                  <i class="pi pi-download"></i> Scarica
-                </a>
-              ` : `
-                <span class="text-[10px] text-slate-400 flex items-center gap-1">
-                  <i class="pi pi-check-circle text-emerald-600"></i> Archiviato
-                </span>
-              `}
+              <button data-doc-id="${doc.id}" class="btn-preview-doc cursor-pointer text-xs font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1">
+                <i class="pi pi-eye"></i> Visualizza
+              </button>
+              <span class="text-slate-200">|</span>
+              <button data-doc-id="${doc.id}" class="btn-download-doc cursor-pointer text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center gap-1">
+                <i class="pi pi-download"></i> Scarica
+              </button>
             </div>
 
             <span class="text-[10px] font-mono text-slate-400">ID #${doc.id}</span>
@@ -138,17 +132,72 @@
       `;
     }).join("");
 
-    // Preview Doc Handler - Apertura Diretta nel Visualizzatore Integrato del Sito
+    // Preview Doc Handler - Apertura Diretta nel Visualizzatore Integrato del Sito con Fetch On-Demand
     document.querySelectorAll(".btn-preview-doc").forEach(btn => {
-      btn.addEventListener("click", () => {
+      btn.addEventListener("click", async () => {
         const docId = btn.getAttribute("data-doc-id");
         const doc = (persona.wallet || []).find(d => String(d.id) === String(docId));
-        if (doc) {
-          if (typeof window.openDocumentViewer === "function") {
-            window.openDocumentViewer(doc, persona);
-          } else {
-            alert(`Visualizzazione documento: ${doc.nome}`);
+        if (!doc) return;
+
+        // Se il file reale (BLOB) non è ancora in memoria, caricalo on-demand dalla nuova API
+        if (!doc.fileContent) {
+          if (window.RoxLoading) window.RoxLoading.show("Caricamento file...", `Recupero ${doc.nome} da MySQL...`);
+          try {
+            const res = await fetch(`/api/wallet/${doc.id}`);
+            if (res.ok) {
+              const fullDoc = await res.json();
+              doc.fileContent = fullDoc.fileContent;
+              doc.fileType = fullDoc.fileType;
+            }
+          } catch (e) {
+            console.error("Errore download documento on-demand:", e);
+          } finally {
+            if (window.RoxLoading) window.RoxLoading.hide();
           }
+        }
+
+        if (typeof window.openDocumentViewer === "function") {
+          window.openDocumentViewer(doc, persona);
+        } else {
+          alert(`Visualizzazione documento: ${doc.nome}`);
+        }
+      });
+    });
+
+    // Download Doc Handler - Scarica il file recuperandolo on-demand da MySQL se non ancora in memoria
+    document.querySelectorAll(".btn-download-doc").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const docId = btn.getAttribute("data-doc-id");
+        const doc = (persona.wallet || []).find(d => String(d.id) === String(docId));
+        if (!doc) return;
+
+        let content = doc.fileContent;
+        if (!content) {
+          if (window.RoxLoading) window.RoxLoading.show("Preparazione download...", `Recupero ${doc.nome} da MySQL...`);
+          try {
+            const res = await fetch(`/api/wallet/${doc.id}`);
+            if (res.ok) {
+              const fullDoc = await res.json();
+              doc.fileContent = fullDoc.fileContent;
+              doc.fileType = fullDoc.fileType;
+              content = fullDoc.fileContent;
+            }
+          } catch (e) {
+            console.error("Errore download documento:", e);
+          } finally {
+            if (window.RoxLoading) window.RoxLoading.hide();
+          }
+        }
+
+        if (content) {
+          const a = document.createElement("a");
+          a.href = content;
+          a.download = doc.nome || "documento";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        } else {
+          RoxToast.error("Errore", "Impossibile scaricare il file dal server.");
         }
       });
     });
