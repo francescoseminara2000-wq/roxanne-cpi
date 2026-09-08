@@ -87,7 +87,9 @@ function sanitizePersonaInput(raw) {
   if (!data.dataVerbale && raw.diagnosiLastDataDiagnosi) data.dataVerbale = raw.diagnosiLastDataDiagnosi;
 
   // Numeric fields
-  if (data.numeroIscrizione !== undefined) data.numeroIscrizione = parseInt(data.numeroIscrizione) || 10001;
+  if (data.numeroIscrizione !== undefined && data.numeroIscrizione !== null && data.numeroIscrizione !== "") {
+    data.numeroIscrizione = parseInt(data.numeroIscrizione);
+  }
   if (data.icPercentuale !== undefined) data.icPercentuale = parseInt(data.icPercentuale) || 0;
   if (data.anno !== undefined && data.anno !== null && data.anno !== "") data.anno = parseInt(data.anno) || null;
   else if (data.anno === "") data.anno = null;
@@ -117,11 +119,6 @@ function sanitizePersonaInput(raw) {
     }
   });
 
-  // Ensure unique codice
-  if (!data.codice) {
-    data.codice = `PERS-${data.numeroIscrizione || Date.now()}`;
-  }
-
   return data;
 }
 
@@ -130,6 +127,20 @@ app.post('/api/persone', async (req, res) => {
     const rawData = req.body;
     const disponibilita = rawData.disponibilita;
     const sanitized = sanitizePersonaInput(rawData);
+
+    // Se numero iscrizione non fornito dall'utente, calcola il progressivo successivo reale
+    if (!sanitized.numeroIscrizione) {
+      const maxPersona = await prisma.persona.findFirst({
+        orderBy: { numeroIscrizione: 'desc' },
+        select: { numeroIscrizione: true }
+      });
+      sanitized.numeroIscrizione = (maxPersona && maxPersona.numeroIscrizione) ? (maxPersona.numeroIscrizione + 1) : 10001;
+    }
+
+    // Codice univoco coerente con l'iscrizione
+    if (!sanitized.codice) {
+      sanitized.codice = `PERS-${String(sanitized.numeroIscrizione).padStart(5, '0')}`;
+    }
 
     const newPersona = await prisma.persona.create({
       data: {

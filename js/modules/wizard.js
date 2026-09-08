@@ -155,6 +155,23 @@
       if (titleEl) titleEl.textContent = "Procedura Guidata Inserimento Iscritto";
       if (badgeEl) badgeEl.textContent = "Nuova Presa in Carico L.68/99";
       if (idInput) idInput.value = "";
+
+      // Reset esplicito e sicuro di tutte le checkbox a false in modalità creazione
+      const allCheckboxes = form.querySelectorAll("input[type='checkbox']");
+      allCheckboxes.forEach(cb => { cb.checked = false; });
+
+      // Campi con placeholder/vuoti di default
+      document.getElementById("w-prov-res").value = "";
+      document.getElementById("w-raggio-km").value = "";
+      document.getElementById("w-operatore-cpi").value = "";
+      document.getElementById("w-ic-perc").value = "";
+      document.getElementById("w-categoria").value = "C.O.";
+      document.getElementById("w-attivo").value = "Attivo";
+      document.getElementById("w-stato-occup").value = "Disoccupato";
+      document.getElementById("w-sesso").value = "M";
+      document.getElementById("w-stato-civile").value = "Celibe/Nubile";
+      document.getElementById("w-ecdl").value = "No";
+      document.getElementById("w-orario").value = "Full-Time (40h)";
     }
 
     modal.classList.remove("hidden");

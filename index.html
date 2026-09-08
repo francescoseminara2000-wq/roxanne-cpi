@@ -168,15 +168,6 @@
         <span class="hidden sm:inline">Nuovo Iscritto</span>
       </button>
 
-      <!-- Zoom & Scalabilità Contenuti (Frosted Glass Segmented Control) -->
-      <div class="hidden sm:flex items-center bg-white/70 backdrop-blur-md rounded-xl p-0.5 border border-white/90 shadow-2xs" title="Regola Dimensione e Leggibilità">
-        <button id="btn-zoom-normal" class="zoom-btn px-2 py-1 rounded-lg text-[11px] font-bold font-heading text-slate-600 hover:text-slate-900 transition">100%</button>
-        <button id="btn-zoom-large" class="zoom-btn active bg-white px-2.5 py-1 rounded-lg text-[11px] font-bold font-heading text-blue-600 shadow-xs transition">115%</button>
-        <button id="btn-zoom-xlarge" class="zoom-btn px-2 py-1 rounded-lg text-[11px] font-bold font-heading text-slate-600 hover:text-slate-900 transition">130%</button>
-      </div>
-
-      <div class="hidden sm:block h-6 w-[1px] bg-slate-200/80"></div>
-
       <!-- Logged User Badge & Profile (Liquid Glass Pill) -->
       <div class="flex items-center space-x-2 bg-white/80 backdrop-blur-md border border-white/90 shadow-2xs rounded-xl px-2.5 py-1.5">
         <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center text-[10px] font-bold font-heading shadow-xs">
@@ -364,128 +355,161 @@
         </div>
       </div>
 
-      <!-- Advanced Multi-Field Search Panel (PrimeTek Panel Style) -->
-      <div class="p-panel shadow-xs">
-        <div class="p-panel-header">
-          <div class="font-bold text-slate-900 text-sm flex items-center gap-2 font-heading">
-            <i class="pi pi-sliders-h text-blue-600"></i> Filtri di Ricerca Avanzata per Campo
+      <!-- Search & Filters Container (Liquid Glass Modern Panel) -->
+      <div class="stellar-glass-card p-4 sm:p-5 space-y-4 shadow-sm">
+        <!-- RIGA 1: BARRA DI DEFAULT SEMPLICE (NOME/COGNOME, CF, TOGGLE FILTRI AVANZATI, AZZERA) -->
+        <div class="flex flex-col lg:flex-row items-stretch lg:items-end gap-3 text-xs">
+          <!-- Campo 1: Nome / Cognome -->
+          <div class="flex-1">
+            <label class="rox-label font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-user text-blue-600"></i> Nome / Cognome
+            </label>
+            <div class="relative">
+              <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" id="af-nome" placeholder="Cerca per nome o cognome (es. Mario, Rossi)..." class="rox-input pl-9.5 font-medium">
+            </div>
           </div>
-          
-          <button id="btn-reset-advanced-search" class="p-button p-button-outlined p-button-sm cursor-pointer">
-            <i class="pi pi-filter-slash text-xs"></i> <span>Azzera Filtri</span>
-          </button>
+
+          <!-- Campo 2: Codice Fiscale -->
+          <div class="w-full lg:w-72">
+            <label class="rox-label font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+              <i class="fa-solid fa-id-card text-indigo-600"></i> Codice Fiscale
+            </label>
+            <div class="relative">
+              <i class="fa-solid fa-barcode absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+              <input type="text" id="af-cf" placeholder="es. RSSMRA78..." class="rox-input pl-9.5 font-mono uppercase font-bold text-blue-700">
+            </div>
+          </div>
+
+          <!-- Action Buttons (Toggle Filtri Avanzati & Reset) -->
+          <div class="flex items-center gap-2 pt-1 sm:pt-0">
+            <button type="button" id="btn-toggle-advanced-filters" class="cursor-pointer flex-1 sm:flex-initial bg-white hover:bg-slate-50 text-slate-700 font-bold font-heading px-4 py-2.5 rounded-xl border border-slate-200/90 shadow-2xs hover:border-blue-300 hover:text-blue-700 transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-sliders text-blue-600"></i>
+              <span>Filtri Avanzati</span>
+              <span id="badge-advanced-filters-count" class="hidden px-1.5 py-0.2 text-[10px] font-extrabold rounded-full bg-blue-600 text-white leading-tight">0</span>
+              <i id="icon-toggle-advanced-filters" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-200"></i>
+            </button>
+
+            <button type="button" id="btn-reset-advanced-search" class="cursor-pointer bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-600 px-3.5 py-2.5 rounded-xl border border-transparent hover:border-rose-200 transition flex items-center justify-center gap-1.5 font-heading font-semibold" title="Azzera tutti i filtri">
+              <i class="fa-solid fa-filter-circle-xmark"></i>
+              <span class="hidden sm:inline">Azzera</span>
+            </button>
+          </div>
         </div>
 
-        <div class="p-panel-content">
-          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 text-xs">
-          <div>
-            <label class="rox-label">Nome / Cognome</label>
-            <input type="text" id="af-nome" placeholder="es. Mario o Rossi" class="rox-input">
+        <!-- RIGA 2: PANNELLO FILTRI AVANZATI (ESPANDIBILE / COLLASSABILE - DEFAULT NASCOSTO) -->
+        <div id="panel-advanced-filters" class="hidden pt-4 border-t border-slate-100/90 space-y-4 animate-scale-up">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 font-heading flex items-center gap-1.5">
+              <i class="fa-solid fa-filter text-blue-600"></i> Criteri Aggiuntivi di Selezione
+            </span>
+            <span class="text-[11px] text-slate-400 italic">I filtri si applicano in tempo reale alla tabella sottostante</span>
           </div>
 
-          <div>
-            <label class="rox-label">Codice Fiscale</label>
-            <input type="text" id="af-cf" placeholder="es. RSSMRA78..." class="rox-input font-mono uppercase">
+          <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-3.5 text-xs">
+            <!-- N. Iscrizione -->
+            <div>
+              <label class="rox-label">N. Iscrizione L.68</label>
+              <input type="number" id="af-num-iscriz" placeholder="es. 10452" class="rox-input font-mono">
+            </div>
+
+            <!-- Comune -->
+            <div class="lg:col-span-2">
+              <label class="rox-label">Comune di Residenza</label>
+              <select id="af-comune" class="rox-select w-full">
+                <option value="">Tutti i Comuni</option>
+                <option value="Lecco">Lecco (LC)</option>
+                <option value="Abbadia Lariana">Abbadia Lariana (LC)</option>
+                <option value="Airuno">Airuno (LC)</option>
+                <option value="Annone di Brianza">Annone di Brianza (LC)</option>
+                <option value="Ballabio">Ballabio (LC)</option>
+                <option value="Barzanò">Barzanò (LC)</option>
+                <option value="Bellano">Bellano (LC)</option>
+                <option value="Bosisio Parini">Bosisio Parini (LC)</option>
+                <option value="Bulciago">Bulciago (LC)</option>
+                <option value="Calco">Calco (LC)</option>
+                <option value="Calolziocorte">Calolziocorte (LC)</option>
+                <option value="Carenno">Carenno (LC)</option>
+                <option value="Casatenovo">Casatenovo (LC)</option>
+                <option value="Cassago Brianza">Cassago Brianza (LC)</option>
+                <option value="Cernusco Lombardone">Cernusco Lombardone (LC)</option>
+                <option value="Civate">Civate (LC)</option>
+                <option value="Colico">Colico (LC)</option>
+                <option value="Costa Masnaga">Costa Masnaga (LC)</option>
+                <option value="Cremella">Cremella (LC)</option>
+                <option value="Dervio">Dervio (LC)</option>
+                <option value="Galbiate">Galbiate (LC)</option>
+                <option value="Garlate">Garlate (LC)</option>
+                <option value="Imbersago">Imbersago (LC)</option>
+                <option value="Introbio">Introbio (LC)</option>
+                <option value="Lomagna">Lomagna (LC)</option>
+                <option value="Malgrate">Malgrate (LC)</option>
+                <option value="Mandello del Lario">Mandello del Lario (LC)</option>
+                <option value="Merate">Merate (LC)</option>
+                <option value="Missaglia">Missaglia (LC)</option>
+                <option value="Molteno">Molteno (LC)</option>
+                <option value="Montevecchia">Montevecchia (LC)</option>
+                <option value="Nibionno">Nibionno (LC)</option>
+                <option value="Oggiono">Oggiono (LC)</option>
+                <option value="Olgiate Molgora">Olgiate Molgora (LC)</option>
+                <option value="Olginate">Olginate (LC)</option>
+                <option value="Osnago">Osnago (LC)</option>
+                <option value="Paderno d'Adda">Paderno d'Adda (LC)</option>
+                <option value="Robbiate">Robbiate (LC)</option>
+                <option value="Rogeno">Rogeno (LC)</option>
+                <option value="Sirone">Sirone (LC)</option>
+                <option value="Sirtori">Sirtori (LC)</option>
+                <option value="Valgreghentino">Valgreghentino (LC)</option>
+                <option value="Valmadrera">Valmadrera (LC)</option>
+                <option value="Varenna">Varenna (LC)</option>
+                <option value="Vercurago">Vercurago (LC)</option>
+                <option value="Verderio">Verderio (LC)</option>
+                <option value="Viganò">Viganò (LC)</option>
+                <option value="Milano">Milano (MI)</option>
+                <option value="Monza">Monza (MB)</option>
+                <option value="Como">Como (CO)</option>
+                <option value="Bergamo">Bergamo (BG)</option>
+              </select>
+            </div>
+
+            <!-- Categoria L.68 -->
+            <div>
+              <label class="rox-label">Categoria L.68</label>
+              <select id="af-categoria" class="rox-select w-full">
+                <option value="ALL">Tutte</option>
+                <option value="C.O.">C.O. Disabili (Art. 1)</option>
+                <option value="Art. 18">Art. 18 Protette</option>
+                <option value="F.D.">F.D. Disabili</option>
+                <option value="BSL">BSL</option>
+              </select>
+            </div>
+
+            <!-- Stato Occupazionale -->
+            <div>
+              <label class="rox-label">Stato Occupazionale</label>
+              <select id="af-stato" class="rox-select w-full">
+                <option value="ALL">Tutti gli Stati</option>
+                <option value="Disoccupato">Disoccupati</option>
+                <option value="In Tirocinio">In Tirocinio</option>
+                <option value="Occupato">Occupati</option>
+              </select>
+            </div>
+
+            <!-- % Invalidità Minima -->
+            <div>
+              <label class="rox-label">% Invalidità Minima</label>
+              <input type="number" id="af-min-ic" min="0" max="100" placeholder="es. 46" class="rox-input">
+            </div>
           </div>
 
-          <div>
-            <label class="rox-label">Numero Iscrizione L.68</label>
-            <input type="number" id="af-num-iscriz" placeholder="es. 10452" class="rox-input font-mono">
-          </div>
-
-          <div>
-            <label class="rox-label">Comune di Residenza</label>
-            <select id="af-comune" class="rox-select w-full">
-              <option value="">Tutti i Comuni</option>
-              <option value="Lecco">Lecco (LC)</option>
-              <option value="Abbadia Lariana">Abbadia Lariana (LC)</option>
-              <option value="Airuno">Airuno (LC)</option>
-              <option value="Annone di Brianza">Annone di Brianza (LC)</option>
-              <option value="Ballabio">Ballabio (LC)</option>
-              <option value="Barzanò">Barzanò (LC)</option>
-              <option value="Bellano">Bellano (LC)</option>
-              <option value="Bosisio Parini">Bosisio Parini (LC)</option>
-              <option value="Bulciago">Bulciago (LC)</option>
-              <option value="Calco">Calco (LC)</option>
-              <option value="Calolziocorte">Calolziocorte (LC)</option>
-              <option value="Carenno">Carenno (LC)</option>
-              <option value="Casatenovo">Casatenovo (LC)</option>
-              <option value="Cassago Brianza">Cassago Brianza (LC)</option>
-              <option value="Cernusco Lombardone">Cernusco Lombardone (LC)</option>
-              <option value="Civate">Civate (LC)</option>
-              <option value="Colico">Colico (LC)</option>
-              <option value="Costa Masnaga">Costa Masnaga (LC)</option>
-              <option value="Cremella">Cremella (LC)</option>
-              <option value="Dervio">Dervio (LC)</option>
-              <option value="Galbiate">Galbiate (LC)</option>
-              <option value="Garlate">Garlate (LC)</option>
-              <option value="Imbersago">Imbersago (LC)</option>
-              <option value="Introbio">Introbio (LC)</option>
-              <option value="Lomagna">Lomagna (LC)</option>
-              <option value="Malgrate">Malgrate (LC)</option>
-              <option value="Mandello del Lario">Mandello del Lario (LC)</option>
-              <option value="Merate">Merate (LC)</option>
-              <option value="Missaglia">Missaglia (LC)</option>
-              <option value="Molteno">Molteno (LC)</option>
-              <option value="Montevecchia">Montevecchia (LC)</option>
-              <option value="Nibionno">Nibionno (LC)</option>
-              <option value="Oggiono">Oggiono (LC)</option>
-              <option value="Olgiate Molgora">Olgiate Molgora (LC)</option>
-              <option value="Olginate">Olginate (LC)</option>
-              <option value="Osnago">Osnago (LC)</option>
-              <option value="Paderno d'Adda">Paderno d'Adda (LC)</option>
-              <option value="Robbiate">Robbiate (LC)</option>
-              <option value="Rogeno">Rogeno (LC)</option>
-              <option value="Sirone">Sirone (LC)</option>
-              <option value="Sirtori">Sirtori (LC)</option>
-              <option value="Valgreghentino">Valgreghentino (LC)</option>
-              <option value="Valmadrera">Valmadrera (LC)</option>
-              <option value="Varenna">Varenna (LC)</option>
-              <option value="Vercurago">Vercurago (LC)</option>
-              <option value="Verderio">Verderio (LC)</option>
-              <option value="Viganò">Viganò (LC)</option>
-              <option value="Milano">Milano (MI)</option>
-              <option value="Monza">Monza (MB)</option>
-              <option value="Como">Como (CO)</option>
-              <option value="Bergamo">Bergamo (BG)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="rox-label">Categoria L.68/99</label>
-            <select id="af-categoria" class="rox-select w-full">
-              <option value="ALL">Tutte le Categorie</option>
-              <option value="C.O.">C.O. Disabili (Art. 1)</option>
-              <option value="Art. 18">Art. 18 Categorie Protette</option>
-              <option value="F.D.">F.D. Disabili</option>
-              <option value="BSL">BSL</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="rox-label">Stato Occupazionale</label>
-            <select id="af-stato" class="rox-select w-full">
-              <option value="ALL">Tutti gli Stati Occupazionali</option>
-              <option value="Disoccupato">Disoccupati</option>
-              <option value="In Tirocinio">In Tirocinio</option>
-              <option value="Occupato">Occupati (T.Det / T.Indet)</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="rox-label">% Invalidità Minima (%)</label>
-            <input type="number" id="af-min-ic" min="0" max="100" placeholder="es. 46" class="rox-input">
-          </div>
-
-          <div class="flex items-end pb-1.5">
+          <div class="pt-1 flex items-center justify-between">
             <label class="flex items-center space-x-2 cursor-pointer font-medium text-slate-700">
-              <input type="checkbox" id="af-noeretta" class="rounded border-slate-300 text-blue-600">
-              <span>Solo Mansione Seduta (No Eretta)</span>
+              <input type="checkbox" id="af-noeretta" class="rounded border-slate-300 text-blue-600 focus:ring-0">
+              <span>Solo Mansioni con Postazione Seduta (Escludi stazione eretta prolungata)</span>
             </label>
           </div>
         </div>
       </div>
-    </div>
 
       <!-- Results Container Header & View Mode Switcher -->
       <div class="flex items-center justify-between">
@@ -2503,7 +2527,7 @@
               </div>
               <div>
                 <label class="rox-label">Provincia Residenza</label>
-                <input type="text" id="w-prov-res" value="LC" class="rox-input uppercase font-mono">
+                <input type="text" id="w-prov-res" placeholder="es. LC" class="rox-input uppercase font-mono">
               </div>
               <div>
                 <label class="rox-label">Indirizzo di Residenza</label>
@@ -2613,7 +2637,7 @@
                 <span class="font-bold text-slate-700">Titolare Legge 104/92</span>
               </label>
               <label class="inline-flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="w-allegati-l68" checked class="rounded text-rose-600 focus:ring-0">
+                <input type="checkbox" id="w-allegati-l68" class="rounded text-rose-600 focus:ring-0">
                 <span class="font-bold text-slate-700">Allegati Sanitari L.68 Presenti nel Fascicolo</span>
               </label>
             </div>
@@ -2677,7 +2701,7 @@
               <label class="rox-label">Lingue Straniere Conosciute</label>
               <div class="flex flex-wrap gap-4 pt-1">
                 <label class="inline-flex items-center gap-1.5 cursor-pointer">
-                  <input type="checkbox" id="w-lang-en" checked class="rounded text-indigo-600 focus:ring-0">
+                  <input type="checkbox" id="w-lang-en" class="rounded text-indigo-600 focus:ring-0">
                   <span class="font-medium text-slate-700">Inglese</span>
                 </label>
                 <label class="inline-flex items-center gap-1.5 cursor-pointer">
@@ -2717,35 +2741,35 @@
               <span class="font-bold text-slate-800 block mb-2 font-heading">Valutazione Abilità & Capacità Motorie:</span>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-stazione-eretta" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-stazione-eretta" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Stazione Eretta</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-movimentazione" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-movimentazione" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Moviment. Carichi</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-manualita" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-manualita" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Manualità Fine</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-arti-superiori" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-arti-superiori" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Arti Superiori</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-vista" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-vista" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Funzione Visiva</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-udito" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-udito" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Funzione Uditiva</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-colonna" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-colonna" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Colonna / Postura</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 hover:border-purple-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-pubblico" checked class="rounded text-purple-600 focus:ring-0">
+                  <input type="checkbox" id="w-pubblico" class="rounded text-purple-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Contatto Pubblico</span>
                 </label>
               </div>
@@ -2756,7 +2780,7 @@
               <span class="font-bold text-slate-800 block mb-2 font-heading">Mansioni & Profili Lavorativi Idonei:</span>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
-                  <input type="checkbox" id="w-m-impiegato" checked class="rounded text-blue-600 focus:ring-0">
+                  <input type="checkbox" id="w-m-impiegato" class="rounded text-blue-600 focus:ring-0">
                   <span class="font-semibold text-slate-700">Impiegato / Data Entry</span>
                 </label>
                 <label class="flex items-center gap-2 p-2.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-blue-50 hover:border-blue-200 transition cursor-pointer">
@@ -2815,21 +2839,21 @@
               </div>
               <div>
                 <label class="rox-label">Raggio Max Spostamento (Km)</label>
-                <input type="number" id="w-raggio-km" value="25" class="rox-input font-bold text-emerald-700">
+                <input type="number" id="w-raggio-km" placeholder="es. 25" class="rox-input font-bold text-emerald-700">
               </div>
               <div>
                 <label class="rox-label">Operatore Incaricato CPI</label>
-                <input type="text" id="w-operatore-cpi" value="Marco Galli (Admin CPI)" class="rox-input font-medium">
+                <input type="text" id="w-operatore-cpi" placeholder="es. Operatore CPI" class="rox-input font-medium">
               </div>
             </div>
 
             <div class="flex flex-wrap gap-4 pt-2">
               <label class="inline-flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="w-mezzo-munito" checked class="rounded text-emerald-600 focus:ring-0">
+                <input type="checkbox" id="w-mezzo-munito" class="rounded text-emerald-600 focus:ring-0">
                 <span class="font-bold text-slate-700">Automunito / Mezzo Proprio</span>
               </label>
               <label class="inline-flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" id="w-smartworking" checked class="rounded text-emerald-600 focus:ring-0">
+                <input type="checkbox" id="w-smartworking" class="rounded text-emerald-600 focus:ring-0">
                 <span class="font-bold text-slate-700">Disponibile a Smart Working</span>
               </label>
               <label class="inline-flex items-center gap-2 cursor-pointer">

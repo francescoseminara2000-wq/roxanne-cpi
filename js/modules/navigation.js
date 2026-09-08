@@ -208,6 +208,55 @@ function initTopNavigation() {
     }
   });
 
+  // --- GESTIONE MASCHERA DI RICERCA: TOGGLE FILTRI AVANZATI & BADGE ---
+  const btnToggleAdvFilters = document.getElementById("btn-toggle-advanced-filters");
+  const panelAdvFilters = document.getElementById("panel-advanced-filters");
+  const iconToggleAdvFilters = document.getElementById("icon-toggle-advanced-filters");
+  const badgeAdvCount = document.getElementById("badge-advanced-filters-count");
+
+  function updateAdvancedFiltersCount() {
+    let count = 0;
+    if ((document.getElementById("af-num-iscriz").value || "").trim()) count++;
+    if (document.getElementById("af-comune").value) count++;
+    if (document.getElementById("af-categoria").value !== "ALL") count++;
+    if (document.getElementById("af-stato").value !== "ALL") count++;
+    if ((document.getElementById("af-min-ic").value || "").trim()) count++;
+    if (document.getElementById("af-noeretta").checked) count++;
+
+    if (badgeAdvCount) {
+      if (count > 0) {
+        badgeAdvCount.textContent = count;
+        badgeAdvCount.classList.remove("hidden");
+      } else {
+        badgeAdvCount.classList.add("hidden");
+      }
+    }
+  }
+
+  if (btnToggleAdvFilters && panelAdvFilters) {
+    btnToggleAdvFilters.addEventListener("click", () => {
+      const isHidden = panelAdvFilters.classList.contains("hidden");
+      if (isHidden) {
+        panelAdvFilters.classList.remove("hidden");
+        if (iconToggleAdvFilters) iconToggleAdvFilters.classList.add("rotate-180");
+        btnToggleAdvFilters.classList.add("bg-blue-50/80", "border-blue-300", "text-blue-700");
+      } else {
+        panelAdvFilters.classList.add("hidden");
+        if (iconToggleAdvFilters) iconToggleAdvFilters.classList.remove("rotate-180");
+        btnToggleAdvFilters.classList.remove("bg-blue-50/80", "border-blue-300", "text-blue-700");
+      }
+    });
+  }
+
+  // Hook all'input per aggiornare il badge dei filtri avanzati
+  searchInputs.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener("input", updateAdvancedFiltersCount);
+      el.addEventListener("change", updateAdvancedFiltersCount);
+    }
+  });
+
   const btnResetSearch = document.getElementById("btn-reset-advanced-search");
   if (btnResetSearch) {
     btnResetSearch.addEventListener("click", () => {
@@ -219,42 +268,10 @@ function initTopNavigation() {
       document.getElementById("af-stato").value = "ALL";
       document.getElementById("af-min-ic").value = "";
       document.getElementById("af-noeretta").checked = false;
+      updateAdvancedFiltersCount();
       if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
     });
   }
-
-  // --- CONTROLLER INGRANDIMENTO & SCALABILITÀ SCHERMATE (100% / 115% / 130%) ---
-  const btnZoomNormal = document.getElementById("btn-zoom-normal");
-  const btnZoomLarge = document.getElementById("btn-zoom-large");
-  const btnZoomXLarge = document.getElementById("btn-zoom-xlarge");
-  const zoomBtns = [btnZoomNormal, btnZoomLarge, btnZoomXLarge];
-
-  function applyZoom(zoomLevel) {
-    document.documentElement.classList.remove("zoom-100", "zoom-115", "zoom-130");
-    document.documentElement.classList.add(`zoom-${zoomLevel}`);
-    localStorage.setItem("ROXANNE_ZOOM_LEVEL", String(zoomLevel));
-
-    zoomBtns.forEach(btn => {
-      if (btn) {
-        btn.classList.remove("active", "bg-white", "text-blue-600", "shadow-2xs");
-        btn.classList.add("text-slate-600");
-      }
-    });
-
-    const activeBtn = zoomLevel === 100 ? btnZoomNormal : zoomLevel === 130 ? btnZoomXLarge : btnZoomLarge;
-    if (activeBtn) {
-      activeBtn.classList.add("active", "bg-white", "text-blue-600", "shadow-2xs");
-      activeBtn.classList.remove("text-slate-600");
-    }
-  }
-
-  if (btnZoomNormal) btnZoomNormal.addEventListener("click", () => applyZoom(100));
-  if (btnZoomLarge) btnZoomLarge.addEventListener("click", () => applyZoom(115));
-  if (btnZoomXLarge) btnZoomXLarge.addEventListener("click", () => applyZoom(130));
-
-  // Inizializza con livello 115% (Ampio & Leggibile di default)
-  const savedZoom = parseInt(localStorage.getItem("ROXANNE_ZOOM_LEVEL")) || 115;
-  applyZoom(savedZoom);
 
   // Inizializza indicatore dinamico Liquid Glass sulla barra desktop
   liquidNavInstance = new LiquidGlassNavbar("#desktop-nav-container");
