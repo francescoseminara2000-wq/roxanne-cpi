@@ -3820,84 +3820,208 @@
     </div>
   </div>
 
-  <!-- MODAL NUOVO PROGETTO INSERIMENTO LAVORATIVO (PIL L.68/99) -->
-  <div id="modal-progetto-pil" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="liquid-modal-card w-full max-w-3xl rounded-2xl border border-white/95 shadow-2xl p-6 space-y-4 text-xs max-h-[92vh] overflow-y-auto">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
-        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading">
-          <i class="fa-solid fa-file-signature text-teal-600"></i> Registra Nuovo Progetto di Inserimento Lavorativo (PIL)
-        </h3>
-        <button id="btn-close-modal-pil" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
+  <!-- MODAL WIZARD GUIDATO PROGETTO INSERIMENTO LAVORATIVO (PIL L.68/99) STEP-BY-STEP -->
+  <div id="modal-progetto-pil" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 hidden">
+    <div class="liquid-modal-card w-full max-w-4xl rounded-3xl border border-white/95 shadow-2xl overflow-hidden flex flex-col max-h-[94vh] animate-scale-up text-xs">
+      
+      <!-- Stepper Header con Indicatore Avanzamento Liquid Glass -->
+      <div class="px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-teal-900 via-slate-900 to-indigo-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <div class="flex items-center gap-2 text-teal-400 font-bold text-[11px] uppercase tracking-wider font-heading">
+            <i class="fa-solid fa-file-signature"></i>
+            <span id="pil-wizard-badge-mode">Fascicolo Inserimento Lavorativo L.68/99</span>
+          </div>
+          <h2 id="modal-pil-title" class="text-xl font-bold font-heading text-white">Progetto Individuale di Inserimento (PIL)</h2>
+          <p class="text-xs text-teal-100/75 mt-0.5" id="pil-citizen-reference">Compilazione guidata del percorso dote e profilo di occupabilità</p>
+        </div>
+
+        <button id="btn-close-modal-pil" class="self-end sm:self-center w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
       </div>
 
-      <form id="form-progetto-pil" class="space-y-4">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="rox-label">Data Redazione PIL *</label>
-            <input type="date" id="pil-data" required class="rox-input font-semibold">
+      <!-- Barra di Navigazione degli Step (Stepper Tabs) -->
+      <div class="bg-slate-50 border-b border-slate-200 px-6 py-3 overflow-x-auto">
+        <div class="flex items-center justify-between min-w-[620px] text-xs">
+          
+          <button type="button" class="pil-step-tab active flex items-center gap-2 font-heading font-bold text-teal-700 transition" data-step="1">
+            <span class="w-6 h-6 rounded-full bg-teal-600 text-white flex items-center justify-center text-[11px] font-bold">1</span>
+            <span>1. Dati Patto & Obiettivi</span>
+          </button>
+          
+          <div class="h-[2px] w-6 bg-slate-200"></div>
+
+          <button type="button" class="pil-step-tab flex items-center gap-2 font-heading font-bold text-slate-400 transition" data-step="2">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px] font-bold">2</span>
+            <span>2. Competenze & Pregresso</span>
+          </button>
+
+          <div class="h-[2px] w-6 bg-slate-200"></div>
+
+          <button type="button" class="pil-step-tab flex items-center gap-2 font-heading font-bold text-slate-400 transition" data-step="3">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px] font-bold">3</span>
+            <span>3. Autonomie & Salute</span>
+          </button>
+
+          <div class="h-[2px] w-6 bg-slate-200"></div>
+
+          <button type="button" class="pil-step-tab flex items-center gap-2 font-heading font-bold text-slate-400 transition" data-step="4">
+            <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[11px] font-bold">4</span>
+            <span>4. Valutazione & Risorse</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Form Contenitore Pagine Wizard Step -->
+      <form id="form-progetto-pil" class="flex-1 overflow-y-auto p-6 space-y-6">
+        <input type="hidden" id="pil-edit-id">
+
+        <!-- STEP 1: DATI PATTO, OBIETTIVI & TUTOR -->
+        <div id="pil-step-content-1" class="pil-step-pane space-y-5">
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-handshake text-teal-600"></i>
+              <span>Quadro Istituzionale & Patto di Servizio</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div>
+                <label class="rox-label font-bold text-slate-700">Data Redazione PIL *</label>
+                <input type="date" id="pil-data" required class="rox-input font-bold text-slate-900">
+              </div>
+              <div>
+                <label class="rox-label font-bold text-slate-700">Codice ID Dote / Bando</label>
+                <input type="text" id="pil-iddote" placeholder="es. DOTE-L68-2026-92" class="rox-input font-mono font-bold text-teal-700">
+              </div>
+              <div>
+                <label class="rox-label font-bold text-slate-700">Tutor / Operatore CPI *</label>
+                <input type="text" id="pil-operatore" required value="Marco Galli (Admin CPI)" class="rox-input font-medium">
+              </div>
+            </div>
           </div>
-          <div>
-            <label class="rox-label">Codice ID Dote / Bando</label>
-            <input type="text" id="pil-iddote" placeholder="es. DOTE-L68-2026-92" class="rox-input font-mono font-bold text-teal-700">
-          </div>
-          <div>
-            <label class="rox-label">Tutor / Operatore Referente</label>
-            <input type="text" id="pil-operatore" value="Marco Galli (Admin CPI)" class="rox-input font-medium">
+
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-bullseye text-teal-600"></i>
+              <span>Obiettivo Lavorativo & Percorso di Inserimento Mirato</span>
+            </div>
+
+            <div>
+              <label class="rox-label font-bold text-slate-700">Progetto di Inserimento, Tirocinio o Assunzione *</label>
+              <textarea id="pil-progetto" rows="4" placeholder="Delinea la sintesi del percorso di inserimento, percorso di tirocinio o avviamento diretto, mansioni target, supporto aziendale e monitoraggio previsto..." required class="rox-input text-slate-800 font-medium"></textarea>
+            </div>
           </div>
         </div>
 
-        <div>
-          <label class="rox-label">Progetto di Inserimento & Obiettivi Lavorativi *</label>
-          <textarea id="pil-progetto" rows="3" placeholder="Sintesi del percorso di inserimento, percorso di tirocinio/assunzione, mansioni target e tutoraggio..." required class="rox-input text-slate-800 font-medium"></textarea>
-        </div>
+        <!-- STEP 2: COMPETENZE, FORMAZIONE & ESPERIENZE PREGRESSE -->
+        <div id="pil-step-content-2" class="pil-step-pane space-y-5 hidden">
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-graduation-cap text-indigo-600"></i>
+              <span>Profilo Scolastico, Formativo & Certificazioni</span>
+            </div>
+            <div>
+              <label class="rox-label">Titoli di Studio, Corsi di Formazione & Competenze Acquisite</label>
+              <textarea id="pil-scolastico" rows="3" placeholder="Istruzione completata, corsi professionalizzanti, competenze informatiche o linguistiche..." class="rox-input"></textarea>
+            </div>
+          </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label class="rox-label">Profilo Dinamico Funzionale</label>
-            <textarea id="pil-funzionale" rows="2" placeholder="Autonomia operativa, capacità esecutiva, ritmo di lavoro..." class="rox-input"></textarea>
-          </div>
-          <div>
-            <label class="rox-label">Profilo Sanitario & Adattamenti</label>
-            <textarea id="pil-sanitario" rows="2" placeholder="Quadro sanitario sintetico e ausili necessari..." class="rox-input"></textarea>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label class="rox-label">Profilo Scolastico & Formativo</label>
-            <textarea id="pil-scolastico" rows="2" placeholder="Competenze acquisite e corsi di formazione seguiti..." class="rox-input"></textarea>
-          </div>
-          <div>
-            <label class="rox-label">Profilo Lavorativo Pregresso</label>
-            <textarea id="pil-lavorativo" rows="2" placeholder="Esperienze e mansioni svolte in precedenza..." class="rox-input"></textarea>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label class="rox-label">Profilo Personale & Sociale</label>
-            <textarea id="pil-sociale" rows="2" placeholder="Attitudini relazionali, motivazione e contesto familiare..." class="rox-input"></textarea>
-          </div>
-          <div>
-            <label class="rox-label">Valutazione Occupabilità & Match</label>
-            <textarea id="pil-valutazione" rows="2" placeholder="Sintesi del livello di occupabilità e compatibilità con le quote d'obbligo..." class="rox-input"></textarea>
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-briefcase text-blue-600"></i>
+              <span>Esperienze Lavorative Pregresse & Mansioni Svolte</span>
+            </div>
+            <div>
+              <label class="rox-label">Storico Occupazionale, Settori e Mansioni</label>
+              <textarea id="pil-lavorativo" rows="3" placeholder="Precedenti contratti, tirocini svolti, mansioni ricoperte e motivi di cessazione o cambio percorso..." class="rox-input"></textarea>
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <div>
-            <label class="rox-label text-rose-600">Aspetti di Criticità / Da Evitare</label>
-            <textarea id="pil-criticita" rows="2" placeholder="Limitazioni ambientali, carichi, orari o mansioni non idonee..." class="rox-input border-rose-200 bg-rose-50/20"></textarea>
+        <!-- STEP 3: PROFILO DINAMICO-FUNZIONALE & QUADRO SANITARIO/AUTONOMIE -->
+        <div id="pil-step-content-3" class="pil-step-pane space-y-5 hidden">
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-person-running text-purple-600"></i>
+              <span>Profilo Dinamico Funzionale & Ritmo di Lavoro</span>
+            </div>
+            <div>
+              <label class="rox-label">Autonomia Operativa, Tolleranza allo Stress e Capacità Esecutiva</label>
+              <textarea id="pil-funzionale" rows="3" placeholder="Autonomia nel raggiungere la sede, rispetto compiti, capacità di apprendimento nuove mansioni e tenuta oraria..." class="rox-input"></textarea>
+            </div>
           </div>
-          <div>
-            <label class="rox-label text-emerald-600">Aspetti di Positività / Punti di Forza</label>
-            <textarea id="pil-positivita" rows="2" placeholder="Capacità relazionali, puntualità, competenze informatiche o tecniche..." class="rox-input border-emerald-200 bg-emerald-50/20"></textarea>
+
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-heart-pulse text-rose-600"></i>
+              <span>Profilo Sanitario, Ausili & Limitazioni Ambientali</span>
+            </div>
+            <div>
+              <label class="rox-label">Quadro Sanitario Funzionale e Adattamenti della Postazione</label>
+              <textarea id="pil-sanitario" rows="3" placeholder="Condizioni di salute rilevanti per il lavoro, ausili informatici o posturali, ergonomia necessaria..." class="rox-input"></textarea>
+            </div>
           </div>
         </div>
 
-        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-200/80">
-          <button id="btn-cancel-modal-pil" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
-          <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-bold font-heading">Salva Progetto PIL</button>
+        <!-- STEP 4: VALUTAZIONE OCCUPABILITÀ, CRITICITÀ & PUNTI DI FORZA -->
+        <div id="pil-step-content-4" class="pil-step-pane space-y-5 hidden">
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-people-arrows text-cyan-600"></i>
+              <span>Profilo Personale, Sociale & Relazionale</span>
+            </div>
+            <div>
+              <label class="rox-label">Attitudini Relazionali, Motivazione e Contesto Familiare</label>
+              <textarea id="pil-sociale" rows="2" placeholder="Capacità di lavorare in gruppo, motivazione al lavoro e rete di supporto..." class="rox-input"></textarea>
+            </div>
+          </div>
+
+          <div class="mantine-form-section">
+            <div class="mantine-section-header">
+              <i class="fa-solid fa-chart-line text-emerald-600"></i>
+              <span>Valutazione Complessiva Occupabilità & Match</span>
+            </div>
+            <div>
+              <label class="rox-label">Sintesi del Livello di Occupabilità e Compatibilità L.68/99</label>
+              <textarea id="pil-valutazione" rows="2" placeholder="Valutazione del tutor CPI sulla spendibilità del profilo nelle aziende in obbligo L.68..." class="rox-input"></textarea>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="p-3.5 rounded-2xl bg-rose-50/50 border border-rose-200/80 space-y-1">
+              <label class="rox-label text-rose-700 font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-triangle-exclamation"></i> Aspetti di Criticità / Da Evitare
+              </label>
+              <textarea id="pil-criticita" rows="3" placeholder="Limitazioni ambientali, turni notturni, rumore o mansioni controindicate..." class="rox-input border-rose-200 bg-white"></textarea>
+            </div>
+
+            <div class="p-3.5 rounded-2xl bg-emerald-50/50 border border-emerald-200/80 space-y-1">
+              <label class="rox-label text-emerald-700 font-bold flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-check"></i> Aspetti di Positività / Punti di Forza
+              </label>
+              <textarea id="pil-positivita" rows="3" placeholder="Puntualità, precisione, attitudine all'apprendimento, competenze trasversali..." class="rox-input border-emerald-200 bg-white"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer di Navigazione Wizard (Precedente, Successivo, Salva) -->
+        <div class="flex items-center justify-between pt-4 border-t border-slate-200/80">
+          <button type="button" id="btn-pil-prev-step" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-bold flex items-center gap-1.5 hidden">
+            <i class="fa-solid fa-arrow-left text-[11px]"></i>
+            <span>Precedente</span>
+          </button>
+
+          <div class="flex items-center gap-2 ml-auto">
+            <button id="btn-cancel-modal-pil" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-600 font-medium">Annulla</button>
+            <button type="button" id="btn-pil-next-step" class="cursor-pointer bg-teal-600 hover:bg-teal-700 text-white font-bold font-heading px-5 py-2.5 rounded-xl shadow-xs transition flex items-center gap-1.5">
+              <span>Successivo</span>
+              <i class="fa-solid fa-arrow-right text-[11px]"></i>
+            </button>
+            <button type="submit" id="btn-pil-submit" class="cursor-pointer bg-emerald-600 hover:bg-emerald-700 text-white font-bold font-heading px-6 py-2.5 rounded-xl shadow-md transition flex items-center gap-1.5 hidden">
+              <i class="fa-solid fa-floppy-disk text-xs"></i>
+              <span>Salva Progetto PIL</span>
+            </button>
+          </div>
         </div>
       </form>
     </div>

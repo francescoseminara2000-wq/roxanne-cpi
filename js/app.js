@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof window.loadBrandingConfig === "function") window.loadBrandingConfig();
   if (typeof window.initProfileModal === "function") window.initProfileModal();
   if (typeof window.initMonitoraggiEvents === "function") window.initMonitoraggiEvents();
+  if (typeof window.initPilEvents === "function") window.initPilEvents();
 
   // 4. Sessione Operatore & Preloader
   if (typeof window.initAuthSession === "function") window.initAuthSession();
