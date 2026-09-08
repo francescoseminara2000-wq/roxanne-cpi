@@ -307,20 +307,21 @@ class LiquidGlassNavbar {
   updateTarget(targetBtn, animate = true) {
     if (!targetBtn || !this.pill || !this.baseNav) return;
 
-    const navRect = this.baseNav.getBoundingClientRect();
-    const btnRect = targetBtn.getBoundingClientRect();
+    // Calcolo coordinate pixel-perfect tramite offset relativo all'offsetParent (#desktop-nav-base)
+    const targetX = targetBtn.offsetLeft;
+    const targetY = targetBtn.offsetTop;
+    const targetW = targetBtn.offsetWidth;
+    const targetH = targetBtn.offsetHeight;
 
-    if (navRect.width === 0 || btnRect.width === 0) return;
+    if (targetW === 0 || targetH === 0) return;
 
-    // Calcolo coordinate relative rispetto a #desktop-nav-base
-    const targetX = btnRect.left - navRect.left;
-    const targetW = btnRect.width;
-
-    this.target = { x: targetX, w: targetW };
+    this.target = { x: targetX, y: targetY, w: targetW, h: targetH };
 
     if (!animate) {
       this.current.x = targetX;
+      this.current.y = targetY;
       this.current.w = targetW;
+      this.current.h = targetH;
       this.velocity.x = 0;
       this.velocity.w = 0;
       this.applyPillStyle();
@@ -354,6 +355,10 @@ class LiquidGlassNavbar {
     this.velocity.w += forceW * dt;
     this.current.w += this.velocity.w * dt;
 
+    // Posizione Y e altezza H con aderenza immediata
+    this.current.y = this.target.y;
+    this.current.h = this.target.h;
+
     this.applyPillStyle();
 
     // Condizione di arresto quando le oscillazioni convergono
@@ -365,7 +370,9 @@ class LiquidGlassNavbar {
 
     if (isSettled) {
       this.current.x = this.target.x;
+      this.current.y = this.target.y;
       this.current.w = this.target.w;
+      this.current.h = this.target.h;
       this.velocity.x = 0;
       this.velocity.w = 0;
       this.applyPillStyle();
@@ -376,8 +383,9 @@ class LiquidGlassNavbar {
   }
 
   applyPillStyle() {
-    this.pill.style.transform = `translate3d(${this.current.x.toFixed(2)}px, 0, 0)`;
+    this.pill.style.transform = `translate3d(${this.current.x.toFixed(2)}px, ${this.current.y.toFixed(2)}px, 0)`;
     this.pill.style.width = `${this.current.w.toFixed(2)}px`;
+    this.pill.style.height = `${this.current.h.toFixed(2)}px`;
   }
 }
 
