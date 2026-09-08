@@ -807,35 +807,33 @@
                       </div>
                     </div>
 
-                    <!-- Riga 2: Dati Identificativi CF e Iscrizione -->
-                    <div class="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
-                      <span class="inline-flex items-center gap-1.5 font-medium">
-                        <span class="text-[10px] uppercase font-semibold text-slate-400">CF</span>
-                        <strong id="hub-cf" class="text-slate-800 font-semibold font-mono tracking-wide">RSSMRA78A01E507X</strong>
-                      </span>
+                    <!-- Riga 2: Dati Identificativi (CF Uniforme & Chip Box Iscrizione in Risalto) -->
+                    <div class="flex items-center gap-3 text-slate-500 flex-wrap">
+                      <strong id="hub-cf" class="text-slate-800 font-semibold text-[13px] tracking-wide" title="Codice Fiscale">RSSMRA78A01E507X</strong>
                       <span class="text-slate-300 hidden sm:inline">&bull;</span>
-                      <span class="inline-flex items-center gap-1.5 font-medium">
-                        <span class="text-[10px] uppercase font-semibold text-slate-400">Iscriz.</span>
-                        <strong id="hub-num-iscriz" class="text-blue-700 font-semibold">#10452</strong>
-                      </span>
+                      <div class="liquid-enrollment-chip" title="Numero Iscrizione Collocamento Mirato L.68/99">
+                        <i class="pi pi-id-card text-[11px] text-blue-600"></i>
+                        <span class="text-[10px] uppercase font-semibold text-blue-600 tracking-wider">Iscriz.</span>
+                        <strong id="hub-num-iscriz" class="font-bold text-blue-700">#10452</strong>
+                      </div>
                     </div>
 
-                    <!-- Riga 3: Recapiti Contatto Puliti e Allineati -->
-                    <div class="flex items-center gap-x-4 gap-y-1.5 text-xs text-slate-600 flex-wrap pt-0.5 border-t border-slate-200/50">
-                      <div class="flex items-center gap-1.5">
+                    <!-- Riga 3: Recapiti Contatto Puliti e Cliccabili (Telefono & Email Interattivi) -->
+                    <div class="flex items-center gap-x-5 gap-y-1.5 text-xs text-slate-600 flex-wrap pt-1 border-t border-slate-200/50">
+                      <div class="flex items-center gap-1.5 text-slate-600">
                         <i class="pi pi-map-marker text-slate-400 text-xs"></i>
                         <span id="hub-residenza" class="font-medium text-slate-700">Lecco</span>
                       </div>
 
-                      <div class="flex items-center gap-1.5">
+                      <a id="hub-tel-link" href="tel:3389876543" class="contact-interactive-link" title="Chiama numero di telefono">
                         <i class="pi pi-phone text-slate-400 text-xs"></i>
-                        <span id="hub-tel" class="font-medium text-slate-700">3389876543</span>
-                      </div>
+                        <span id="hub-tel" class="font-medium">3389876543</span>
+                      </a>
 
-                      <div class="flex items-center gap-1.5 truncate max-w-[220px]">
+                      <a id="hub-email-link" href="mailto:mario.rossi@email.it" class="contact-interactive-link truncate max-w-[240px]" title="Invia messaggio email">
                         <i class="pi pi-envelope text-slate-400 text-xs"></i>
-                        <span id="hub-email" class="font-medium text-slate-700 truncate">mario.rossi@email.it</span>
-                      </div>
+                        <span id="hub-email" class="font-medium truncate">mario.rossi@email.it</span>
+                      </a>
                     </div>
 
                   </div>

@@ -92,8 +92,32 @@
     if (elCf) elCf.textContent = p.codiceFiscale || "-";
     if (elNumIscriz) elNumIscriz.textContent = `#${p.numeroIscrizione || '0'}`;
     if (elResidenza) elResidenza.textContent = p.comuneResidenza || "Lecco";
-    if (elTel) elTel.textContent = p.cellulare || p.telefono1 || p.telefono || "-";
-    if (elEmail) elEmail.textContent = p.email || "-";
+    
+    const phoneVal = p.cellulare || p.telefono1 || p.telefono || "";
+    if (elTel) elTel.textContent = phoneVal || "-";
+    const elTelLink = document.getElementById("hub-tel-link");
+    if (elTelLink) {
+      if (phoneVal) {
+        elTelLink.href = `tel:${phoneVal.replace(/\s+/g, '')}`;
+        elTelLink.classList.remove("pointer-events-none", "opacity-60");
+      } else {
+        elTelLink.removeAttribute("href");
+        elTelLink.classList.add("pointer-events-none", "opacity-60");
+      }
+    }
+
+    const emailVal = p.email || "";
+    if (elEmail) elEmail.textContent = emailVal || "-";
+    const elEmailLink = document.getElementById("hub-email-link");
+    if (elEmailLink) {
+      if (emailVal) {
+        elEmailLink.href = `mailto:${emailVal}`;
+        elEmailLink.classList.remove("pointer-events-none", "opacity-60");
+      } else {
+        elEmailLink.removeAttribute("href");
+        elEmailLink.classList.add("pointer-events-none", "opacity-60");
+      }
+    }
 
     // Dynamic Category Badge (Uniform Liquid Glass Style)
     const catBadge = document.getElementById("hub-cat-badge");
