@@ -113,6 +113,40 @@ body {
   opacity: 1;
 }
 
+/* CENTERED LOADING MODAL OVERLAY & STRIPES ANIMATION */
+#global-loading-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#global-loading-overlay.active #global-loading-modal-card {
+  transform: scale(1);
+}
+
+.mantine-progress-bar-stripes {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.25) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.25) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: mantineStripes 1s linear infinite;
+}
+
+@keyframes mantineStripes {
+  0% {
+    background-position: 1rem 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
 .stellar-glass-card {
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(12px);

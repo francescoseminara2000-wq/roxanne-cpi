@@ -69,6 +69,38 @@
     <span id="global-loading-text">Elaborazione in corso...</span>
   </div>
 
+  <!-- MODERN MANTINE / PRIMETEK CENTERED LOADING DIALOG OVERLAY -->
+  <div id="global-loading-overlay" class="fixed inset-0 z-[9995] bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="bg-white rounded-3xl p-6 sm:p-7 max-w-sm w-full shadow-2xl border border-blue-100 flex flex-col items-center text-center space-y-4 transform transition-all duration-300 scale-95" id="global-loading-modal-card">
+      
+      <!-- Animated Icon Circle with Glowing Ring -->
+      <div class="relative w-16 h-16 flex items-center justify-center">
+        <div class="absolute inset-0 rounded-2xl bg-blue-500/15 animate-ping" style="animation-duration: 2s;"></div>
+        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-500 text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-blue-500/30">
+          <i class="pi pi-spin pi-spinner text-2xl"></i>
+        </div>
+      </div>
+
+      <!-- Title & Details -->
+      <div class="space-y-1">
+        <h4 id="global-modal-title" class="font-heading font-extrabold text-slate-900 text-base">Salvataggio in corso...</h4>
+        <p id="global-modal-sub" class="text-xs text-slate-500 font-medium">Sincronizzazione dei dati con il Database MySQL CPI...</p>
+      </div>
+
+      <!-- Mantine Striped Progress Bar Component -->
+      <div class="w-full space-y-1.5 pt-1">
+        <div class="w-full h-2.5 rounded-full bg-slate-100 overflow-hidden relative p-0.5 border border-slate-200">
+          <div class="h-full rounded-full bg-gradient-to-r from-sky-500 via-blue-600 to-indigo-600 w-full animate-pulse mantine-progress-bar-stripes"></div>
+        </div>
+        <div class="flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase tracking-wider font-heading">
+          <span>Roxanne CPI Live</span>
+          <span class="text-blue-600 font-bold font-mono">Attendere...</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
   <!-- TOP HEADER / CPI NAVBAR (CHRONO STELLAR RESPONSIVE - AZZURRINO CHIARO) -->
   <header id="main-header" class="backdrop-blur-md sticky top-0 z-40 px-4 md:px-8 py-3 flex items-center justify-between shadow-xs">
     <div class="flex items-center space-x-3">

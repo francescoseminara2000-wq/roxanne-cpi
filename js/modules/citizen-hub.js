@@ -742,6 +742,7 @@
         ...mansPayload
       };
 
+      if (window.RoxLoading) window.RoxLoading.show("Salvataggio scheda iscritto...", "Aggiornamento anagrafica, diagnosi e mansioni su MySQL...");
       try {
         await window.store.updatePersona(p.id, updatedPayload);
 
@@ -763,6 +764,8 @@
         } else {
           alert(`Errore salvataggio MySQL: ${err.message}`);
         }
+      } finally {
+        if (window.RoxLoading) window.RoxLoading.hide();
       }
     });
   }
@@ -798,10 +801,12 @@
       if (!current) return;
       const idx = persone.findIndex(item => item.id === current.id);
       if (idx > 0) {
+        if (window.RoxLoading) window.RoxLoading.show("Caricamento iscritto...", `Apertura fascicolo #${persone[idx - 1].numeroIscrizione}`);
         window.store.setSelectedPersonaId(persone[idx - 1].id);
         const stickyBar = document.getElementById("hub-sticky-save-bar");
         if (stickyBar) stickyBar.classList.add("hidden");
         renderCitizenHub();
+        setTimeout(() => { if (window.RoxLoading) window.RoxLoading.hide(); }, 200);
       }
     });
   }
@@ -813,10 +818,12 @@
       if (!current) return;
       const idx = persone.findIndex(item => item.id === current.id);
       if (idx !== -1 && idx < persone.length - 1) {
+        if (window.RoxLoading) window.RoxLoading.show("Caricamento iscritto...", `Apertura fascicolo #${persone[idx + 1].numeroIscrizione}`);
         window.store.setSelectedPersonaId(persone[idx + 1].id);
         const stickyBar = document.getElementById("hub-sticky-save-bar");
         if (stickyBar) stickyBar.classList.add("hidden");
         renderCitizenHub();
+        setTimeout(() => { if (window.RoxLoading) window.RoxLoading.hide(); }, 200);
       }
     });
   }
@@ -1147,7 +1154,7 @@
   // --- SAVE DISPONIBILITA FORM ---
   const formDisp = document.getElementById("form-disponibilita-hub");
   if (formDisp) {
-    formDisp.addEventListener("submit", (e) => {
+    formDisp.addEventListener("submit", async (e) => {
       e.preventDefault();
       const p = window.store.getSelectedPersona();
       if (!p) return;
@@ -1162,22 +1169,29 @@
         noteDisponibilita: document.getElementById("disp-note").value
       };
 
-      window.store.updatePersona(p.id, { disponibilita: disponibilitaData });
-      
-      if (typeof Swal !== "undefined") {
-        Swal.fire({
-          toast: true,
-          position: 'top-end',
-          icon: 'success',
-          title: 'Disponibilità lavorativa salvata!',
-          showConfirmButton: false,
-          timer: 2000,
-          timerProgressBar: true
-        });
-      } else {
-        alert("Disponibilità aggiornata con successo!");
+      if (window.RoxLoading) window.RoxLoading.show("Salvataggio disponibilità lavorativa...", "Aggiornamento preferenze mobilità ed orari...");
+      try {
+        await window.store.updatePersona(p.id, { disponibilita: disponibilitaData });
+        
+        if (typeof Swal !== "undefined") {
+          Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: 'Disponibilità lavorativa salvata!',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+          });
+        } else {
+          alert("Disponibilità aggiornata con successo!");
+        }
+        renderCitizenHub();
+      } catch (err) {
+        alert(`Errore aggiornamento disponibilità: ${err.message}`);
+      } finally {
+        if (window.RoxLoading) window.RoxLoading.hide();
       }
-      renderCitizenHub();
     });
   }
 

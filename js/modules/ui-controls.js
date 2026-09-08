@@ -203,16 +203,24 @@ const RoxLoading = {
   activeCount: 0,
   timer: null,
 
-  show(message = "Elaborazione in corso...") {
+  show(message = "Salvataggio in corso...", subtitle = "Sincronizzazione dei dati con il Database MySQL CPI...") {
     this.activeCount++;
     const container = document.getElementById("global-progress-container");
     const chip = document.getElementById("global-loading-chip");
-    const text = document.getElementById("global-loading-text");
+    const chipText = document.getElementById("global-loading-text");
+    const overlay = document.getElementById("global-loading-overlay");
+    const modalTitle = document.getElementById("global-modal-title");
+    const modalSub = document.getElementById("global-modal-sub");
 
     if (container) container.classList.add("active");
-    if (chip && text) {
-      text.textContent = message;
+    if (chip && chipText) {
+      chipText.textContent = message;
       chip.classList.add("active");
+    }
+    if (overlay && modalTitle) {
+      modalTitle.textContent = message;
+      if (modalSub && subtitle) modalSub.textContent = subtitle;
+      overlay.classList.add("active");
     }
   },
 
@@ -224,10 +232,12 @@ const RoxLoading = {
         if (this.activeCount === 0) {
           const container = document.getElementById("global-progress-container");
           const chip = document.getElementById("global-loading-chip");
+          const overlay = document.getElementById("global-loading-overlay");
           if (container) container.classList.remove("active");
           if (chip) chip.classList.remove("active");
+          if (overlay) overlay.classList.remove("active");
         }
-      }, 250);
+      }, 300);
     }
   }
 };
