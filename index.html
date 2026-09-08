@@ -2002,55 +2002,197 @@
       </section>
 
       <!-- SECTION 3: MATCHER VIEW -->
+      <!-- SECTION 3: MATCHER VIEW POTENZIATA L.68/99 -->
       <section id="section-matcher" class="space-y-6 hidden">
-        <div>
-          <h1 class="text-2xl font-bold font-heading text-slate-900">Incrocio Domanda / Offerta L.68/99</h1>
-          <p class="text-xs text-slate-500">Trova i candidati idonei per le aziende clienti in base ai fabbisogni fisici e professionali.</p>
+        <!-- Header Sezione Liquid Glass -->
+        <div class="relative overflow-hidden rounded-2xl p-6 bg-gradient-to-r from-blue-900/90 via-indigo-900/85 to-slate-900/90 backdrop-blur-xl border border-white/20 shadow-xl text-white">
+          <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-semibold mb-2">
+                <i class="fa-solid fa-wand-magic-sparkles text-sky-400"></i>
+                <span>Smart Matcher L.68/99 Engine</span>
+              </div>
+              <h1 class="text-2xl font-black font-heading tracking-tight text-white flex items-center gap-3">
+                Incrocio Domanda / Offerta Collocamento Mirato
+              </h1>
+              <p class="text-xs text-slate-300 mt-1 max-w-2xl">
+                Algoritmo di compatibilità multi-criterio per aziende e convenzioni: incrocia mansioni, limitazioni posturali, percentuali di invalidità e mobilità territoriale.
+              </p>
+            </div>
+
+            <!-- Contatore Candidati Match -->
+            <div class="flex items-center space-x-3 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-xl border border-white/15">
+              <div class="w-10 h-10 rounded-lg bg-blue-500/30 flex items-center justify-center text-blue-300 text-lg">
+                <i class="fa-solid fa-users-viewfinder"></i>
+              </div>
+              <div>
+                <div class="text-[11px] uppercase tracking-wider text-slate-300 font-semibold">Candidati Idonei</div>
+                <div id="matcher-count-badge" class="text-lg font-black font-heading text-white">0</div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div class="card-white p-6 space-y-4">
-            <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2 font-heading">
-              <i class="fa-solid fa-sliders text-blue-600"></i> Requisiti Aziendali
-            </h3>
-
-            <form id="form-full-matcher" class="space-y-4 text-xs">
-              <div>
-                <label class="rox-label">Mansione Ricercata</label>
-                <select id="m-mansione" class="rox-select w-full">
-                  <option value="ALL">Tutte le Mansioni</option>
-                  <option value="impiegato">Impiegato / Data Entry</option>
-                  <option value="cassa">Addetto Cassa / Commesso</option>
-                  <option value="magazzino">Magazziniere / Muletti</option>
-                  <option value="socialeScuola">Servizi Scolastici</option>
-                </select>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Colonna Sinistra: Filtri Requisiti Aziendali (Liquid Glass Form) -->
+          <div class="lg:col-span-4 space-y-4">
+            <div class="card-white p-6 space-y-5 shadow-sm border border-slate-200/80">
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="font-bold text-slate-900 text-sm flex items-center gap-2 font-heading">
+                  <i class="fa-solid fa-sliders text-blue-600"></i> Requisiti Aziendali
+                </h3>
+                <button type="button" id="btn-reset-matcher" class="text-[11px] font-semibold text-slate-500 hover:text-blue-600 cursor-pointer transition">
+                  <i class="fa-solid fa-rotate-left mr-1"></i>Reset
+                </button>
               </div>
 
-              <div>
-                <label class="rox-label">% Invalidità Minima</label>
-                <input type="number" id="m-min-ic" value="46" min="0" max="100" class="rox-input">
-              </div>
+              <form id="form-full-matcher" class="space-y-4 text-xs">
+                <!-- Mansione Ricercata -->
+                <div>
+                  <label class="rox-label font-semibold text-slate-700">Mansione Ricercata</label>
+                  <select id="m-mansione" class="rox-select w-full mt-1">
+                    <option value="ALL">Tutte le Mansioni (Nessun vincolo)</option>
+                    <option value="impiegato">Impiegato / Back Office / Contabilità</option>
+                    <option value="receptionSegreteria">Reception / Segreteria / Front Office</option>
+                    <option value="informatica">Informatica / Web / Sviluppo Software</option>
+                    <option value="cassa">Addetto Cassa / Vendita al Pubblico</option>
+                    <option value="commesso">Commesso / Scaffalista Negozio</option>
+                    <option value="magazzino">Magazziniere / Logistica Leggera</option>
+                    <option value="artigiano">Artigiano / Produzione Meccanica CNC</option>
+                    <option value="socialeScuola">Servizi Scolastici / Sociali / Comunità</option>
+                    <option value="pulizie">Addetto Pulizie / Ausiliario</option>
+                  </select>
+                </div>
 
-              <div class="space-y-2 border-t border-slate-100 pt-3">
-                <label class="flex items-center space-x-2 cursor-pointer">
-                  <input type="checkbox" id="m-noeretta" class="rounded border-slate-300 text-blue-600">
-                  <span>Richiede Lavoro Seduto (No stazione eretta)</span>
-                </label>
+                <!-- Categoria L.68 -->
+                <div>
+                  <label class="rox-label font-semibold text-slate-700">Categoria Iscrizione L.68/99</label>
+                  <select id="m-categoria" class="rox-select w-full mt-1">
+                    <option value="ALL">Qualsiasi Categoria</option>
+                    <option value="C.O.">C.O. (Disabili Art. 1)</option>
+                    <option value="Art. 18">Art. 18 (Orfani / Profughi / Vittime)</option>
+                    <option value="F.D.">F.D. (Fondo Disabili)</option>
+                    <option value="BSL">BSL (Borsa Lavoro / Inclusione)</option>
+                  </select>
+                </div>
 
-                <label class="flex items-center space-x-2 cursor-pointer">
-                  <input type="checkbox" id="m-nocarichi" class="rounded border-slate-300 text-blue-600">
-                  <span>No Sollevamento Carichi</span>
-                </label>
-              </div>
+                <!-- Griglia: % Invalidità Minima e Titolo Studio -->
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="rox-label font-semibold text-slate-700">% Invalidità Minima</label>
+                    <div class="relative mt-1">
+                      <input type="number" id="m-min-ic" value="46" min="0" max="100" class="rox-input pr-7 w-full font-bold text-slate-800">
+                      <span class="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xs">%</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="rox-label font-semibold text-slate-700">Studio Minimo</label>
+                    <select id="m-titolo-studio" class="rox-select w-full mt-1">
+                      <option value="ALL">Qualsiasi</option>
+                      <option value="DIPLOMA">Diploma Sup.</option>
+                      <option value="LAUREA">Laurea</option>
+                    </select>
+                  </div>
+                </div>
 
-              <button type="submit" class="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded-xl shadow-xs transition font-heading">
-                Calcola Match Candidati
-              </button>
-            </form>
+                <!-- Sezione Limitazioni & Ergonomia Postazione -->
+                <div class="border-t border-slate-100 pt-3 space-y-2">
+                  <div class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fa-solid fa-chair text-indigo-600"></i> Ergonomia & Postazione
+                  </div>
+                  
+                  <label class="flex items-center space-x-2.5 cursor-pointer text-slate-700 hover:text-slate-900 select-none">
+                    <input type="checkbox" id="m-noeretta" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                    <span>Richiede lavoro seduto (No stazione eretta prolungata)</span>
+                  </label>
+
+                  <label class="flex items-center space-x-2.5 cursor-pointer text-slate-700 hover:text-slate-900 select-none">
+                    <input type="checkbox" id="m-nocarichi" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                    <span>No sollevamento / movimentazione carichi</span>
+                  </label>
+
+                  <label class="flex items-center space-x-2.5 cursor-pointer text-slate-700 hover:text-slate-900 select-none">
+                    <input type="checkbox" id="m-nocontatto" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                    <span>Ambiente protetto (No contatto con pubblico)</span>
+                  </label>
+                </div>
+
+                <!-- Sezione Competenze & Logistica -->
+                <div class="border-t border-slate-100 pt-3 space-y-2">
+                  <div class="text-[11px] font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                    <i class="fa-solid fa-laptop-code text-blue-600"></i> Competenze & Mobilità
+                  </div>
+
+                  <label class="flex items-center space-x-2.5 cursor-pointer text-slate-700 hover:text-slate-900 select-none">
+                    <input type="checkbox" id="m-richiedepc" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                    <span>Competenze informatiche / Uso PC / ECDL</span>
+                  </label>
+
+                  <label class="flex items-center space-x-2.5 cursor-pointer text-slate-700 hover:text-slate-900 select-none">
+                    <input type="checkbox" id="m-richiede-inglese" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                    <span>Conoscenza lingua inglese</span>
+                  </label>
+
+                  <label class="flex items-center space-x-2.5 cursor-pointer text-slate-700 hover:text-slate-900 select-none">
+                    <input type="checkbox" id="m-automunito" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                    <span>Patente B & Mezzo proprio (Auto)</span>
+                  </label>
+
+                  <label class="flex items-center space-x-2.5 cursor-pointer text-slate-700 hover:text-slate-900 select-none">
+                    <input type="checkbox" id="m-smartworking" class="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4">
+                    <span>Disponibilità Smart Working</span>
+                  </label>
+                </div>
+
+                <!-- Comune / Ambito Territoriale -->
+                <div class="border-t border-slate-100 pt-3">
+                  <label class="rox-label font-semibold text-slate-700">Filtro Territoriale (Comune residenza)</label>
+                  <input type="text" id="m-comune" placeholder="Es. Lecco, Merate, Calolziocorte..." class="rox-input w-full mt-1">
+                </div>
+
+                <div class="pt-2">
+                  <button type="submit" class="w-full cursor-pointer bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-3 px-4 rounded-xl shadow-md shadow-blue-500/20 transition flex items-center justify-center space-x-2 font-heading">
+                    <i class="fa-solid fa-bullseye"></i>
+                    <span>Calcola Compatibilità Matcher</span>
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
 
-          <div id="matcher-results-container" class="lg:col-span-2 space-y-4">
-            <!-- Matcher results rendered via JS -->
+          <!-- Colonna Destra: Risultati Matcher in Liquid Glass -->
+          <div class="lg:col-span-8 space-y-4">
+            <!-- Barra Superiore di Ordinamento & Vista Risultati -->
+            <div class="card-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs border border-slate-200/80">
+              <div class="flex items-center space-x-2 text-xs text-slate-600">
+                <span class="font-bold text-slate-800 font-heading">Graduatoria Compatibilità:</span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span> 80-100% Alta
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                  60-79% Con Adattamenti
+                </span>
+                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">
+                  &lt;60% Bassa
+                </span>
+              </div>
+
+              <!-- Filtro Soglia Minima Score -->
+              <div class="flex items-center space-x-2 text-xs">
+                <label for="m-min-score-filter" class="text-slate-500 font-medium">Soglia Minima:</label>
+                <select id="m-min-score-filter" class="rox-select py-1 px-2.5 text-xs font-semibold text-slate-700">
+                  <option value="0">Tutti i punteggi</option>
+                  <option value="60" selected>&ge; 60% (Consigliati)</option>
+                  <option value="80">&ge; 80% (Solo Alta Compatibilità)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Contenitore Schede Risultati -->
+            <div id="matcher-results-container" class="space-y-4">
+              <!-- Renderizzato dinamicamente da js/modules/matcher-view.js -->
+            </div>
           </div>
         </div>
       </section>

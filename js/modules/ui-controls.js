@@ -114,11 +114,23 @@ function initCustomSearchableSelects() {
       
       // Close other custom selects
       document.querySelectorAll(".custom-select-wrapper.open").forEach(w => {
-        if (w !== wrapper) w.classList.remove("open");
+        if (w !== wrapper) {
+          w.classList.remove("open");
+          const parentCard = w.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
+          if (parentCard) parentCard.style.zIndex = "";
+        }
       });
 
-      wrapper.classList.toggle("open", !isOpen);
-      if (!isOpen && searchInput) {
+      const nextOpen = !isOpen;
+      wrapper.classList.toggle("open", nextOpen);
+
+      // Assicura che la card/colonna genitore non tagli o sovrapponga la tendina
+      const parentCard = wrapper.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
+      if (parentCard) {
+        parentCard.style.zIndex = nextOpen ? "99998" : "";
+      }
+
+      if (nextOpen && searchInput) {
         searchInput.value = "";
         renderOptions();
         setTimeout(() => searchInput.focus(), 50);
@@ -142,9 +154,23 @@ function initCustomSearchableSelects() {
     });
   });
 
-  // Close on click outside
+  // Close on click outside or ESC
   document.addEventListener("click", () => {
-    document.querySelectorAll(".custom-select-wrapper.open").forEach(w => w.classList.remove("open"));
+    document.querySelectorAll(".custom-select-wrapper.open").forEach(w => {
+      w.classList.remove("open");
+      const parentCard = w.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
+      if (parentCard) parentCard.style.zIndex = "";
+    });
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      document.querySelectorAll(".custom-select-wrapper.open").forEach(w => {
+        w.classList.remove("open");
+        const parentCard = w.closest(".mantine-paper, .card-white, .form-group-card, .stellar-glass-card, [class*='col-']");
+        if (parentCard) parentCard.style.zIndex = "";
+      });
+    }
   });
 }
 
