@@ -2320,8 +2320,8 @@
 
   <!-- MODAL CREA/MODIFICA UTENTE ADMIN -->
   <div id="modal-user-edit" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-lg rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+    <div class="liquid-modal-card w-full max-w-lg rounded-2xl border border-white/95 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-200/80 pb-3">
         <h3 id="modal-user-title" class="font-bold text-slate-900 text-base font-heading">Aggiungi Nuovo Operatore</h3>
         <button id="btn-close-modal-user" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
       </div>
@@ -2372,9 +2372,9 @@
           <label for="user-attivo" class="font-bold text-slate-700">Account Attivo & Abilitato al Login</label>
         </div>
 
-        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
-          <button id="btn-cancel-modal-user" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
-          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold font-heading shadow-xs">Salva Operatore</button>
+        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-200/80">
+          <button id="btn-cancel-modal-user" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-bold font-heading shadow-xs">Salva Operatore</button>
         </div>
       </form>
     </div>
@@ -2382,7 +2382,7 @@
 
   <!-- MODAL WIZARD GUIDATO INSERIMENTO / MODIFICA ISCRITTO L.68/99 (STEP-BY-STEP STEPPER) -->
   <div id="modal-persona" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 hidden">
-    <div class="bg-white w-full max-w-5xl rounded-3xl border border-slate-200 shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-scale-up text-xs">
+    <div class="liquid-modal-card w-full max-w-5xl rounded-3xl border border-white/95 shadow-2xl overflow-hidden flex flex-col max-h-[92vh] animate-scale-up text-xs">
       
       <!-- Stepper Header con Indicatore Avanzamento -->
       <div class="px-6 py-5 border-b border-slate-100 bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -2852,8 +2852,8 @@
       </form>
 
       <!-- Stepper Footer con Pulsanti Indietro / Avanti / Salva -->
-      <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-        <button id="btn-wizard-prev" type="button" class="cursor-pointer px-4 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-700 hover:bg-slate-100 font-bold font-heading transition flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
+      <div class="px-6 py-4 border-t border-slate-200/80 bg-slate-50/60 backdrop-blur-md flex items-center justify-between">
+        <button id="btn-wizard-prev" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2.5 text-slate-700 font-bold font-heading transition flex items-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed">
           <i class="fa-solid fa-arrow-left"></i>
           <span>Indietro</span>
         </button>
@@ -2863,12 +2863,12 @@
         </div>
 
         <div class="flex items-center gap-2">
-          <button id="btn-wizard-next" type="button" class="cursor-pointer px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold font-heading transition flex items-center gap-2 shadow-xs">
+          <button id="btn-wizard-next" type="button" class="liquid-btn-primary cursor-pointer px-5 py-2.5 text-white font-bold font-heading transition flex items-center gap-2 shadow-xs">
             <span>Avanti</span>
             <i class="fa-solid fa-arrow-right"></i>
           </button>
 
-          <button id="btn-wizard-submit" type="button" class="cursor-pointer px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold font-heading transition flex items-center gap-2 shadow-md shadow-emerald-600/20 hidden">
+          <button id="btn-wizard-submit" type="button" class="cursor-pointer px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-bold font-heading transition flex items-center gap-2 shadow-md shadow-emerald-600/20 hidden">
             <i class="fa-solid fa-check-double"></i>
             <span>Salva Scheda Iscritto</span>
           </button>
@@ -2880,8 +2880,8 @@
 
   <!-- MODAL UPLOAD DOCUMENT FILE (WALLET) -->
   <div id="modal-upload-doc" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-md rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+    <div class="liquid-modal-card w-full max-w-md rounded-2xl border border-white/95 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-200/80 pb-3">
         <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading"><i class="pi pi-cloud-upload text-blue-600"></i> Carica Documento nel Wallet</h3>
         <button id="btn-close-modal-doc" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="pi pi-times"></i></button>
       </div>
@@ -2926,8 +2926,8 @@
         </div>
 
         <div class="flex justify-end space-x-3 pt-2">
-          <button id="btn-cancel-doc" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
-          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-blue-600 text-white font-semibold font-heading">Carica File in Wallet</button>
+          <button id="btn-cancel-doc" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-semibold font-heading">Carica File in Wallet</button>
         </div>
       </form>
     </div>
@@ -2935,8 +2935,8 @@
 
   <!-- MODAL EDIT DOCUMENT METADATA (WALLET) -->
   <div id="modal-edit-doc" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-md rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+    <div class="liquid-modal-card w-full max-w-md rounded-2xl border border-white/95 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-200/80 pb-3">
         <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading"><i class="pi pi-pencil text-amber-600"></i> Modifica Dettagli Documento</h3>
         <button id="btn-close-modal-edit-doc" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="pi pi-times"></i></button>
       </div>
@@ -2968,8 +2968,8 @@
         </div>
 
         <div class="flex justify-end space-x-3 pt-2">
-          <button id="btn-cancel-edit-doc" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
-          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold font-heading">Salva Modifiche</button>
+          <button id="btn-cancel-edit-doc" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-semibold font-heading">Salva Modifiche</button>
         </div>
       </form>
     </div>
@@ -3032,8 +3032,8 @@
 
   <!-- MODAL NUOVA NOTA DIARIO -->
   <div id="modal-nota-diario" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-lg rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs">
-      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+    <div class="liquid-modal-card w-full max-w-lg rounded-2xl border border-white/95 shadow-2xl p-6 space-y-4 text-xs">
+      <div class="flex justify-between items-center border-b border-slate-200/80 pb-3">
         <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading"><i class="fa-solid fa-book-bookmark text-blue-600"></i> Aggiungi Nota Diario Operatore</h3>
         <button id="btn-close-modal-nota" class="cursor-pointer text-slate-400 hover:text-slate-600 text-base"><i class="fa-solid fa-xmark"></i></button>
       </div>
@@ -3058,8 +3058,8 @@
         </div>
 
         <div class="flex justify-end space-x-3 pt-2">
-          <button id="btn-cancel-nota" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
-          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-slate-900 text-white font-semibold font-heading">Salva Nota</button>
+          <button id="btn-cancel-nota" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-semibold font-heading">Salva Nota</button>
         </div>
       </form>
     </div>
@@ -3067,7 +3067,7 @@
 
   <!-- MODAL NUOVO VERBALE COMITATO TECNICO ASL (FULLSCREEN EXECUTIVE RECORDING) -->
   <div id="modal-verbale-comitato" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 hidden">
-    <div class="bg-white w-full max-w-6xl rounded-3xl border border-slate-200 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[95vh] overflow-y-auto flex flex-col justify-between">
+    <div class="liquid-modal-card w-full max-w-6xl rounded-3xl border border-white/95 shadow-2xl p-6 sm:p-8 space-y-6 text-xs max-h-[95vh] overflow-y-auto flex flex-col justify-between">
       
       <!-- Modal Header -->
       <div class="flex justify-between items-start border-b border-slate-100 pb-4">
@@ -3225,10 +3225,10 @@
           <span class="text-xs text-slate-400">Tutti i campi con * sono obbligatori per il verbale collegiale.</span>
           
           <div class="flex space-x-3">
-            <button id="btn-cancel-modal-comitato" type="button" class="cursor-pointer px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition">
+            <button id="btn-cancel-modal-comitato" type="button" class="liquid-btn-ghost cursor-pointer px-5 py-2.5 text-slate-700 font-semibold transition">
               Annulla
             </button>
-            <button type="submit" class="cursor-pointer px-7 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold font-heading shadow-md shadow-cyan-600/20 transition flex items-center space-x-2">
+            <button type="submit" class="liquid-btn-primary cursor-pointer px-7 py-2.5 text-white font-bold font-heading transition flex items-center space-x-2">
               <i class="fa-solid fa-save"></i>
               <span>Salva Verbale ASL</span>
             </button>
@@ -3241,7 +3241,7 @@
 
   <!-- MODAL NUOVO PROGETTO INSERIMENTO LAVORATIVO (PIL L.68/99) -->
   <div id="modal-progetto-pil" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
-    <div class="bg-white w-full max-w-3xl rounded-2xl border border-slate-200 shadow-2xl p-6 space-y-4 text-xs max-h-[92vh] overflow-y-auto">
+    <div class="liquid-modal-card w-full max-w-3xl rounded-2xl border border-white/95 shadow-2xl p-6 space-y-4 text-xs max-h-[92vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b border-slate-100 pb-3">
         <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 font-heading">
           <i class="fa-solid fa-file-signature text-teal-600"></i> Registra Nuovo Progetto di Inserimento Lavorativo (PIL)
@@ -3298,7 +3298,7 @@
             <textarea id="pil-sociale" rows="2" placeholder="Attitudini relazionali, motivazione e contesto familiare..." class="rox-input"></textarea>
           </div>
           <div>
-            <label class="rox-label">Valutazione Lavorativa Complessiva</label>
+            <label class="rox-label">Valutazione Occupabilità & Match</label>
             <textarea id="pil-valutazione" rows="2" placeholder="Sintesi del livello di occupabilità e compatibilità con le quote d'obbligo..." class="rox-input"></textarea>
           </div>
         </div>
@@ -3314,9 +3314,9 @@
           </div>
         </div>
 
-        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-100">
-          <button id="btn-cancel-modal-pil" type="button" class="cursor-pointer px-4 py-2 rounded-xl bg-slate-100 text-slate-700 font-medium">Annulla</button>
-          <button type="submit" class="cursor-pointer px-5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold font-heading shadow-xs">Salva Progetto PIL</button>
+        <div class="flex justify-end space-x-3 pt-3 border-t border-slate-200/80">
+          <button id="btn-cancel-modal-pil" type="button" class="liquid-btn-ghost cursor-pointer px-4 py-2 text-slate-700 font-medium">Annulla</button>
+          <button type="submit" class="liquid-btn-primary cursor-pointer px-5 py-2 text-white font-bold font-heading">Salva Progetto PIL</button>
         </div>
       </form>
     </div>
