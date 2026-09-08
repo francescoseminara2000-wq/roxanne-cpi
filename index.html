@@ -781,10 +781,10 @@
               <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
                 
                 <!-- Colonna 1: Profilo Anagrafico & Recapiti (7/12 cols su desktop per massima leggibilità) -->
-                <div class="lg:col-span-7 flex items-center space-x-4 min-w-0">
-                  <!-- Avatar Glass 3D con Indicatore di Presenza -->
-                  <div class="relative shrink-0">
-                    <div id="hub-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-xl shadow-lg shadow-blue-500/25 font-heading">
+                <div class="lg:col-span-7 flex flex-col sm:flex-row sm:items-center gap-5 min-w-0">
+                  <!-- Avatar Glass con Indicatore di Presenza -->
+                  <div class="relative shrink-0 self-start sm:self-center">
+                    <div id="hub-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-xl shadow-lg shadow-blue-500/25">
                       MR
                     </div>
                     <div id="hub-active-dot" class="absolute -bottom-1 -right-1 bg-emerald-500 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white shadow-xs" title="Iscritto Attivo">
@@ -792,47 +792,49 @@
                     </div>
                   </div>
 
-                  <!-- Dati Anagrafici Strutturati -->
-                  <div class="space-y-1.5 flex-1 min-w-0">
+                  <!-- Dati Anagrafici Strutturati in Modo Pulito e Ordinato -->
+                  <div class="space-y-2 flex-1 min-w-0">
                     <!-- Riga 1: Nome + Categoria + Stato Occupazionale -->
-                    <div class="flex items-center space-x-2 flex-wrap gap-y-1">
-                      <h1 id="hub-nome" class="text-xl font-extrabold text-slate-900 font-heading tracking-tight truncate">Mario Rossi</h1>
-                      <span id="hub-cat-badge" class="liquid-glass-badge-blue">
-                        C.O. Disabili
-                      </span>
-                      <span id="hub-stato-badge" class="liquid-glass-badge-green">
-                        Disoccupato
-                      </span>
-                    </div>
-
-                    <!-- Riga 2: Codice Fiscale & Numero Iscrizione -->
-                    <div class="flex items-center space-x-2 flex-wrap gap-y-1 text-xs">
-                      <div class="liquid-chip">
-                        <span class="text-[9px] uppercase font-bold text-slate-400">CF</span>
-                        <strong id="hub-cf" class="text-slate-800 font-mono font-bold">RSSMRA78A01E507X</strong>
-                      </div>
-
-                      <div class="liquid-chip active">
-                        <span class="text-[9px] uppercase font-bold text-blue-500">Iscriz.</span>
-                        <strong id="hub-num-iscriz" class="text-blue-700 font-mono font-bold">#10452</strong>
+                    <div class="flex items-center gap-2.5 flex-wrap">
+                      <h1 id="hub-nome" class="text-xl font-bold text-slate-900 tracking-tight truncate">Mario Rossi</h1>
+                      <div class="flex items-center gap-1.5 flex-wrap">
+                        <span id="hub-cat-badge" class="liquid-glass-badge-blue">
+                          C.O. Disabili
+                        </span>
+                        <span id="hub-stato-badge" class="liquid-glass-badge-green">
+                          Disoccupato
+                        </span>
                       </div>
                     </div>
 
-                    <!-- Riga 3: Recapiti Contatto -->
-                    <div class="flex items-center space-x-2 text-[11px] text-slate-600 flex-wrap gap-y-1 pt-0.5">
-                      <div class="liquid-contact-pill flex items-center space-x-1 font-medium">
-                        <i class="pi pi-map-marker text-rose-500 text-[10px]"></i>
-                        <span id="hub-residenza" class="font-semibold text-slate-700">Lecco</span>
+                    <!-- Riga 2: Dati Identificativi CF e Iscrizione -->
+                    <div class="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
+                      <span class="inline-flex items-center gap-1.5 font-medium">
+                        <span class="text-[10px] uppercase font-semibold text-slate-400">CF</span>
+                        <strong id="hub-cf" class="text-slate-800 font-semibold font-mono tracking-wide">RSSMRA78A01E507X</strong>
+                      </span>
+                      <span class="text-slate-300 hidden sm:inline">&bull;</span>
+                      <span class="inline-flex items-center gap-1.5 font-medium">
+                        <span class="text-[10px] uppercase font-semibold text-slate-400">Iscriz.</span>
+                        <strong id="hub-num-iscriz" class="text-blue-700 font-semibold">#10452</strong>
+                      </span>
+                    </div>
+
+                    <!-- Riga 3: Recapiti Contatto Puliti e Allineati -->
+                    <div class="flex items-center gap-x-4 gap-y-1.5 text-xs text-slate-600 flex-wrap pt-0.5 border-t border-slate-200/50">
+                      <div class="flex items-center gap-1.5">
+                        <i class="pi pi-map-marker text-slate-400 text-xs"></i>
+                        <span id="hub-residenza" class="font-medium text-slate-700">Lecco</span>
                       </div>
 
-                      <div class="liquid-contact-pill flex items-center space-x-1 font-medium">
-                        <i class="pi pi-phone text-emerald-600 text-[10px]"></i>
-                        <span id="hub-tel" class="font-semibold text-slate-700">3389876543</span>
+                      <div class="flex items-center gap-1.5">
+                        <i class="pi pi-phone text-slate-400 text-xs"></i>
+                        <span id="hub-tel" class="font-medium text-slate-700">3389876543</span>
                       </div>
 
-                      <div class="liquid-contact-pill flex items-center space-x-1 font-medium truncate max-w-[200px]">
-                        <i class="pi pi-envelope text-blue-500 text-[10px]"></i>
-                        <span id="hub-email" class="font-semibold text-slate-700 truncate">mario.rossi@email.it</span>
+                      <div class="flex items-center gap-1.5 truncate max-w-[220px]">
+                        <i class="pi pi-envelope text-slate-400 text-xs"></i>
+                        <span id="hub-email" class="font-medium text-slate-700 truncate">mario.rossi@email.it</span>
                       </div>
                     </div>
 

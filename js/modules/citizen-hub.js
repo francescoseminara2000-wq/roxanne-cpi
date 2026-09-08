@@ -95,33 +95,33 @@
     if (elTel) elTel.textContent = p.cellulare || p.telefono1 || p.telefono || "-";
     if (elEmail) elEmail.textContent = p.email || "-";
 
-    // Dynamic Category Badge (Mantine Badge Style)
+    // Dynamic Category Badge (Uniform Liquid Glass Style)
     const catBadge = document.getElementById("hub-cat-badge");
     if (catBadge) {
       const cat = p.categoria || "C.O.";
       catBadge.textContent = cat === "C.O." ? "C.O. Disabili" : (cat === "Art. 18" ? "Art. 18 Categorie Protette" : cat);
       if (cat === "C.O.") {
-        catBadge.className = "mantine-badge mantine-badge-blue-light";
+        catBadge.className = "liquid-glass-badge-blue";
       } else if (cat === "Art. 18") {
-        catBadge.className = "mantine-badge mantine-badge-amber-light";
+        catBadge.className = "liquid-glass-badge-amber";
       } else {
-        catBadge.className = "mantine-badge mantine-badge-teal-light";
+        catBadge.className = "liquid-glass-badge-teal";
       }
     }
 
-    // Dynamic Employment Status Badge (Mantine Badge Style)
+    // Dynamic Employment Status Badge (Uniform Liquid Glass Style)
     const elStatoBadge = document.getElementById("hub-stato-badge");
     if (elStatoBadge) {
       const st = p.stato || "Disoccupato";
       elStatoBadge.textContent = st;
       if (st.toLowerCase().includes("occupato")) {
-        elStatoBadge.className = "mantine-badge mantine-badge-blue-light";
+        elStatoBadge.className = "liquid-glass-badge-blue";
       } else if (st.toLowerCase().includes("tirocinio")) {
-        elStatoBadge.className = "mantine-badge mantine-badge-indigo-light";
+        elStatoBadge.className = "liquid-glass-badge-indigo";
       } else if (st.toLowerCase().includes("disoccupato")) {
-        elStatoBadge.className = "mantine-badge mantine-badge-green-light";
+        elStatoBadge.className = "liquid-glass-badge-green";
       } else {
-        elStatoBadge.className = "mantine-badge mantine-badge-rose-light";
+        elStatoBadge.className = "liquid-glass-badge-rose";
       }
     }
 
