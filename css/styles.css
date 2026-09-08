@@ -565,7 +565,17 @@ body {
 
 .hub-sidebar-nav {
   position: sticky;
-  top: 1.5rem;
+  top: 5rem;
+  z-index: 30;
+  align-self: flex-start;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hub-sidebar-nav::-webkit-scrollbar {
+  display: none;
 }
 
 /* 1. Anagrafica & CPI (Blue Ocean Theme) */

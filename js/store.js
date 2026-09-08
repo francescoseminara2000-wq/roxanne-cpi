@@ -85,10 +85,28 @@ class StoreManager {
         const personeDb = await res.json();
         if (Array.isArray(personeDb)) {
           this.data.persone = personeDb;
+
+          // Popola lo store relazionale con tutti i record collegati caricati da MySQL
+          this.data.comitatoTecnico = [];
+          this.data.noteDiario = [];
+          this.data.progettiInserimentoLav = [];
+
+          personeDb.forEach(p => {
+            if (Array.isArray(p.comitatoTecnico)) {
+              this.data.comitatoTecnico.push(...p.comitatoTecnico);
+            }
+            if (Array.isArray(p.noteDiario)) {
+              this.data.noteDiario.push(...p.noteDiario);
+            }
+            if (Array.isArray(p.progettiPIL)) {
+              this.data.progettiInserimentoLav.push(...p.progettiPIL);
+            }
+          });
+
           if (!this.selectedPersonaId && this.data.persone.length > 0) {
             this.selectedPersonaId = this.data.persone[0].id;
           }
-          console.log(`[MySQL Sync] Sincronizzati ${personeDb.length} iscritti dal Database.`);
+          console.log(`[MySQL Sync] Sincronizzati ${personeDb.length} iscritti dal Database con relative note, verbali e progetti PIL.`);
           if (typeof window.renderMainSearchTable === "function") window.renderMainSearchTable();
           if (typeof window.renderCitizenHub === "function") window.renderCitizenHub();
           if (typeof window.renderDashboardAnalytics === "function") window.renderDashboardAnalytics();

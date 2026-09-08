@@ -185,7 +185,7 @@
   </div>
 
   <!-- MAIN WRAPPER -->
-  <main class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 space-y-6">
+  <main class="flex-1 p-4 sm:p-6 md:p-8 space-y-6">
 
     <!-- VIEW 0: DASHBOARD KPI & ANALYTICS (CHRONO STELLAR EXECUTIVE OVERVIEW) -->
     <section id="section-dashboard" class="space-y-6 hidden">
@@ -490,168 +490,13 @@
     </section>
 
     <!-- VIEW 2: CITIZEN HUB 360° (FINESTRA DETTAGLIO ISOLATA) -->
-    <section id="section-citizen-hub" class="space-y-6 hidden">
-
-        <!-- CITIZEN MASTER HEADER CARD (MANTINE PAPER + PRIMETEK ENTERPRISE) -->
-        <div class="mantine-paper p-5 sm:p-6 space-y-4 relative overflow-hidden shadow-xs">
-          
-          <!-- Top Bar: Navigazione Rapida Iscritto Prec/Succ + Banner Revisione Sanitaria -->
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-            <!-- Navigatore Rapido Frecce Mantine / PrimeTek Style -->
-            <div class="flex items-center space-x-2">
-              <button id="btn-hub-prev-persona" class="p-button p-button-outlined p-button-sm cursor-pointer shadow-2xs" title="Iscritto Precedente">
-                <i class="pi pi-chevron-left text-[10px]"></i>
-                <span class="hidden sm:inline text-xs">Precedente</span>
-              </button>
-              <span id="hub-indexer-badge" class="mantine-badge mantine-badge-gray-light font-mono">
-                1 / 15
-              </span>
-              <button id="btn-hub-next-persona" class="p-button p-button-outlined p-button-sm cursor-pointer shadow-2xs" title="Iscritto Successivo">
-                <span class="hidden sm:inline text-xs">Successivo</span>
-                <i class="pi pi-chevron-right text-[10px]"></i>
-              </button>
-            </div>
-
-            <!-- Alert Revisione Verbale Sanitario Dinamico (Mantine Light Rose Alert) -->
-            <div id="hub-revisione-alert" class="hidden items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold font-heading">
-              <i class="pi pi-exclamation-triangle"></i>
-              <span id="hub-revisione-text">Revisione Sanitaria: 15/06/2026</span>
-            </div>
-
-            <!-- Pulsante Esporta Dossier PDF (PrimeTek Style) -->
-            <div class="flex items-center space-x-2">
-              <button id="btn-export-dossier-pdf" class="p-button p-button-outlined p-button-sm cursor-pointer text-slate-700">
-                <i class="pi pi-file-pdf text-rose-600"></i>
-                <span>Esporta Dossier PDF</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- MAIN ROW: Grid 12 Colonne con perfetta distribuzione degli spazi -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
-            
-            <!-- Profilo Anagrafico Principale (5/12 cols) -->
-            <div class="lg:col-span-5 flex items-center space-x-4">
-              <!-- Avatar Premium con Indicatore di Presenza Attivo -->
-              <div class="relative shrink-0">
-                <div id="hub-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-xl shadow-md shadow-blue-500/20 font-heading">
-                  MR
-                </div>
-                <div id="hub-active-dot" class="absolute -bottom-1 -right-1 bg-emerald-500 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white shadow-xs" title="Iscritto Attivo">
-                  <i class="pi pi-check"></i>
-                </div>
-              </div>
-
-              <!-- Dati Anagrafici Strutturati a Micro-Contenitori Isolati -->
-              <div class="space-y-1.5 flex-1 min-w-0">
-                <!-- Riga 1: Nome + Categoria + Stato Occupazionale Mantine Badges -->
-                <div class="flex items-center space-x-2 flex-wrap gap-y-1">
-                  <h1 id="hub-nome" class="text-xl font-extrabold text-slate-900 font-heading tracking-tight truncate">Mario Rossi</h1>
-                  <span id="hub-cat-badge" class="mantine-badge mantine-badge-blue-light">
-                    C.O. Disabili
-                  </span>
-                  <span id="hub-stato-badge" class="mantine-badge mantine-badge-green-light">
-                    Disoccupato
-                  </span>
-                </div>
-
-                <!-- Riga 2: Micro-Chip per Codice Fiscale & N. Iscrizione -->
-                <div class="flex items-center space-x-2 flex-wrap gap-y-1 text-xs">
-                  <div class="p-chip">
-                    <span class="text-[9px] uppercase font-bold text-slate-400">CF</span>
-                    <strong id="hub-cf" class="text-slate-800 font-mono font-bold">RSSMRA78A01E507X</strong>
-                  </div>
-
-                  <div class="p-chip p-chip-active">
-                    <span class="text-[9px] uppercase font-bold text-blue-500">Iscriz.</span>
-                    <strong id="hub-num-iscriz" class="text-blue-700 font-mono font-bold">#10452</strong>
-                  </div>
-                </div>
-
-                <!-- Riga 3: Recapiti Isolati a Badge Minimal -->
-                <div class="flex items-center space-x-2 text-[11px] text-slate-600 flex-wrap gap-y-1 pt-0.5">
-                  <div class="bg-slate-100/80 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium">
-                    <i class="pi pi-map-marker text-rose-500 text-[10px]"></i>
-                    <span id="hub-residenza" class="font-semibold text-slate-700">Lecco</span>
-                  </div>
-
-                  <div class="bg-slate-100/80 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium">
-                    <i class="pi pi-phone text-emerald-600 text-[10px]"></i>
-                    <span id="hub-tel" class="font-semibold text-slate-700">3389876543</span>
-                  </div>
-
-                  <div class="bg-slate-100/80 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium truncate max-w-[170px]">
-                    <i class="pi pi-envelope text-blue-500 text-[10px]"></i>
-                    <span id="hub-email" class="font-semibold text-slate-700 truncate">mario.rossi@email.it</span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
-            <!-- Metriche & Indicatori Chiave (4/12 cols) -->
-            <div class="lg:col-span-4 flex items-center space-x-3 flex-wrap sm:flex-nowrap gap-y-2">
-              <!-- Radial Gauge Invalidità Grafico in Mantine Paper mini -->
-              <div class="bg-slate-50/80 border border-slate-200/80 rounded-2xl p-2.5 flex items-center space-x-3 shrink-0 shadow-2xs">
-                <div class="relative w-11 h-11 flex items-center justify-center">
-                  <svg class="w-11 h-11 transform -rotate-90" viewBox="0 0 36 36">
-                    <path class="text-slate-200" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                    <path id="hub-radial-circle" class="text-rose-500" stroke-dasharray="67, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                  </svg>
-                  <span id="hub-ic-perc" class="absolute text-[11px] font-extrabold text-slate-900 font-heading">67%</span>
-                </div>
-                <div>
-                  <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block font-heading">Invalidità Civile</span>
-                  <span id="hub-ic-label" class="text-xs font-extrabold text-rose-600 font-heading">Invalido Civile</span>
-                </div>
-              </div>
-
-              <!-- Widget Ultima Nota Diario in Mantine Amber Soft Style -->
-              <div id="hub-last-note-box" class="flex-1 bg-amber-50/60 border border-amber-200/80 rounded-2xl px-3.5 py-2.5 space-y-0.5 overflow-hidden shadow-2xs cursor-pointer hover:bg-amber-100/50 transition">
-                <div class="flex items-center justify-between text-[10px] font-heading">
-                  <span class="font-bold text-amber-900 flex items-center gap-1 truncate">
-                    <i class="pi pi-book text-amber-600"></i>
-                    <span id="hub-last-note-author">Elena Bianchi</span>
-                  </span>
-                  <span id="hub-last-note-date" class="text-[9px] font-semibold text-amber-700/80 shrink-0 ml-1">05/03/2026</span>
-                </div>
-                <p id="hub-last-note-text" class="text-[11px] text-slate-700 italic truncate" title="Visualizza nel diario">
-                  Colloquio orientativo per inserimento L.68 completato con successo.
-                </p>
-              </div>
-            </div>
-
-            <!-- Pulsanti d'Azione Rapida PrimeTek Style (3/12 cols) -->
-            <div class="lg:col-span-3 flex items-center justify-start lg:justify-end space-x-2">
-              <button id="btn-back-to-search" class="p-button p-button-outlined p-button-sm cursor-pointer text-slate-700" title="Torna alla ricerca">
-                <i class="pi pi-arrow-left"></i>
-                <span class="hidden sm:inline">Indietro</span>
-              </button>
-
-              <button id="btn-save-inline-hub" class="p-button p-button-primary p-button-sm cursor-pointer shadow-xs" title="Salva Modifiche">
-                <i class="pi pi-save"></i>
-                <span>Salva</span>
-              </button>
-
-              <button id="btn-hub-add-nota" class="p-button p-button-sm bg-slate-900 hover:bg-slate-800 text-white cursor-pointer" title="Aggiungi Nota">
-                <i class="pi pi-plus text-xs"></i>
-                <span>Nota</span>
-              </button>
-
-              <button id="btn-hub-upload-doc" class="p-button p-button-outlined p-button-sm cursor-pointer" title="Carica Documento nel Wallet">
-                <i class="pi pi-upload text-xs"></i>
-                <span>Wallet</span>
-              </button>
-            </div>
-
-          </div>
-        </div>
+    <section id="section-citizen-hub" class="hidden">
 
         <!-- CITIZEN HUB 2-COLUMN LAYOUT: VERTICAL SIDEBAR ON THE LEFT + TAB CONTENTS ON THE RIGHT -->
         <div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
 
-          <!-- LEFT SIDEBAR: VERTICAL NAVIGATION TABS (XL: 3 COLS) -->
-          <div class="xl:col-span-3 hub-sidebar-nav space-y-3">
+          <!-- LEFT SIDEBAR: VERTICAL NAVIGATION TABS (XL: 3 COLS) - FIXED SENZA SCROLL IN ALTO -->
+          <div class="xl:col-span-3 hub-sidebar-nav sticky top-20">
             <div class="form-group-card p-3 space-y-1.5 shadow-sm bg-white">
               <div class="px-3 py-2 text-[10px] font-extrabold uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center justify-between">
                 <span>Sezioni Fascicolo</span>
@@ -801,8 +646,163 @@
             </div>
           </div>
 
-          <!-- RIGHT AREA: CITIZEN HUB TAB CONTENTS (XL: 9 COLS) -->
+          <!-- RIGHT AREA: CITIZEN HUB RIEPILOGO HEADER + TAB CONTENTS (XL: 9 COLS) -->
           <div class="xl:col-span-9 space-y-6">
+
+            <!-- CITIZEN MASTER HEADER CARD (RIEPILOGO INCOLONNATO A DESTRA CON LE DUE COLONNE SOTTO) -->
+            <div class="mantine-paper p-5 sm:p-6 space-y-4 relative overflow-hidden shadow-xs">
+              
+              <!-- Top Bar: Navigazione Rapida Iscritto Prec/Succ + Banner Revisione Sanitaria -->
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+                <!-- Navigatore Rapido Frecce Mantine / PrimeTek Style -->
+                <div class="flex items-center space-x-2">
+                  <button id="btn-hub-prev-persona" class="p-button p-button-outlined p-button-sm cursor-pointer shadow-2xs" title="Iscritto Precedente">
+                    <i class="pi pi-chevron-left text-[10px]"></i>
+                    <span class="hidden sm:inline text-xs">Precedente</span>
+                  </button>
+                  <span id="hub-indexer-badge" class="mantine-badge mantine-badge-gray-light font-mono">
+                    1 / 15
+                  </span>
+                  <button id="btn-hub-next-persona" class="p-button p-button-outlined p-button-sm cursor-pointer shadow-2xs" title="Iscritto Successivo">
+                    <span class="hidden sm:inline text-xs">Successivo</span>
+                    <i class="pi pi-chevron-right text-[10px]"></i>
+                  </button>
+                </div>
+
+                <!-- Alert Revisione Verbale Sanitario Dinamico (Mantine Light Rose Alert) -->
+                <div id="hub-revisione-alert" class="hidden items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-bold font-heading">
+                  <i class="pi pi-exclamation-triangle"></i>
+                  <span id="hub-revisione-text">Revisione Sanitaria: 15/06/2026</span>
+                </div>
+
+                <!-- Pulsante Esporta Dossier PDF (PrimeTek Style) -->
+                <div class="flex items-center space-x-2">
+                  <button id="btn-export-dossier-pdf" class="p-button p-button-outlined p-button-sm cursor-pointer text-slate-700">
+                    <i class="pi pi-file-pdf text-rose-600"></i>
+                    <span>Esporta Dossier PDF</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- MAIN ROW: Grid 12 Colonne con perfetta distribuzione degli spazi -->
+              <div class="grid grid-cols-1 xl:grid-cols-12 gap-4 items-center">
+                
+                <!-- Profilo Anagrafico Principale (5/12 cols) -->
+                <div class="xl:col-span-5 flex items-center space-x-4 min-w-0">
+                  <!-- Avatar Premium con Indicatore di Presenza Attivo -->
+                  <div class="relative shrink-0">
+                    <div id="hub-avatar" class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-slate-900 text-white flex items-center justify-center font-extrabold text-xl shadow-md shadow-blue-500/20 font-heading">
+                      MR
+                    </div>
+                    <div id="hub-active-dot" class="absolute -bottom-1 -right-1 bg-emerald-500 w-5 h-5 rounded-full border-2 border-white flex items-center justify-center text-[9px] text-white shadow-xs" title="Iscritto Attivo">
+                      <i class="pi pi-check"></i>
+                    </div>
+                  </div>
+
+                  <!-- Dati Anagrafici Strutturati a Micro-Contenitori Isolati -->
+                  <div class="space-y-1.5 flex-1 min-w-0">
+                    <!-- Riga 1: Nome + Categoria + Stato Occupazionale Mantine Badges -->
+                    <div class="flex items-center space-x-2 flex-wrap gap-y-1">
+                      <h1 id="hub-nome" class="text-xl font-extrabold text-slate-900 font-heading tracking-tight truncate">Mario Rossi</h1>
+                      <span id="hub-cat-badge" class="mantine-badge mantine-badge-blue-light">
+                        C.O. Disabili
+                      </span>
+                      <span id="hub-stato-badge" class="mantine-badge mantine-badge-green-light">
+                        Disoccupato
+                      </span>
+                    </div>
+
+                    <!-- Riga 2: Micro-Chip per Codice Fiscale & N. Iscrizione -->
+                    <div class="flex items-center space-x-2 flex-wrap gap-y-1 text-xs">
+                      <div class="p-chip">
+                        <span class="text-[9px] uppercase font-bold text-slate-400">CF</span>
+                        <strong id="hub-cf" class="text-slate-800 font-mono font-bold">RSSMRA78A01E507X</strong>
+                      </div>
+
+                      <div class="p-chip p-chip-active">
+                        <span class="text-[9px] uppercase font-bold text-blue-500">Iscriz.</span>
+                        <strong id="hub-num-iscriz" class="text-blue-700 font-mono font-bold">#10452</strong>
+                      </div>
+                    </div>
+
+                    <!-- Riga 3: Recapiti Isolati a Badge Minimal -->
+                    <div class="flex items-center space-x-2 text-[11px] text-slate-600 flex-wrap gap-y-1 pt-0.5">
+                      <div class="bg-slate-100/80 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium">
+                        <i class="pi pi-map-marker text-rose-500 text-[10px]"></i>
+                        <span id="hub-residenza" class="font-semibold text-slate-700">Lecco</span>
+                      </div>
+
+                      <div class="bg-slate-100/80 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium">
+                        <i class="pi pi-phone text-emerald-600 text-[10px]"></i>
+                        <span id="hub-tel" class="font-semibold text-slate-700">3389876543</span>
+                      </div>
+
+                      <div class="bg-slate-100/80 rounded-md px-2 py-0.5 flex items-center space-x-1 font-medium truncate max-w-[170px]">
+                        <i class="pi pi-envelope text-blue-500 text-[10px]"></i>
+                        <span id="hub-email" class="font-semibold text-slate-700 truncate">mario.rossi@email.it</span>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- Metriche & Indicatori Chiave (3/12 cols) -->
+                <div class="xl:col-span-3 flex items-center space-x-3 flex-wrap sm:flex-nowrap gap-y-2 min-w-0">
+                  <!-- Radial Gauge Invalidità Grafico in Mantine Paper mini -->
+                  <div class="bg-slate-50/80 border border-slate-200/80 rounded-2xl p-2.5 flex items-center space-x-3 shrink-0 shadow-2xs">
+                    <div class="relative w-11 h-11 flex items-center justify-center">
+                      <svg class="w-11 h-11 transform -rotate-90" viewBox="0 0 36 36">
+                        <path class="text-slate-200" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path id="hub-radial-circle" class="text-rose-500" stroke-dasharray="67, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <span id="hub-ic-perc" class="absolute text-[11px] font-extrabold text-slate-900 font-heading">67%</span>
+                    </div>
+                    <div>
+                      <span class="text-[9px] text-slate-500 font-bold uppercase tracking-wider block font-heading">Invalidità Civile</span>
+                      <span id="hub-ic-label" class="text-xs font-extrabold text-rose-600 font-heading">Invalido Civile</span>
+                    </div>
+                  </div>
+
+                  <!-- Widget Ultima Nota Diario in Mantine Amber Soft Style -->
+                  <div id="hub-last-note-box" class="flex-1 bg-amber-50/60 border border-amber-200/80 rounded-2xl px-3.5 py-2.5 space-y-0.5 overflow-hidden shadow-2xs cursor-pointer hover:bg-amber-100/50 transition min-w-[130px]">
+                    <div class="flex items-center justify-between text-[10px] font-heading">
+                      <span class="font-bold text-amber-900 flex items-center gap-1 truncate">
+                        <i class="pi pi-book text-amber-600"></i>
+                        <span id="hub-last-note-author">Elena Bianchi</span>
+                      </span>
+                      <span id="hub-last-note-date" class="text-[9px] font-semibold text-amber-700/80 shrink-0 ml-1">05/03/2026</span>
+                    </div>
+                    <p id="hub-last-note-text" class="text-[11px] text-slate-700 italic truncate" title="Visualizza nel diario">
+                      Colloquio orientativo per inserimento L.68 completato con successo.
+                    </p>
+                  </div>
+                </div>
+
+                <!-- Pulsanti d'Azione Rapida PrimeTek Style (4/12 cols) -->
+                <div class="xl:col-span-4 flex items-center justify-start xl:justify-end gap-2 flex-wrap">
+                  <button id="btn-back-to-search" class="p-button p-button-outlined p-button-sm cursor-pointer text-slate-700" title="Torna alla ricerca">
+                    <i class="pi pi-arrow-left"></i>
+                    <span class="hidden sm:inline">Indietro</span>
+                  </button>
+
+                  <button id="btn-save-inline-hub" class="p-button p-button-primary p-button-sm cursor-pointer shadow-xs" title="Salva Modifiche">
+                    <i class="pi pi-save"></i>
+                    <span>Salva</span>
+                  </button>
+
+                  <button id="btn-hub-add-nota" class="p-button p-button-sm bg-slate-900 hover:bg-slate-800 text-white cursor-pointer" title="Aggiungi Nota">
+                    <i class="pi pi-plus text-xs"></i>
+                    <span>Nota</span>
+                  </button>
+
+                  <button id="btn-hub-upload-doc" class="p-button p-button-outlined p-button-sm cursor-pointer" title="Carica Documento nel Wallet">
+                    <i class="pi pi-upload text-xs"></i>
+                    <span>Wallet</span>
+                  </button>
+                </div>
+
+              </div>
+            </div>
 
             <!-- TAB 1: ANAGRAFICA & CPI (ASIMMETRIC DYNAMIC CARD LAYOUT) -->
             <div id="hub-tab-panoramica" class="hub-tab-content space-y-6">
